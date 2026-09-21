@@ -41,6 +41,7 @@
   "files": [
     "lib",
     "tools",
+    "!tools/local.json",
     "cases",
     "SKILL.md",
     "INSTRUCTIONS.md",
@@ -67,5 +68,8 @@
   "bugs": {
     "url": "https://github.com/7starsseeker/dsh-fact-check/issues"
   },
-  "private": true
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  }
 }
