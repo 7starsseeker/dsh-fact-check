@@ -28,6 +28,7 @@ node tools/smoke-plugin.mjs                          # 插件挂载 + 单一真�
 node tools/jev-verdict.mjs selftest
 node tools/route.mjs selftest
 node tools/route.mjs regress --file cases/route-cases-neutral.json
+node tools/route.mjs arms                            # 派发臂代理指标（MEASUREMENTS §4.1）
 node tools/make-instructions.mjs                     # 只有改了 SKILL.md 才需要
 ```
 

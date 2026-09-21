@@ -1,6 +1,6 @@
 {
   "name": "dsh-fact-check",
-  "version": "1.2.2",
+  "version": "1.3.0",
   "description": "Fact-checking skill for DeepSeek Harness: verifies claims against the open web instead of model memory, cross-checks independent sources across domestic and international search ecosystems, and can route three factual judgements (does the evidence support the claim / is this source primary / does this page carry usable text) to a TypeSafe Jev (System One) decision model when a key is configured, falling back to the skill's deterministic rules when it is not.",
   "keywords": [
     "deepseek-harness",
@@ -27,6 +27,7 @@
     "selftest": "node tools/smoke-plugin.mjs && node tools/jev-verdict.mjs selftest && node tools/route.mjs selftest",
     "doctor": "node tools/doctor.mjs",
     "regress": "node tools/route.mjs regress --file cases/route-cases-neutral.json",
+    "arms": "node tools/route.mjs arms",
     "instructions": "node tools/make-instructions.mjs"
   },
   "engines": {

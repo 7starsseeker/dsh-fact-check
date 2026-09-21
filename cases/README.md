@@ -35,9 +35,11 @@
 | `dispatch-blind-neutral.json` | 40 | —（仅 id + 任务描述，无标签） | 派发决策的**输入** |
 | `dispatch-label-L1-neutral.json` / `-L2-neutral.json` | 40×2 | 两名独立盲标注员 | 两人一致 35/40 = **87.5%**；不一致的 5 条即"口径本身有歧义" |
 | `dispatch-label-LLM-neutral.json` | 40 | 一个 LLM 用同一份判据作答 | 作为"派发决策让 LLM 现判"的对照臂 |
-| `route-cases-neutral.json` | 14 | 任务描述 → 期望命中的域 / 路线（按路由表机械裁定） | **14/14**（`route.mjs regress`，0 成本、不调模型、不出网） |
+| `route-cases-neutral.json` | 26 | 任务描述 → 期望命中的域 / 路线（按路由表机械裁定） | **26/26**（`route.mjs regress`，0 成本、不调模型、不出网） |
 
 前六套语料打的是**判据层**（`jev-verdict.mjs`，要密钥、有成本）；最后一套打的是**路由层**（`route.mjs`，纯数据表、0 成本）。路由层同样属于"判据"：**改触发词表或域路由表 = 重新校准事件**，必须重跑 `route.mjs regress` 与 `route.mjs selftest`。
+
+`dispatch-*` 四套语料原本没有随包脚本（作者侧四臂对比的编排脚本不分发）。1.3.0 起，其中**确定性关键词臂**可由 `node tools/route.mjs arms` 复跑：它把 `dispatchHint` 当作该臂，只计入 L1/L2 一致的样本，并显式声明自己不是 §4 表里那个作者侧 R 规则（见 `MEASUREMENTS.md` §4.1）。
 
 ## 判据的准确性口径（重要）
 

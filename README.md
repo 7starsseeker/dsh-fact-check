@@ -143,13 +143,14 @@ Every command below runs offline, needs no key, and takes seconds:
 node tools/smoke-plugin.mjs                          # is the plugin mounted, and does it serve SKILL.md?
 node tools/route.mjs selftest                        # deterministic routing tables
 node tools/route.mjs regress --file cases/route-cases-neutral.json
+node tools/route.mjs arms                            # dispatch-arm proxy metric (MEASUREMENTS §4.1)
 node tools/jev-verdict.mjs selftest                  # judgement layer regression assertions
 node tools/doctor.mjs                                # what this machine can and cannot do
 ```
 
 `node tools/doctor.mjs --net` additionally self-tests the fetch chains and the judgement endpoint, and
 reports which capabilities are missing and how the skill degrades without them. Current status on this
-checkout: **27/27**, **25/25**, **19/19** and **14/14** assertions pass.
+checkout: **27/27**, **25/25**, **37/37** and **26/26** assertions pass.
 
 CI runs exactly these commands on Linux and Windows, on Node 18 and 22, plus one more check: that the
 generated `INSTRUCTIONS.md` still matches `SKILL.md`.

@@ -1,10 +1,11 @@
 {
   "_about": "路由层回归语料（不调模型、不出网、0 成本）。每条给一个任务描述与若干 expect* 断言，检查 route.mjs 的确定性路由是否命中该命中的域、避开不该命中的域。跑法：node tools/route.mjs regress --file cases/route-cases-neutral.json",
-  "_generated_by": "2026-09-21 新增（补上游只有 selftest 断言、没有独立路由语料的缺口；触发词一改就必须重跑这里）",
+  "_generated_by": "2026-09-21 新增（补上游只有 selftest 断言、没有独立路由语料的缺口；触发词一改就必须重跑这里）；1.3.0 起随七个新域扩到 26 例",
   "_notes": [
     "域是并列累积的：一个任务可以同时命中多个域，expectDomains 只要求包含（子集检查），不要求独占",
     "expectClosed / expectDispatch 对应 plan 输出的 closedEcosystem / dispatchHint",
-    "触发词表属于「判据」的一部分：改动触发词 = 重新校准事件，必须重跑本语料并记录"
+    "触发词表属于「判据」的一部分：改动触发词 = 重新校准事件，必须重跑本语料并记录",
+    "R15 起覆盖 1.3.0 新增的七个域（司法 / 灾害 / 食安 / 科学常识 / 教育考试 / 体育 / 娱乐），并检查相邻域不串味"
   ],
   "cases": [
     {
@@ -85,6 +86,79 @@
       "id": "R14",
       "task": "这个保健品宣称的疗效有临床证据吗",
       "expectDomains": ["medical"]
+    },
+    {
+      "id": "R15",
+      "task": "网传某地发生 7.2 级地震，伤亡惨重",
+      "expectDomains": ["disaster_emergency"],
+      "expectRoutes": ["gov_notice"]
+    },
+    {
+      "id": "R16",
+      "task": "某地地震遇难人数到底是多少",
+      "expectDomains": ["disaster_emergency"],
+      "expectNotDomains": ["entertainment_celebrity"]
+    },
+    {
+      "id": "R17",
+      "task": "网传这种蔬菜农药残留超标致癌",
+      "expectDomains": ["food_safety"],
+      "expectRoutes": ["gov_notice"]
+    },
+    {
+      "id": "R18",
+      "task": "太阳耀斑会让人心情变差吗",
+      "expectDomains": ["science_general"],
+      "expectNotDomains": ["academic"],
+      "expectRoutes": ["science_authority"]
+    },
+    {
+      "id": "R19",
+      "task": "网传 2027 年起高考取消英语科目",
+      "expectDomains": ["education_exam"],
+      "expectRoutes": ["gov_notice"]
+    },
+    {
+      "id": "R20",
+      "task": "某球员的转会传闻属实吗",
+      "expectDomains": ["sports"],
+      "expectRoutes": ["sports_official"]
+    },
+    {
+      "id": "R21",
+      "task": "核实某运动员兴奋剂检测阳性的说法",
+      "expectDomains": ["sports"],
+      "expectRoutes": ["sports_official"]
+    },
+    {
+      "id": "R22",
+      "task": "核实某明星去世的网传消息",
+      "expectDomains": ["entertainment_celebrity"],
+      "expectClosed": true,
+      "expectRoutes": ["entertainment_official"]
+    },
+    {
+      "id": "R23",
+      "task": "网传某案一审宣判结果",
+      "expectDomains": ["legal_case"],
+      "expectRoutes": ["gov_notice"]
+    },
+    {
+      "id": "R24",
+      "task": "某地一起刑事案件的判决书全文",
+      "expectDomains": ["legal_case"],
+      "expectNotDomains": ["cn_policy"]
+    },
+    {
+      "id": "R25",
+      "task": "这家餐厅的菜很好吃，帮我写个点评",
+      "expectNotDomains": ["food_safety", "disaster_emergency", "legal_case", "sports", "entertainment_celebrity", "science_general", "education_exam"]
+    },
+    {
+      "id": "R26",
+      "task": "某球员转会费创纪录，核实金额是否属实",
+      "expectDomains": ["sports"],
+      "expectNotDomains": ["finance"]
     }
   ]
 }

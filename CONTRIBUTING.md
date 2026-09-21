@@ -30,6 +30,7 @@ node tools/smoke-plugin.mjs                          # plugin mount + single sou
 node tools/jev-verdict.mjs selftest
 node tools/route.mjs selftest
 node tools/route.mjs regress --file cases/route-cases-neutral.json
+node tools/route.mjs arms                            # dispatch-arm proxy metric (MEASUREMENTS §4.1)
 node tools/make-instructions.mjs                     # only if you edited SKILL.md
 ```
 

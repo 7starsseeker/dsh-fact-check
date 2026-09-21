@@ -73,8 +73,9 @@ node tools/doctor.mjs --write    # 生成 tools/local.json（已存在则不会�
 
 ```bash
 node tools/jev-verdict.mjs selftest      # 期望 25/25
-node tools/route.mjs selftest            # 期望 19/19
-node tools/route.mjs regress --file cases/route-cases-neutral.json   # 期望 14/14，0 成本
+node tools/route.mjs selftest            # 期望 37/37
+node tools/route.mjs regress --file cases/route-cases-neutral.json   # 期望 26/26，0 成本
+node tools/route.mjs arms                # 派发臂代理指标，期望 28/35 = 80.0%，0 成本
 
 # 有密钥时再跑一次真机，确认端到端可用（约 $0.0003）
 node tools/jev-verdict.mjs regress --file cases/injection-cases-neutral.json --conc 6
@@ -116,7 +117,8 @@ node tools/jev-verdict.mjs regress --file cases/injection-cases-neutral.json --c
 node tools/route.mjs plan --task "核查一条社交媒体首发的传闻，需要国内外两侧交叉"
 #    → 看 ladders（该找哪些源）/ routes（走哪些渠道）/ failureActions（遇到 403、超时、0 结果怎么办）
 #    → 看 dispatchHint（要不要多路并行取证）
-node tools/route.mjs regress --file cases/route-cases-neutral.json   # 路由层回归，14 例，0 成本
+node tools/route.mjs regress --file cases/route-cases-neutral.json   # 路由层回归，26 例，0 成本
+node tools/route.mjs arms                                            # 派发臂代理指标（改触发词后必跑），0 成本
 
 # ② 判据层（有密钥时）：把"证据 → 结论"这件事交给决策模型
 node tools/jev-verdict.mjs tier --claim-file claim.txt --evidence-file evidence.json

@@ -22,8 +22,8 @@ node tools/doctor.mjs --write                   # 生成 local.json 草稿，再
 
 # 4) 验收（离线，不花钱）
 node tools/jev-verdict.mjs selftest                              # 期望 25/25
-node tools/route.mjs selftest                                    # 期望 19/19
-node tools/route.mjs regress --file cases/route-cases-neutral.json   # 期望 14/14
+node tools/route.mjs selftest                                    # 期望 37/37
+node tools/route.mjs regress --file cases/route-cases-neutral.json   # 期望 26/26
 ```
 
 要求：**Node 18+**（内置 `fetch` 与 `AbortSignal.timeout`）。零 npm 依赖。

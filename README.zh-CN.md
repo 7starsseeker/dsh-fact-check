@@ -131,12 +131,13 @@ dsh plugin add ./dsh-fact-check
 node tools/smoke-plugin.mjs                          # 插件挂载是否正确、是否真的在提供 SKILL.md
 node tools/route.mjs selftest                        # 确定性路由表
 node tools/route.mjs regress --file cases/route-cases-neutral.json
+node tools/route.mjs arms                            # 派发臂代理指标（见 MEASUREMENTS §4.1）
 node tools/jev-verdict.mjs selftest                  # 判据层回归断言
 node tools/doctor.mjs                                # 这台机器能做什么、缺什么
 ```
 
 `node tools/doctor.mjs --net` 会额外自测抓取链与判据端点，并报告缺哪些能力、缺了会降级成什么样。
-本检出上的当前状态：**27/27**、**25/25**、**19/19**、**14/14** 断言全过。
+本检出上的当前状态：**27/27**、**25/25**、**37/37**、**26/26** 断言全过。
 
 CI 在 Linux 与 Windows 上、Node 18 与 22 下跑的就是上面这几条，另外多一条检查：生成的
 `INSTRUCTIONS.md` 是否仍然与 `SKILL.md` 一致。

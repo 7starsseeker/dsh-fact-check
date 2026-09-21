@@ -33,6 +33,9 @@ jobs:
       - name: Routing corpus
         run: node tools/route.mjs regress --file cases/route-cases-neutral.json
 
+      - name: Dispatch-arm proxy metric (against the two blind labellings)
+        run: node tools/route.mjs arms
+
       - name: Generated INSTRUCTIONS.md matches SKILL.md
         shell: bash
         run: |
