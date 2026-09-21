@@ -1,6 +1,7 @@
 # dsh-fact-check
 
 [![version](https://img.shields.io/github/v/tag/7starsseeker/dsh-fact-check?label=version)](https://github.com/7starsseeker/dsh-fact-check/tags)
+[![selftest](https://img.shields.io/github/actions/workflow/status/7starsseeker/dsh-fact-check/selftest.yml?label=selftest)](https://github.com/7starsseeker/dsh-fact-check/actions/workflows/selftest.yml)
 [![license: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
 [![node](https://img.shields.io/badge/node-%E2%89%A518-brightgreen.svg)](https://nodejs.org)
 [![DSH plugin](https://img.shields.io/badge/DeepSeek%20Harness-plugin-4B6BFB.svg)](https://github.com/deepseek-ai/deepseek-harness)
