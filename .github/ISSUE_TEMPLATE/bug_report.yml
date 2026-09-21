@@ -1,0 +1,54 @@
+name: Bug report
+description: A verdict was wrong, a claim was graded wrongly, a tool fails, or the report template did not hold.
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Before filing: this skill is an **evidence-gathering process, not an oracle**. "I think the conclusion is wrong" is a valid report **only with the sources** — please include them, since the whole point of the skill is that every statement binds to a traceable URL.
+
+        A prompt-injection bypass belongs in [SECURITY.md](https://github.com/7starsseeker/dsh-fact-check/blob/main/SECURITY.md) instead, and so does anything exploitable.
+  - type: dropdown
+    id: where
+    attributes:
+      label: What went wrong
+      options:
+        - The skill did not trigger when it should have (or triggered when it should not have)
+        - The flow was skipped or short-circuited (single source quoted as confirmed, no adversarial re-search, …)
+        - A grade was wrong (something confirmed that only had one source, something unverified marked confirmed)
+        - The report template was violated (unverified mixed into confirmed, missing source appendix, …)
+        - A bundled tool fails (smoke-plugin / route / jev-verdict / doctor)
+        - A fetch chain failed and the skill gave up instead of degrading
+        - Installation or host integration
+        - Documentation
+    validations:
+      required: true
+  - type: textarea
+    id: task
+    attributes:
+      label: The task you gave it
+      description: The claim, rumour or question, as close to verbatim as you can. Redact anything private.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected vs. actual
+      description: Which rule or step in SKILL.md should have applied, what happened instead, and (if it is a grade) which sources you believe contradict it — with URLs.
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: Environment
+      description: Host and model, OS, Node version, and how the skill was installed (DSH plugin, or the folder handed to an agent).
+    validations:
+      required: true
+  - type: textarea
+    id: doctor
+    attributes:
+      label: doctor output (optional)
+      description: '`node tools/doctor.mjs` — it reports which capabilities are available and how the skill degrades without them.'
+      render: shell
+    validations:
+      required: false

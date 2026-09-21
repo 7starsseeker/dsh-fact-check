@@ -1,0 +1,41 @@
+name: selftest
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  selftest:
+    name: ${{ matrix.os }} · node ${{ matrix.node }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        node: ['18', '22']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+
+      - name: Plugin mounts and serves SKILL.md (single source of truth)
+        run: node tools/smoke-plugin.mjs
+
+      - name: Judgement layer regression assertions
+        run: node tools/jev-verdict.mjs selftest
+
+      - name: Routing tables
+        run: node tools/route.mjs selftest
+
+      - name: Routing corpus
+        run: node tools/route.mjs regress --file cases/route-cases-neutral.json
+
+      - name: Generated INSTRUCTIONS.md matches SKILL.md
+        shell: bash
+        run: |
+          set -eo pipefail
+          node tools/make-instructions.mjs
+          git diff --exit-code INSTRUCTIONS.md

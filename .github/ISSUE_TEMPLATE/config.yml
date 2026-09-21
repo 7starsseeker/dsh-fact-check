@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Security policy
+    url: https://github.com/7starsseeker/dsh-fact-check/blob/main/SECURITY.md
+    about: Private reporting channel — and why prompt injection is the threat this skill actually faces.
+  - name: Measured numbers and how to reproduce them
+    url: https://github.com/7starsseeker/dsh-fact-check/blob/main/MEASUREMENTS.md
+    about: Every reliability figure the skill quotes, with the command that regenerates it.
+  - name: Adapting it to your environment
+    url: https://github.com/7starsseeker/dsh-fact-check/blob/main/ADAPTING.md
+    about: What to change when moving to another host, and what must not change.
