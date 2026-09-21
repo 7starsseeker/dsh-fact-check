@@ -1,0 +1,3 @@
+# 全仓按 LF 存储：本仓库有跨平台生成物（INSTRUCTIONS.md 由 make-instructions.mjs 生成），
+# 若检出时被转成 CRLF，CI 里的"生成物与源一致"检查会在 Windows 上误报。
+* text=auto eol=lf

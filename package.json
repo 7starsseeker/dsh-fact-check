@@ -52,6 +52,8 @@
     "README.zh-CN.md",
     "CONTRIBUTING.md",
     "CONTRIBUTING.zh-CN.md",
+    "SECURITY.md",
+    "SECURITY.zh-CN.md",
     "LICENSE"
   ],
   "license": "MIT",
