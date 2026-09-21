@@ -165,6 +165,7 @@ generated `INSTRUCTIONS.md` still matches `SKILL.md`.
 | [`ADAPTING.md`](./ADAPTING.md) | what to change when moving to another environment |
 | [`MEASUREMENTS.md`](./MEASUREMENTS.md) | measured numbers and how to reproduce them |
 | [`CHANGELOG.md`](./CHANGELOG.md) | net change between versions |
+| [`RELEASING.md`](./RELEASING.md) | how a release reaches npm (OIDC, no long-lived token) |
 | [`lib/index.js`](./lib/index.js) | DSH plugin entry: exposes `SKILL.md` on `ctx.skills` |
 | [`cordis.patch.yml`](./cordis.patch.yml) | bundle patch that makes the package installable via `dsh plugin add` |
 | [`tools/`](./tools) | two zero-dependency Node scripts, the machine-local config template, and the data tables |

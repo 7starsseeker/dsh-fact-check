@@ -152,6 +152,7 @@ CI 在 Linux 与 Windows 上、Node 18 与 22 下跑的就是上面这几条，�
 | [`ADAPTING.md`](./ADAPTING.md) | 换环境要改什么 |
 | [`MEASUREMENTS.md`](./MEASUREMENTS.md) | 实测数字与复跑方法 |
 | [`CHANGELOG.md`](./CHANGELOG.md) | 版本间净变化 |
+| [`RELEASING.md`](./RELEASING.md) | 一次发布怎么发到 npm（OIDC，无长期 token） |
 | [`lib/index.js`](./lib/index.js) | DSH 插件入口：把 `SKILL.md` 挂到 `ctx.skills` |
 | [`cordis.patch.yml`](./cordis.patch.yml) | bundle patch，让本包能被 `dsh plugin add` 安装 |
 | [`tools/`](./tools) | 两个零依赖 Node 脚本、本机配置模板与数据表 |
