@@ -70,8 +70,11 @@ The skill body is not bound to any host, product or tool chain: it names *capabi
 ### As a DSH plugin
 
 ```sh
-dsh plugin add github:7starsseeker/dsh-fact-check
+dsh plugin add dsh-fact-check
 ```
+
+That is the published npm package — the source the plugin market installs from by preference. The same
+plugin straight from GitHub source is `dsh plugin add github:7starsseeker/dsh-fact-check`.
 
 Then restart DSH: the `fact-check` skill appears in the session catalogue. The plugin itself is a thin
 adapter — `lib/index.js` registers the bundled `SKILL.md` on `ctx.skills`, re-reading it on every load,

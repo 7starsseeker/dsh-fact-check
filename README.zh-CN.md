@@ -64,8 +64,11 @@
 ### 作为 DSH 插件
 
 ```sh
-dsh plugin add github:7starsseeker/dsh-fact-check
+dsh plugin add dsh-fact-check
 ```
+
+上面这条装的是已发布到 npm 的包——也就是插件市场优先采用的安装源。想直接从 GitHub 源码装，用
+`dsh plugin add github:7starsseeker/dsh-fact-check`。
 
 重启 DSH 后 `fact-check` 技能即出现在会话技能目录里。插件本体是一层很薄的接线——`lib/index.js`
 把包自带的 `SKILL.md` 注册到 `ctx.skills`，每次加载都现读，所以改技能不需要改代码。它是
