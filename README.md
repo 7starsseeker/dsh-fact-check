@@ -7,6 +7,7 @@
 [![dependencies: 0](https://img.shields.io/badge/dependencies-0-brightgreen.svg)](./package.json)
 [![last commit](https://img.shields.io/github/last-commit/7starsseeker/dsh-fact-check)](https://github.com/7starsseeker/dsh-fact-check/commits/main)
 [![stars](https://img.shields.io/github/stars/7starsseeker/dsh-fact-check?style=flat)](https://github.com/7starsseeker/dsh-fact-check/stargazers)
+[![issues](https://img.shields.io/github/issues/7starsseeker/dsh-fact-check)](https://github.com/7starsseeker/dsh-fact-check/issues)
 [![PRs welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](./CONTRIBUTING.md)
 
 > A fact-checking skill for DeepSeek Harness that verifies claims against the open web instead of model
@@ -148,6 +149,9 @@ node tools/doctor.mjs                                # what this machine can and
 `node tools/doctor.mjs --net` additionally self-tests the fetch chains and the judgement endpoint, and
 reports which capabilities are missing and how the skill degrades without them. Current status on this
 checkout: **27/27**, **25/25**, **19/19** and **14/14** assertions pass.
+
+CI runs exactly these commands on Linux and Windows, on Node 18 and 22, plus one more check: that the
+generated `INSTRUCTIONS.md` still matches `SKILL.md`.
 
 ## Project layout
 

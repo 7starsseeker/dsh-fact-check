@@ -7,6 +7,7 @@
 [![dependencies: 0](https://img.shields.io/badge/dependencies-0-brightgreen.svg)](./package.json)
 [![last commit](https://img.shields.io/github/last-commit/7starsseeker/dsh-fact-check)](https://github.com/7starsseeker/dsh-fact-check/commits/main)
 [![stars](https://img.shields.io/github/stars/7starsseeker/dsh-fact-check?style=flat)](https://github.com/7starsseeker/dsh-fact-check/stargazers)
+[![issues](https://img.shields.io/github/issues/7starsseeker/dsh-fact-check)](https://github.com/7starsseeker/dsh-fact-check/issues)
 [![PRs welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](./CONTRIBUTING.md)
 
 > DeepSeek Harness 用的事实核查技能：不轻信模型自己的记忆，一律去公开互联网核实——多源交叉、
@@ -135,6 +136,9 @@ node tools/doctor.mjs                                # 这台机器能做什么�
 
 `node tools/doctor.mjs --net` 会额外自测抓取链与判据端点，并报告缺哪些能力、缺了会降级成什么样。
 本检出上的当前状态：**27/27**、**25/25**、**19/19**、**14/14** 断言全过。
+
+CI 在 Linux 与 Windows 上、Node 18 与 22 下跑的就是上面这几条，另外多一条检查：生成的
+`INSTRUCTIONS.md` 是否仍然与 `SKILL.md` 一致。
 
 ## 目录结构
 
