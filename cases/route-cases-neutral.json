@@ -1,0 +1,90 @@
+{
+  "_about": "路由层回归语料（不调模型、不出网、0 成本）。每条给一个任务描述与若干 expect* 断言，检查 route.mjs 的确定性路由是否命中该命中的域、避开不该命中的域。跑法：node tools/route.mjs regress --file cases/route-cases-neutral.json",
+  "_generated_by": "2026-09-21 新增（补上游只有 selftest 断言、没有独立路由语料的缺口；触发词一改就必须重跑这里）",
+  "_notes": [
+    "域是并列累积的：一个任务可以同时命中多个域，expectDomains 只要求包含（子集检查），不要求独占",
+    "expectClosed / expectDispatch 对应 plan 输出的 closedEcosystem / dispatchHint",
+    "触发词表属于「判据」的一部分：改动触发词 = 重新校准事件，必须重跑本语料并记录"
+  ],
+  "cases": [
+    {
+      "id": "R01",
+      "task": "核查西贝（餐饮公司）近期舆情事件的始末",
+      "expectDomains": ["cn_social_rumor"],
+      "expectClosed": true,
+      "expectDispatch": true
+    },
+    {
+      "id": "R02",
+      "task": "某品牌冲上热搜，核实热搜里那条说法的真假",
+      "expectDomains": ["cn_social_rumor"]
+    },
+    {
+      "id": "R03",
+      "task": "核实一条微信公众号首发的传闻",
+      "expectDomains": ["cn_social_rumor"],
+      "expectClosed": true,
+      "expectRoutes": ["closed_cn_social", "factcheck_registry"]
+    },
+    {
+      "id": "R04",
+      "task": "核查这篇论文是否已被撤稿",
+      "expectDomains": ["academic"],
+      "expectRoutes": ["academic_api"]
+    },
+    {
+      "id": "R05",
+      "task": "确认该政策文件的文号与生效日期",
+      "expectDomains": ["cn_policy"],
+      "expectRoutes": ["official_json_api"]
+    },
+    {
+      "id": "R06",
+      "task": "这段视频是真的吗，有没有剪辑痕迹",
+      "expectDomains": ["image_video"],
+      "expectRoutes": ["media_metadata"]
+    },
+    {
+      "id": "R07",
+      "task": "某上市公司公告称完成收购，核实交易金额是否属实",
+      "expectDomains": ["finance"]
+    },
+    {
+      "id": "R08",
+      "task": "核实某公司宣称的合作是否属实，需要境外监管文件",
+      "expectDomains": ["company_claim", "international"]
+    },
+    {
+      "id": "R09",
+      "task": "这套方案的视觉设计很美观，帮我看看有没有更好的排版思路",
+      "expectNotDomains": ["international"]
+    },
+    {
+      "id": "R10",
+      "task": "？？？",
+      "expectDomains": ["tech_release"]
+    },
+    {
+      "id": "R11",
+      "task": "联合国某机构发布的报告数据是否被断章取义",
+      "expectDomains": ["international"],
+      "expectRoutes": ["general_web", "news_rss"]
+    },
+    {
+      "id": "R12",
+      "task": "这张照片的拍摄时间和地点能核实吗",
+      "expectDomains": ["image_video"],
+      "expectClosed": true
+    },
+    {
+      "id": "R13",
+      "task": "某款软件的许可证是 MIT 还是 GPL，核实一下仓库说明",
+      "expectDomains": ["tech_release"]
+    },
+    {
+      "id": "R14",
+      "task": "这个保健品宣称的疗效有临床证据吗",
+      "expectDomains": ["medical"]
+    }
+  ]
+}

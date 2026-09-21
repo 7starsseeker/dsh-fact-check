@@ -1,0 +1,388 @@
+{
+ "_about": "40 例「证据-论断」测试集。真值由判据机械决定：证据是否直接、明确地印证论断的全部关键要素（主体/时间/数字/方向）。kind 说明该例考的是什么。",
+ "_generated_by": "cases/neutralize.mjs（作者侧工具，本包不分发原始语料）",
+ "_replaced_tokens": 72,
+ "_rubric": {
+  "true": "证据直接、明确地印证论断的全部关键要素：主体、时间、数字、方向都一致",
+  "false": "证据与论断矛盾，或只涉及别的对象/时间，或数字口径不符，或只是无法追溯来源的孤证，或只支持一个更弱的版本"
+ },
+ "cases": [
+  {
+   "id": "B01",
+   "kind": "supported",
+   "claim": "<该安全阀门> 通过了 26 例双语自检。",
+   "label": true,
+   "evidence": [
+    "来源: <项目验证记录>）— 第 23 项结论：双语与语言开关，离线 selftest-i18n 26 例全过。"
+   ]
+  },
+  {
+   "id": "B02",
+   "kind": "supported",
+   "claim": "<宿主> 实际加载的 <该安全阀门> 代码位于 <宿主磁盘>。",
+   "label": true,
+   "evidence": [
+    "来源: <宿主配置清单> 配置）— dependencies 含 \"<该工具包>\": \"link:<项目验证记录>\"，<宿主配置项> 也列出 <该工具包>。",
+    "来源: 文件系统实测 — profiles/web/node_modules/<该工具包> 是指向 <项目验证记录> 的符号链接。"
+   ]
+  },
+  {
+   "id": "B03",
+   "kind": "contradicted",
+   "claim": "审计日志显示阀门当前处于额度降级状态。",
+   "label": false,
+   "evidence": [
+    "来源: 现场实测（2026-09-21）— <审计日志目录> 下不存在 降级标记文件；阀门状态命令输出「✅ 判定阀门:正常」。",
+    "来源: <审计日志目录> — 最新若干条判定 source 均为 jev（真实调用），非降级回退。"
+   ]
+  },
+  {
+   "id": "B04",
+   "kind": "contradicted",
+   "claim": "Jev 对中文的准确率明显低于英语。",
+   "label": false,
+   "evidence": [
+    "来源: jev-calibration/report.md（114 题三臂校准，2026-09-20）— 臂 A 中文直连 90.4%，臂 B 机器翻译成英文后调 Jev 89.5%，臂 C 翻译+回译校验 89.5%。",
+    "说明: 比较口径为「中文直连 vs 翻译成英文」，差值 0.9 个百分点，样本 114 题。"
+   ]
+  },
+  {
+   "id": "B05",
+   "kind": "overstated",
+   "claim": "Jev 在所有场景上的判断准确率都达到 90%。",
+   "label": false,
+   "evidence": [
+    "来源: jev-calibration/report.md — 按场景：support 100%（n=36）、coding 94%（n=18）、triage 96%（n=24）、ops 仅 75%（n=36）。"
+   ]
+  },
+  {
+   "id": "B06",
+   "kind": "supported",
+   "claim": "<该安全阀门> 在判定超时后会放行命令（fail-open）。",
+   "label": true,
+   "evidence": [
+    "来源: <项目验证记录> — _timing 项原文：「超时或报错一律放行(fail-open)，因为宿主自己的沙箱与审批策略仍在执行之前」。",
+    "来源: <项目验证记录> 文件头注释 — pipeline 第 3 步「timeout, network error, aborted caller -> ALLOW (fail-open)」。"
+   ]
+  },
+  {
+   "id": "B07",
+   "kind": "insufficient",
+   "claim": "TypeSafe 是全球最大的决策模型供应商。",
+   "label": false,
+   "evidence": [
+    "来源: 厂商自家官网首页自述 — 自称在自动化场景领先，未给出第三方市占数据。"
+   ]
+  },
+  {
+   "id": "B08",
+   "kind": "supported",
+   "claim": "阀门在 737 条真实命令上的拦截比例低于 2%。",
+   "label": true,
+   "evidence": [
+    "来源: <该工具包>/offline-report.md（离线复跑）— 命令行数 737；判定分布 allow 723（98.1%）、ask 14（1.9%）、deny 0。"
+   ]
+  },
+  {
+   "id": "B09",
+   "kind": "contradicted",
+   "claim": "L0 硬拒绝规则会被重试预算升级成人工弹窗从而可能被放行。",
+   "label": false,
+   "evidence": [
+    "来源: <项目验证记录> — 记录一次修复「判定动作随审批模式分叉，并堵住重试预算绕过 L0 的洞」；修复后硬-deny 不参与重试预算升级。"
+   ]
+  },
+  {
+   "id": "B10",
+   "kind": "conflict",
+   "claim": "Jev 调用的 P95 延迟在 400 毫秒以内。",
+   "label": false,
+   "evidence": [
+    "来源: offline-report.md（737 条命令）— Jev 调用 P50 268ms、P95 367ms。",
+    "来源: jev-calibration/report.md（114 题）— Jev 平均 0.89s、P50 0.79s、P95 1.67s。",
+    "说明: 两份证据的 P95 相差近 5 倍，口径（命令判定 vs 复合问题）不同且均未说明可比性。"
+   ]
+  },
+  {
+   "id": "B11",
+   "kind": "supported",
+   "claim": "官方文档列出 Jev 1.13 的 9 类已知失效模式。",
+   "label": true,
+   "evidence": [
+    "来源: https://docs.typesafe.ai/model-jaggedness/jev-1.13.md（厂商官方文档，标注 last reviewed 2026-09-17）— 表格编号列出 9 条：1 literal reading、2 math and numbers、3 date and time comparison、4 indirection、5 large state full of irrelevant detail、6 adversarial content、7 contradictory instructions and criteria、8 common-sense structural invariants、9 generation。"
+   ]
+  },
+  {
+   "id": "B12",
+   "kind": "insufficient",
+   "claim": "官方文档指出 Jev 对中文的准确率弱于英语。",
+   "label": false,
+   "evidence": [
+    "来源: https://docs.typesafe.ai/model-jaggedness/jev-1.13.md — 该页列出的失效模式中没有任何一条涉及语言或 CJK。",
+    "来源: https://docs.typesafe.ai/llms.txt（官方文档索引）— 未检索到「语言支持」「多语言」「CJK」相关的独立页面。"
+   ]
+  },
+  {
+   "id": "B13",
+   "kind": "supported",
+   "claim": "Jev 输出的置信度是由概率分布的展开程度算出来的。",
+   "label": true,
+   "evidence": [
+    "来源: https://docs.typesafe.ai/confidence.md（厂商官方文档）— 页面标题与摘要：「How TypeSafe reports certainty, how it differs from probability, and how to use it to control system behavior」，正文演示「How this demo calculates Confidence」时以三项概率分布的分散程度计算 confidence。"
+   ]
+  },
+  {
+   "id": "B14",
+   "kind": "supported",
+   "claim": "把多个问题打包进一次 TypeSafe 调用，官方实测比逐条调用便宜 12.2 倍、快 10.0 倍。",
+   "label": true,
+   "evidence": [
+    "来源: https://docs.typesafe.ai/cookbooks/parallel_questions.md（厂商官方 cookbook）— 摘要原文：「Runs a 13-question regulatory briefing over the GDPR Wikipedia article, showing that batching every question into one TypeSafe call is 12.2x cheaper and 10.0x faster with no change in answers」。"
+   ]
+  },
+  {
+   "id": "B15",
+   "kind": "overstated",
+   "claim": "并行打包提问会轻微改变模型给出的答案。",
+   "label": false,
+   "evidence": [
+    "来源: https://docs.typesafe.ai/cookbooks/parallel_questions.md — 原文写明打包后「with no change in answers」（答案没有变化），并给出 12.2x 便宜 / 10.0x 更快的量化。"
+   ]
+  },
+  {
+   "id": "B16",
+   "kind": "supported",
+   "claim": "TypeSafe 提供了官方 Python 与 JavaScript 客户端 SDK。",
+   "label": true,
+   "evidence": [
+    "来源: https://docs.typesafe.ai/llms.txt（官方文档索引）— 分别列出「TypeSafe Python SDK」（含 changelog / API reference）与「JavaScript SDK」（含 TypeSafeClient 等 API 页面）。"
+   ]
+  },
+  {
+   "id": "B17",
+   "kind": "supported",
+   "claim": "TypeSafe 官方发布了一个可被 agent 直接安装的技能包。",
+   "label": true,
+   "evidence": [
+    "来源: https://docs.typesafe.ai/agent-skill.md（官方文档）— 标题「Agent skill — Drop-in skill for Claude Code, Codex, and other agent environments」，给出安装命令与 https://github.com/typesafe-ai/skills 的 SKILL.md 直链。"
+   ]
+  },
+  {
+   "id": "B18",
+   "kind": "contradicted",
+   "claim": "Jev 的输出 token 与输入 token 同价。",
+   "label": false,
+   "evidence": [
+    "来源: https://openrouter.ai/typesafe/jev-1.13（第三方模型目录）— 标价 $0.042 per million input tokens、$0 per million output tokens。",
+    "来源: <项目验证记录> — pricePerMTok 0.042，注释说明「输出按官方说明免费」。"
+   ]
+  },
+  {
+   "id": "B19",
+   "kind": "supported",
+   "claim": "该环境的 Jev 判定默认在 1.8 秒超时后放行。",
+   "label": true,
+   "evidence": [
+    "来源: <项目验证记录> — \"timeoutMs\": 1800，_timing 注释「单次判定预算；超时或报错一律放行(fail-open)」。"
+   ]
+  },
+  {
+   "id": "B20",
+   "kind": "insufficient",
+   "claim": "<该安全阀门> 在 Windows 上的表现优于 Linux。",
+   "label": false,
+   "evidence": [
+    "来源: <项目验证记录> — 第 16 项记录「跨平台入口守卫：两个平台都跑通了」，第 17 项记录 Windows 授权行引号问题已修；两项都只说明可用，未做任何性能或效果对比。"
+   ]
+  },
+  {
+   "id": "B21",
+   "kind": "supported",
+   "claim": "<宿主> 的 file 策略在本会话是 <沙箱策略>。",
+   "label": true,
+   "evidence": [
+    "来源: 本会话运行时上下文 — 「Current <宿主> file policy: <沙箱策略>. Any available operation enforced by the <宿主> file sandbox may modify files under the session workspace: <工作区路径>"
+   ]
+  },
+  {
+   "id": "B22",
+   "kind": "supported",
+   "claim": "SearXNG 实例当前启用了 86 个引擎。",
+   "label": true,
+   "evidence": [
+    "来源: 现场实测 curl <自托管搜索地址>/config — engines 数组共 232 项，其中 enabled 为真者 86 项（http_200）。"
+   ]
+  },
+  {
+   "id": "B23",
+   "kind": "contradicted",
+   "claim": "该环境的自托管元搜索服务已经停止服务。",
+   "label": false,
+   "evidence": [
+    "来源: 现场实测（2026-09-21）— 容器编排工具显示元搜索容器状态 Up，端口 <自托管搜索地址>；curl /healthz 返回 200 且正文 OK；/search?q=test&format=json 返回 200 与结果列表。"
+   ]
+  },
+  {
+   "id": "B24",
+   "kind": "insufficient",
+   "claim": "该环境下 curl 访问环回地址必须加 --noproxy '*'。",
+   "label": false,
+   "evidence": [
+    "来源: 现场实测 — 一条命令同时包含 --noproxy '*' 与 -m 30，返回 http_200；另两条带 --noproxy '*' 但超时更短（-m 8 / -m 10）返回 http_000。",
+    "说明: 该记录无法区分「代理干扰」与「超时过短」，缺少不带 --noproxy 的对照实验。"
+   ]
+  },
+  {
+   "id": "B25",
+   "kind": "supported",
+   "claim": "该环境安装的 视频提取工具提供了 video、danmaku、comments 三个子命令。",
+   "label": true,
+   "evidence": [
+    "来源: 现场实测 python3 <工具入口路径> --help — usage: 视频提取工具 [-h] {video,danmaku,comments} ...，三行子命令说明分别为提取字幕、弹幕、评论。"
+   ]
+  },
+  {
+   "id": "B26",
+   "kind": "overstated",
+   "claim": "该环境的 fact-check skill 会在所有情况下自动联网核实。",
+   "label": false,
+   "evidence": [
+    "来源: <本技能目录> — 铁律 1 要求所有关键信息用搜索核实；但「使用边界」一节写明：用户若只要快速浏览，可明确告知「轻量模式」，此时至少保留多源搜索与来源标注两步，其余流程可省。"
+   ]
+  },
+  {
+   "id": "B27",
+   "kind": "supported",
+   "claim": "本技能文档 声明自己不在缺少证据时下超越证据的断言。",
+   "label": true,
+   "evidence": [
+    "来源: <本技能目录> 原文：「本技能只负责『查证与呈现』，不下超越证据的断言；证据不足时结论就是『无法核实/未证实』，而不是猜测。」"
+   ]
+  },
+  {
+   "id": "B28",
+   "kind": "insufficient",
+   "claim": "<该安全阀门> 的拦截准确率是 99%。",
+   "label": false,
+   "evidence": [
+    "来源: <该工具包>/offline-report.md — 报告只给出 737 条命令上的判定分布（allow 723 / ask 14 / deny 0）与延迟分位数，并单独列出 14 条会被拦下的命令「需人工复核误报」，未给出准确率。"
+   ]
+  },
+  {
+   "id": "B29",
+   "kind": "contradicted",
+   "claim": "离线报告显示该批命令中有 14 条被硬拒绝（deny）。",
+   "label": false,
+   "evidence": [
+    "来源: <该工具包>/offline-report.md — 判定分布表：allow 723（98.1%）、ask 14（1.9%）、deny 0（0.0%）。"
+   ]
+  },
+  {
+   "id": "B30",
+   "kind": "conflict",
+   "claim": "Jev 在中文下的准确率高于翻译成英文后调用。",
+   "label": false,
+   "evidence": [
+    "来源: jev-calibration/report.md 总表 — 中文直连 90.4%（103/114），翻译成英文 89.5%（102/114），故中文高 0.9 个百分点。",
+    "来源: 同报告第 4 节可靠性分桶 — 置信度 0.7–0.8 桶内，中文 90%、翻译英文 71%；而 0.6–0.7 桶内中文 80%、翻译英文 50%，分桶样本各 5–10 例。",
+    "说明: 两个口径给出的差距方向一致但量级矛盾（总体 0.9pp vs 分桶数 10–30pp），小样本下无法判定。"
+   ]
+  },
+  {
+   "id": "B31",
+   "kind": "supported",
+   "claim": "<该安全阀门> 会把每次判定的结果写进共享审计日志。",
+   "label": true,
+   "evidence": [
+    "来源: <项目验证记录> — _log 注释：「共享审计日志：每个判定追加一行 JSONL，<宿主插件>与 CLI 写同一个文件」，默认路径 <审计日志目录>",
+    "来源: 现场实测 — <审计日志目录> 存在且 871 行，每行含 at/tool/action/decision/source/p/model/ms/command 字段。"
+   ]
+  },
+  {
+   "id": "B32",
+   "kind": "overstated",
+   "claim": "阀门在额度耗尽后会完全停止工作。",
+   "label": false,
+   "evidence": [
+    "来源: <项目验证记录> — _degradePolicy 注释：「降级期间保留哪一层：'l0-only'（默认）= 只停要花钱联网的语义层，免费的 L0 硬规则 + 预筛照常工作」。"
+   ]
+  },
+  {
+   "id": "B33",
+   "kind": "supported",
+   "claim": "被拦下的命令会附带一个绑定命令哈希的一次性放行令牌。",
+   "label": true,
+   "evidence": [
+    "来源: <项目验证记录> — _tokens 注释：「令牌绑定命令哈希（空白差异不影响）、用掉即删、无法重放，且不越过 L0 的永不允许规则」。",
+    "来源: verification-results/SUMMARY.md 第 9 项 — 令牌闭环在真实会话里验证：被拦命令的理由里带 ALLOW-XXXXXXXXXX。"
+   ]
+  },
+  {
+   "id": "B34",
+   "kind": "insufficient",
+   "claim": "<该安全阀门> 比同类安全阀门更安全。",
+   "label": false,
+   "evidence": [
+    "来源: <项目验证记录> — 只描述自身设计（L0 硬规则 + 预筛 + Jev 语义判定 + 降级策略），没有任何与同类工具的比较实验或第三方评测。"
+   ]
+  },
+  {
+   "id": "B35",
+   "kind": "supported",
+   "claim": "该环境存在两条可用的 Jev 访问路径（TypeSafe 直连与 OpenRouter 代理）。",
+   "label": true,
+   "evidence": [
+    "来源: Hindsight 知识页 kp-1ed317dbca1144bb9904bb08709e340b — 列出两条路线：POST https://api.typesafe.ai/v1/systemone（64k context）与 OpenRouter 的 typesafe/jev-1.13（beta，POST https://openrouter.ai/api/alpha/decisions，32k context）。",
+    "来源: https://openrouter.ai/typesafe/jev-1.13（第三方模型目录）— 模型页存在。"
+   ]
+  },
+  {
+   "id": "B36",
+   "kind": "contradicted",
+   "claim": "该环境凭据文件里没有任何与 TypeSafe 相关的密钥。",
+   "label": false,
+   "evidence": [
+    "来源: 现场实测 grep <宿主凭据清单> — refs 中出现 TYPESAFE_API_KEY（值不外显）。"
+   ]
+  },
+  {
+   "id": "B37",
+   "kind": "supported",
+   "claim": "Jev 的 choice 类型回答里包含每个选项的概率。",
+   "label": true,
+   "evidence": [
+    "来源: https://docs.typesafe.ai/primitives/choice.md — 摘要原文：「The answer includes the selected option, a probability for each option, and confidence」。",
+    "来源: 现场探针实测（2026-09-21）— 单条 choice 回答原文：{\"choice\": \"spec\", \"confidence\": 0.94, \"probabilities\": {\"mixed\": 0, \"react\": 0.04, \"spec\": 0.96, \"weak\": 0}, \"type\": \"choice\"}。"
+   ]
+  },
+  {
+   "id": "B38",
+   "kind": "overstated",
+   "claim": "Jev 的回答里 confidence 独立于概率分布，能提供额外信息。",
+   "label": false,
+   "evidence": [
+    "来源: https://docs.typesafe.ai/confidence.md — 官方说明 confidence 由概率分布的分散程度计算得出（页面演示「How this demo calculates Confidence」即据三项概率算 confidence）。",
+    "来源: 现场探针样本 — conf 0.94 对应 top 概率 0.96、次高 0.04；conf 0.52 对应 0.65/0.34，与「由分布推出」一致。"
+   ]
+  },
+  {
+   "id": "B39",
+   "kind": "insufficient",
+   "claim": "Jev 的判定延迟低于 300 毫秒所以总成本可以忽略。",
+   "label": false,
+   "evidence": [
+    "来源: <工作区>/ — Jev 调用延迟均值 297ms、P50 268ms、P95 367ms（737 条）。",
+    "说明: 该证据只覆盖延迟，没有任何关于调用单价、配额上限或总调用量的数据；「总成本可以忽略」不是该证据能支持或否证的结论。"
+   ]
+  },
+  {
+   "id": "B40",
+   "kind": "supported",
+   "claim": "本技能文档 的校准时间标注为 2026-09-19。",
+   "label": true,
+   "evidence": [
+    "来源: <本技能目录> — 「工具映射（现场实测，2026-09-19 校准）」与「运行环境适配（2026-09-19 复核）」两节均写明该日期；文件 mtime 为 Sep 19 22:57。"
+   ]
+  }
+ ]
+}

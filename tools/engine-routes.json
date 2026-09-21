@@ -1,0 +1,104 @@
+{
+  "_about": "渠道路由表：确定性映射，模型不参与。**这是模板，不是配置**：表里所有 ${...} 都是变量，取值由 tools/local.json 的 overrides（或 JEV_* 环境变量）提供；未填也能跑，计划会原样显示占位符并把它列进 localPlaceholdersUnset。",
+  "_template_note": "本表只描述公开可用的渠道与接口，不包含任何主机地址。下面的 capabilities 段是「这类渠道能干什么」，具体地址由你填。",
+  "capabilities": {
+    "searxng": "${SEARXNG_URL} —— 自托管元搜索：GET /search?q=…&format=json；引擎数量看你自己实例的 GET /config；若走 HTTP 代理，本地地址必须绕过代理；冷启首查可能超时，建议放宽到 20~30s",
+    "proxy": "${HTTP_PROXY_URL} —— HTTP(S) 代理（海外站点可能需要；国内站点通常直连；本地服务必须绕过代理）",
+    "video_fetch": "${VIDEO_FETCH_CMD} —— 视频平台字幕/弹幕/评论提取工具（可选；评论与字幕通常需要登录态，弹幕一般免登录）",
+    "fetch_fallbacks": ["搜索服务自带的正文抽取（多数搜索 API 都有）", "markitdown / trafilatura / readability 等 HTML→Markdown 工具", "内置网页抓取能力", "curl -sL -A 'Mozilla/5.0'"]
+  },
+  "routes": [
+    {
+      "id": "general_web",
+      "when": "通用事实、需要中英双语多源",
+      "primary": ["批量搜索（多条查询并发，中英各一组）", "多引擎交叉搜索（按命中引擎数分置信度）", "单条快搜"],
+      "notes": "铁律 2 的主力：一次发多条查询，不要串行"
+    },
+    {
+      "id": "searxng_meta",
+      "when": "需要跨引擎交叉、或需要常规搜索 API 索引不到的生态",
+      "primary": ["自托管元搜索 JSON API ${SEARXNG_URL}/search?q=…&format=json（支持 categories / language / pageno）"],
+      "notes": "元搜索通常聚合百度/360/搜狗（含公众号）/B站/bing/brave/wikipedia/arxiv/pubmed 等；是否检索得到某个社区（如 Reddit）取决于你启用了哪些引擎，请在你的实例上验证"
+    },
+    {
+      "id": "vertical_domain",
+      "when": "金融 / 学术 / 法律 / 医疗 / 安全 / 能源 等垂直领域",
+      "primary": ["搜索服务的垂直域/tag 能力（先取 tag 清单再带 tag 调用）"],
+      "notes": "没有垂直域能力时，用 `site:` 限定 + 权威站点白名单替代"
+    },
+    {
+      "id": "official_json_api",
+      "when": "中国政策文件、法条、辟谣",
+      "primary": [
+        "国务院政策文件库 https://sousuo.www.gov.cn/search-gov/data?t=zhengcelibrary_gw_bm_gb&q=<kw>&p=1&n=100",
+        "国家法律法规数据库 https://flk.npc.gov.cn/",
+        "中国互联网联合辟谣平台 https://www.piyao.org.cn/"
+      ],
+      "notes": "结构化 JSON、免登录，优先于媒体转述"
+    },
+    {
+      "id": "academic_api",
+      "when": "学术结论、论文是否被撤稿",
+      "primary": ["Crossref https://api.crossref.org/works/<DOI>", "Retraction Watch 数据库", "PubMed / Semantic Scholar"],
+      "notes": "查 has-update:1 判断撤稿或更正"
+    },
+    {
+      "id": "news_rss",
+      "when": "新闻回溯、对权威源的定向监控、报道量随时间的变化",
+      "primary": [
+        "Google News RSS https://news.google.com/rss/search?q=<kw>&hl=en-US&gl=US&ceid=US:en",
+        "GDELT DOC 2.0 https://api.gdeltproject.org/api/v2/doc/doc?query=<kw>&mode=artlist（65 语种全文检索 + 报道量时间线，免费无 Key）",
+        "GDELT TV 2.0 https://api.gdeltproject.org/api/v2/tv/tv?query=<kw>（美国电视新闻字幕检索，免费无 Key）",
+        "媒体官方 RSS（例：中新网 https://www.chinanews.com.cn/rss/index.shtml —— 少有的央媒官方 RSS）"
+      ],
+      "notes": "支持 site: / when:7d / after: / before: 运算符；Google News 的结果链接为编码重定向需解码；GDELT 适合补『报道量随时间变化』这个维度"
+    },
+    {
+      "id": "archive",
+      "when": "页面是否存在/被删/被改，或需要主动留证",
+      "primary": ["Wayback Availability API", "Wayback CDX API（列全部快照）", "Wayback Save（主动存档）"],
+      "notes": "核查「事后删除」类事件的关键动作，公开免 Key"
+    },
+    {
+      "id": "closed_cn_social",
+      "when": "需要登录态的中国平台内容（公众号 / 知乎 / 视频站 / 微博 等）",
+      "primary": ["自托管元搜索（部分引擎能索引到这类内容）", "${VIDEO_FETCH_CMD}（视频站字幕/弹幕/评论）", "社交域名限定搜索（通常只能到标题/热搜层级）"],
+      "notes": "这类内容的正文通常需要登录态：抓不到就如实写「未能直接获取原文」，不要伪造"
+    },
+    {
+      "id": "closed_intl_social",
+      "when": "X / Reddit / Facebook 等平台内容",
+      "primary": [
+        "X 单条推文 syndication 接口：https://cdn.syndication.twimg.com/tweet-result?id=<tweet_id>&token=a（公开、免登录）",
+        "X oembed：https://publish.twitter.com/oembed?url=<url>（需跟随重定向）",
+        "Reddit：用正文抓取工具抓帖 URL；检索用 `site:reddit.com <关键词>`"
+      ],
+      "notes": "Facebook 免登录基本无解；先试公开接口，失败即如实标注未能获取"
+    },
+    {
+      "id": "media_metadata",
+      "when": "图片/视频溯源",
+      "primary": ["${EXIFTOOL_CMD}（EXIF：拍摄时间/GPS/编辑痕迹）", "平台首发页", "Wayback"],
+      "notes": "照片溯源第一动作是读 EXIF，不是搜文字"
+    },
+    {
+      "id": "domain_intel",
+      "when": "域名真伪、识别冒名站",
+      "primary": ["crt.sh https://crt.sh/?q=<domain>&output=json（证书透明度→子域与域名年龄）", "whois（系统 CLI 或 python-whois 模块）"],
+      "notes": "可疑 SEO 站/冒名站要先证域名"
+    },
+    {
+      "id": "factcheck_registry",
+      "when": "说法是否已被核查机构核查过",
+      "primary": ["Google Fact Check Tools API（需自备免费 Key）", "中国互联网联合辟谣平台 piyao.org.cn", "Snopes / Politifact / 澎湃明查"],
+      "notes": "Google 该 API 需要 Key；没配就只用后几个"
+    }
+  ],
+  "_failure_actions": [
+    {"match": "HTTP 403 / 401 / 验证码 / 安全检测", "action": "换渠道：搜索引擎缓存 → 转载站 → 镜像 → 官方 API；仍失败则标注「未能获取原文」"},
+    {"match": "连接超时 / 无响应 / 被代理劫持", "action": "本地服务绕过代理；外网站确认代理可用；抓取放宽超时并重试一次"},
+    {"match": "0 结果", "action": "换措辞（中英互译、5~10 组关键词）→ 换工具 → 加 site: / 时间限定 → 换垂直域"},
+    {"match": "结果全是同一篇转载", "action": "按「伪多源」处理，追转载链到最上游再计独立来源数"},
+    {"match": "内容像 JS 空壳/登录墙", "action": "先用决策模型的 usable_page 判定；是空壳就换渠道，且不计入证据"}
+  ]
+}

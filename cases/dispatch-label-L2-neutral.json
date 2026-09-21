@@ -1,0 +1,207 @@
+{
+ "_about": "去痕版回归语料：结构、断言与标签与校准记录完全一致，仅把证据文本里的主机路径/SDK 名替换为 <占位符>，以便脱离原作者环境使用。",
+ "_generated_by": "cases/neutralize.mjs（作者侧工具，本包不分发原始语料）",
+ "_replaced_tokens": 0,
+ "labels": [
+  {
+   "id": "D01",
+   "label": false,
+   "why": "仅官方文档一处"
+  },
+  {
+   "id": "D02",
+   "label": true,
+   "why": "中外官方媒体需交叉"
+  },
+  {
+   "id": "D03",
+   "label": false,
+   "why": "npm单一公开源"
+  },
+  {
+   "id": "D04",
+   "label": true,
+   "why": "公众号知乎B站须封闭取证"
+  },
+  {
+   "id": "D05",
+   "label": false,
+   "why": "论文库公开可查"
+  },
+  {
+   "id": "D06",
+   "label": false,
+   "why": "GitHub归档状态公开"
+  },
+  {
+   "id": "D07",
+   "label": false,
+   "why": "公告与财报公开可查"
+  },
+  {
+   "id": "D08",
+   "label": false,
+   "why": "公告媒体均公开可查"
+  },
+  {
+   "id": "D09",
+   "label": false,
+   "why": "文档与issue公开"
+  },
+  {
+   "id": "D10",
+   "label": true,
+   "why": "官方外媒攻击者声明多路"
+  },
+  {
+   "id": "D11",
+   "label": false,
+   "why": "官网一处即可"
+  },
+  {
+   "id": "D12",
+   "label": true,
+   "why": "中外口径需两路取证"
+  },
+  {
+   "id": "D13",
+   "label": false,
+   "why": "法条案例公开库"
+  },
+  {
+   "id": "D14",
+   "label": false,
+   "why": "仓库与许可证公开"
+  },
+  {
+   "id": "D15",
+   "label": true,
+   "why": "外文监管与中文媒体"
+  },
+  {
+   "id": "D16",
+   "label": false,
+   "why": "厂商评测社区均公开"
+  },
+  {
+   "id": "D17",
+   "label": false,
+   "why": "README与包清单"
+  },
+  {
+   "id": "D18",
+   "label": false,
+   "why": "药监与注册公开可查"
+  },
+  {
+   "id": "D19",
+   "label": false,
+   "why": "地方志档案公开"
+  },
+  {
+   "id": "D20",
+   "label": false,
+   "why": "定价页一次可查"
+  },
+  {
+   "id": "D21",
+   "label": true,
+   "why": "原上传者需进入平台"
+  },
+  {
+   "id": "D22",
+   "label": false,
+   "why": "年鉴通报公开可查"
+  },
+  {
+   "id": "D23",
+   "label": false,
+   "why": "GitHub一处可查"
+  },
+  {
+   "id": "D24",
+   "label": false,
+   "why": "统计局IMF公开"
+  },
+  {
+   "id": "D25",
+   "label": false,
+   "why": "公告工商信息公开"
+  },
+  {
+   "id": "D26",
+   "label": false,
+   "why": "许可原文一处"
+  },
+  {
+   "id": "D27",
+   "label": false,
+   "why": "政府官网原文可覆盖"
+  },
+  {
+   "id": "D28",
+   "label": false,
+   "why": "科普教材即可"
+  },
+  {
+   "id": "D29",
+   "label": false,
+   "why": "归档与公告公开"
+  },
+  {
+   "id": "D30",
+   "label": true,
+   "why": "国内外媒体口径差异"
+  },
+  {
+   "id": "D31",
+   "label": true,
+   "why": "需进社交账号取证"
+  },
+  {
+   "id": "D32",
+   "label": false,
+   "why": "CVE库公开可查"
+  },
+  {
+   "id": "D33",
+   "label": false,
+   "why": "公开数据源可覆盖"
+  },
+  {
+   "id": "D34",
+   "label": false,
+   "why": "公告与回应公开"
+  },
+  {
+   "id": "D35",
+   "label": false,
+   "why": "厂商规格书一处"
+  },
+  {
+   "id": "D36",
+   "label": true,
+   "why": "含学生社区须封闭取证"
+  },
+  {
+   "id": "D37",
+   "label": true,
+   "why": "链上社交社区多封闭"
+  },
+  {
+   "id": "D38",
+   "label": false,
+   "why": "RFC官网一处"
+  },
+  {
+   "id": "D39",
+   "label": false,
+   "why": "注册与新闻稿公开"
+  },
+  {
+   "id": "D40",
+   "label": false,
+   "why": "政策文件库单点"
+  }
+ ]
+}

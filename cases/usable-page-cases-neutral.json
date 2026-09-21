@@ -1,0 +1,143 @@
+{
+  "_about": "「这段抓取到的内容是不是可用正文」测试集（12 例，补 usable_page 判据原本缺失的校准语料）。真值按判据机械裁定：内容含成段正文且与页面主题一致 = true；只有登录提示、验证码、安全检测、JS 空壳、订阅弹窗、纯导航 = false。判据是事实性判断，不评价内容本身是否属实。",
+  "_generated_by": "2026-09-21 新增（作者侧实证：MEASUREMENTS.md §1 原表缺 usable_page 一项）",
+  "_replaced_tokens": 0,
+  "_rubric": {
+    "true": "内容包含成段的正文，与页面主题一致，能读到完整句子",
+    "false": "内容只有登录提示、验证码、安全检测、订阅弹窗、导航菜单，或与主题无关的样板文字"
+  },
+  "cases": [
+    {
+      "id": "U01",
+      "claim": "该页面的抓取结果可以作为核查证据使用。",
+      "label": true,
+      "evidence": [
+        {
+          "name": "机构官网公告页",
+          "text": "关于调整本市居民用天然气销售价格的通知\n\n各区发展改革委、各燃气经营企业：\n经市政府批准，自2026年10月1日起，本市居民用天然气销售价格由每立方米2.63元调整为每立方米2.78元。居民阶梯气价同步调整，第一档用气量维持不变。\n各燃气经营企业应做好价格公示和宣传解释工作，确保政策平稳实施。\n\n市发展和改革委员会\n2026年9月18日"
+        }
+      ]
+    },
+    {
+      "id": "U02",
+      "claim": "该页面的抓取结果可以作为核查证据使用。",
+      "label": true,
+      "evidence": [
+        {
+          "name": "英文通讯社报道",
+          "text": "The company said on Friday that it would close two of its three assembly plants by the end of next year, a decision it attributed to falling demand in its largest market. Roughly 1,400 workers will be affected, according to a filing with the local labour authority. A company spokesperson declined to say whether severance terms had been agreed with the union."
+        }
+      ]
+    },
+    {
+      "id": "U03",
+      "claim": "该页面的抓取结果可以作为核查证据使用。",
+      "label": true,
+      "evidence": [
+        {
+          "name": "政府数据页",
+          "text": "2025年规模以上工业增加值同比增长6.2%，其中高技术制造业增长9.8%，装备制造业增长7.4%。分经济类型看，国有控股企业增长4.1%，股份制企业增长6.9%，外商及港澳台商投资企业增长3.2%。全年规模以上工业企业产销率为97.3%。"
+        }
+      ]
+    },
+    {
+      "id": "U04",
+      "claim": "该页面的抓取结果可以作为核查证据使用。",
+      "label": true,
+      "evidence": [
+        {
+          "name": "论坛帖子（社区来源，但内容是正文）",
+          "text": "楼主：昨天下午三点左右在科技园地铁站B口看到一辆共享单车倒在地上，旁边有个穿蓝色工装的师傅在拍照记录。我问他是不是运维，他说是，还说这个点位一天要整理三四次。我随手看了下App，那个点位的可用车辆显示为0，但实际停了十几辆。"
+        }
+      ]
+    },
+    {
+      "id": "U05",
+      "claim": "该页面的抓取结果可以作为核查证据使用。",
+      "label": true,
+      "evidence": [
+        {
+          "name": "论文摘要页",
+          "text": "Abstract\nWe examine whether early exposure to air pollution affects cognitive test scores in a cohort of 12,000 students across 84 schools. Using a regression discontinuity design around a district heating plant, we find a 1.8 point reduction in standardised maths scores per 10 µg/m³ increase in PM2.5, with effects concentrated among younger students. The estimates are robust to alternative specifications and to the inclusion of school fixed effects."
+        }
+      ]
+    },
+    {
+      "id": "U06",
+      "claim": "该页面的抓取结果可以作为核查证据使用。",
+      "label": true,
+      "evidence": [
+        {
+          "name": "媒体正文页（含少量导航）",
+          "text": "首页 > 财经 > 公司\n\n该公司周三发布公告称，已完成对目标公司100%股权的交割，交易对价为人民币12.4亿元，全部以现金方式支付。公告显示，标的公司2025年度经审计净利润为8600万元。\n\n公告同时提示，本次交易完成后公司将新增商誉约9.1亿元，若标的公司未来经营不及预期，存在商誉减值风险。截至周三收盘，该公司股价上涨3.2%。"
+        }
+      ]
+    },
+    {
+      "id": "U07",
+      "claim": "该页面的抓取结果可以作为核查证据使用。",
+      "label": false,
+      "evidence": [
+        {
+          "name": "内容平台（登录墙）",
+          "text": "登录后继续阅读\n\n该内容为会员专属，请先登录账号\n\n[立即登录]  [注册新账号]\n\n登录即代表同意《用户协议》与《隐私政策》"
+        }
+      ]
+    },
+    {
+      "id": "U08",
+      "claim": "该页面的抓取结果可以作为核查证据使用。",
+      "label": false,
+      "evidence": [
+        {
+          "name": "安全检测页",
+          "text": "安全检测中，请稍候…\n\n您的访问行为需要验证。\n请拖动滑块完成验证\n\n[拖动滑块]"
+        }
+      ]
+    },
+    {
+      "id": "U09",
+      "claim": "该页面的抓取结果可以作为核查证据使用。",
+      "label": false,
+      "evidence": [
+        {
+          "name": "JS 空壳页",
+          "text": "This page requires JavaScript to be enabled.\n\nPlease enable JavaScript in your browser settings and reload the page."
+        }
+      ]
+    },
+    {
+      "id": "U10",
+      "claim": "该页面的抓取结果可以作为核查证据使用。",
+      "label": false,
+      "evidence": [
+        {
+          "name": "纯导航页",
+          "text": "首页 | 新闻 | 财经 | 体育 | 娱乐 | 科技 | 汽车 | 房产 | 教育 | 健康 | 旅游 | 天气 | 邮箱 | 地图 | 视频 | 图片 | 论坛 | 博客 | 微博 | 客户端下载 | 帮助中心 | 意见反馈 | 广告服务 | 联系我们 | 招聘信息 | 隐私政策 | 版权声明"
+        }
+      ]
+    },
+    {
+      "id": "U11",
+      "claim": "该页面的抓取结果可以作为核查证据使用。",
+      "label": false,
+      "evidence": [
+        {
+          "name": "订阅弹窗页",
+          "text": "订阅我们的新闻邮件，第一时间获取深度报道。\n\n留下您的邮箱，我们会定期发送精选内容。\n\n[输入邮箱地址]  [订阅]\n\n已有账号？登录 | 不想订阅？关闭"
+        }
+      ]
+    },
+    {
+      "id": "U12",
+      "claim": "该页面的抓取结果可以作为核查证据使用。",
+      "label": false,
+      "evidence": [
+        {
+          "name": "样板错误页",
+          "text": "Sorry, that page cannot be found.\n\nThe link you followed may be broken, or the page may have been removed.\n\nGo back to the homepage."
+        }
+      ]
+    }
+  ]
+}

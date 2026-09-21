@@ -1,0 +1,207 @@
+{
+ "_about": "去痕版回归语料：结构、断言与标签与校准记录完全一致，仅把证据文本里的主机路径/SDK 名替换为 <占位符>，以便脱离原作者环境使用。",
+ "_generated_by": "cases/neutralize.mjs（作者侧工具，本包不分发原始语料）",
+ "_replaced_tokens": 0,
+ "labels": [
+  {
+   "id": "D01",
+   "label": false,
+   "why": "仅官方文档一处"
+  },
+  {
+   "id": "D02",
+   "label": true,
+   "why": "国内外两侧加原始公告"
+  },
+  {
+   "id": "D03",
+   "label": false,
+   "why": "npm 与变更日志两处"
+  },
+  {
+   "id": "D04",
+   "label": true,
+   "why": "公众号知乎B站三生态"
+  },
+  {
+   "id": "D05",
+   "label": false,
+   "why": "论文库一源可查全"
+  },
+  {
+   "id": "D06",
+   "label": false,
+   "why": "单仓库归档公开页"
+  },
+  {
+   "id": "D07",
+   "label": false,
+   "why": "三个公开事实点"
+  },
+  {
+   "id": "D08",
+   "label": false,
+   "why": "公告媒体皆公开可索"
+  },
+  {
+   "id": "D09",
+   "label": false,
+   "why": "仓库文档加 issue"
+  },
+  {
+   "id": "D10",
+   "label": true,
+   "why": "官方境外媒体攻击者"
+  },
+  {
+   "id": "D11",
+   "label": false,
+   "why": "单一版本发布事实"
+  },
+  {
+   "id": "D12",
+   "label": true,
+   "why": "需覆盖境外不同口径"
+  },
+  {
+   "id": "D13",
+   "label": false,
+   "why": "法条案例皆公开库"
+  },
+  {
+   "id": "D14",
+   "label": false,
+   "why": "仓库与许可证页"
+  },
+  {
+   "id": "D15",
+   "label": true,
+   "why": "监管NGO英文原文"
+  },
+  {
+   "id": "D16",
+   "label": true,
+   "why": "官方加用户社区海量"
+  },
+  {
+   "id": "D17",
+   "label": false,
+   "why": "仅README与manifest"
+  },
+  {
+   "id": "D18",
+   "label": true,
+   "why": "药监临床加电商宣传"
+  },
+  {
+   "id": "D19",
+   "label": false,
+   "why": "地方志档案专著"
+  },
+  {
+   "id": "D20",
+   "label": false,
+   "why": "定价页与changelog"
+  },
+  {
+   "id": "D21",
+   "label": true,
+   "why": "社交平台溯源难"
+  },
+  {
+   "id": "D22",
+   "label": false,
+   "why": "年鉴与部委通报"
+  },
+  {
+   "id": "D23",
+   "label": false,
+   "why": "单官方action版本"
+  },
+  {
+   "id": "D24",
+   "label": true,
+   "why": "统计局IMF学术三源"
+  },
+  {
+   "id": "D25",
+   "label": false,
+   "why": "公告目录工商可查"
+  },
+  {
+   "id": "D26",
+   "label": false,
+   "why": "单一许可条款"
+  },
+  {
+   "id": "D27",
+   "label": false,
+   "why": "官网与政务发布"
+  },
+  {
+   "id": "D28",
+   "label": false,
+   "why": "权威科普与教科书"
+  },
+  {
+   "id": "D29",
+   "label": false,
+   "why": "归档与官网公告"
+  },
+  {
+   "id": "D30",
+   "label": true,
+   "why": "指数官网与国内外报道"
+  },
+  {
+   "id": "D31",
+   "label": true,
+   "why": "社交经纪法院跨平台"
+  },
+  {
+   "id": "D32",
+   "label": false,
+   "why": "CVE 库公开列表"
+  },
+  {
+   "id": "D33",
+   "label": true,
+   "why": "NASA NOAA 等多源数据"
+  },
+  {
+   "id": "D34",
+   "label": false,
+   "why": "总局公告与回应"
+  },
+  {
+   "id": "D35",
+   "label": false,
+   "why": "厂商规格书一份"
+  },
+  {
+   "id": "D36",
+   "label": true,
+   "why": "官网加学生社区讨论"
+  },
+  {
+   "id": "D37",
+   "label": true,
+   "why": "链上交易所受害者社区"
+  },
+  {
+   "id": "D38",
+   "label": false,
+   "why": "单一 RFC 状态"
+  },
+  {
+   "id": "D39",
+   "label": true,
+   "why": "注册稿顶会独立媒体"
+  },
+  {
+   "id": "D40",
+   "label": false,
+   "why": "政策文件库一处"
+  }
+ ]
+}

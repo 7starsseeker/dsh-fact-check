@@ -1,0 +1,30 @@
+{
+  "_about": "复制成 local.json 并填入你自己的值（或先跑 `node tools/doctor.mjs --write` 生成草稿）。local.json 属于本机配置：不要提交、不要随包分享、不要写进 SKILL.md。",
+  "_note": "全部字段都可以省略：省了就按内置默认值跑，占位符未填时 route.mjs 会把它们列进 localPlaceholdersUnset，jev-verdict.mjs 会在找不到密钥时明确报错并回退到人工规则。环境变量优先级高于本文件（JEV_ 前缀或原名，例如 JEV_SEARXNG_URL / SEARXNG_URL）。",
+  "keyFile": "/path/to/your/secrets.json",
+  "keyFiles": [],
+  "stateDir": "",
+  "endpoint": "https://api.typesafe.ai/v1/systemone",
+  "model": "jev-latest",
+  "_overrides_about": "渠道表 tools/engine-routes.json 里的 ${占位符} 从取值。注意两类值的性质不同：SEARXNG_URL 属于「取到就能用」；VIDEO_FETCH_CMD / EXIFTOOL_CMD 属于「文件存在 ≠ 真的能用」——填完请各做一次真实调用验证，别只填路径。",
+  "overrides": {
+    "SEARXNG_URL": "http://127.0.0.1:8080",
+    "HTTP_PROXY_URL": "",
+    "VIDEO_FETCH_CMD": "",
+    "EXIFTOOL_CMD": "exiftool"
+  },
+  "_capabilities_about": "可选：把 SKILL.md 能力表左列（规范能力名）绑定到本机真实可调用的工具名。只影响你和模型怎么调工具，不影响任何代码；留空则按 SKILL.md 的默认说法执行。装载时应当做一遍这件事（见 FOR-AI.md 第 4 步）。",
+  "capabilities": {
+    "keyword_search": "",
+    "page_fetch": [],
+    "subagent": "",
+    "archive": ""
+  },
+  "_outputConvention_about": "可选：本机对报告段序 / 纪律的额外要求。SKILL.md 的 Step 4 模板与两条排版纪律是默认值；本机若另有约定写这里，正文不必改——否则每换一个宿主都要改正文，两处必然脱节。",
+  "outputConvention": {
+    "sections": [],
+    "hard_rules": []
+  },
+  "_runtimeNotes_about": "可选：运行时基线，自由文本。值得写的是「这台机器上哪些渠道真的能用」——例如元搜索实例里某些引擎被 CAPTCHA 拦、某些站点必须走代理。这类基线直接影响核查质量，但不适合写进正文。",
+  "runtimeNotes": ""
+}

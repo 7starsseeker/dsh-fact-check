@@ -1,0 +1,12 @@
+# 本机配置与密钥，不要提交 / 不要随包分享
+tools/local.json
+tools/secrets.json
+secrets.json
+
+# 依赖与构建产物（本插件零依赖，正常不会有；装上也不该入库）
+node_modules/
+
+# 运行产物
+out/
+*.log
+*.log.jsonl

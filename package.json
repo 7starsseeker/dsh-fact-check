@@ -1,0 +1,68 @@
+{
+  "name": "dsh-fact-check",
+  "version": "1.2.2",
+  "description": "Fact-checking skill for DeepSeek Harness: verifies claims against the open web instead of model memory, cross-checks independent sources across domestic and international search ecosystems, and can route three factual judgements (does the evidence support the claim / is this source primary / does this page carry usable text) to a TypeSafe Jev (System One) decision model when a key is configured, falling back to the skill's deterministic rules when it is not.",
+  "keywords": [
+    "deepseek-harness",
+    "dsh",
+    "dsh-plugin",
+    "cordis",
+    "skill",
+    "fact-check",
+    "verification",
+    "research",
+    "cross-check",
+    "jev",
+    "typesafe",
+    "provenance",
+    "prompt-injection"
+  ],
+  "type": "module",
+  "main": "lib/index.js",
+  "exports": {
+    ".": "./lib/index.js",
+    "./package.json": "./package.json"
+  },
+  "scripts": {
+    "selftest": "node tools/smoke-plugin.mjs && node tools/jev-verdict.mjs selftest && node tools/route.mjs selftest",
+    "doctor": "node tools/doctor.mjs",
+    "regress": "node tools/route.mjs regress --file cases/route-cases-neutral.json",
+    "instructions": "node tools/make-instructions.mjs"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    }
+  },
+  "files": [
+    "lib",
+    "tools",
+    "cases",
+    "SKILL.md",
+    "INSTRUCTIONS.md",
+    "FOR-AI.md",
+    "ADAPTING.md",
+    "MEASUREMENTS.md",
+    "CHANGELOG.md",
+    "cordis.patch.yml",
+    "README.md",
+    "README.zh-CN.md",
+    "CONTRIBUTING.md",
+    "CONTRIBUTING.zh-CN.md",
+    "LICENSE"
+  ],
+  "license": "MIT",
+  "author": "7starsseeker",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/7starsseeker/dsh-fact-check.git"
+  },
+  "homepage": "https://github.com/7starsseeker/dsh-fact-check#readme",
+  "bugs": {
+    "url": "https://github.com/7starsseeker/dsh-fact-check/issues"
+  },
+  "private": true
+}

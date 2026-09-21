@@ -1,0 +1,72 @@
+{
+  "_about": "来源阶梯：按事实类型给出「该找哪些源」，全部是确定性数据，模型不参与。与具体主机无关：表里只写公开的来源类型与接口，不写任何本机地址。",
+  "_grading": {
+    "one_hand": "一手（官方/原始发布方）：官方公告、政府或机构官网、当事人账号、原始数据或法条原文 —— 权重最高",
+    "authoritative_media": "权威媒体/机构：通讯社、官方广播、央行、学术期刊",
+    "general_media": "一般媒体/门户/百科",
+    "community": "社区/个人：论坛、问答、社交平台、博客（仅旁证/线索）",
+    "unusable": "AI 生成 / 无法溯源 —— 不采信"
+  },
+  "domains": {
+    "cn_policy": {
+      "label": "中国政策 / 法规 / 统计",
+      "ladder": ["国务院政策文件库（结构化 JSON 接口）", "国家法律法规数据库 flk.npc.gov.cn", "主管部委官网与政务新媒体", "官方通讯社原文", "地方媒体解读"],
+      "closed": false,
+      "languages": ["zh"]
+    },
+    "cn_social_rumor": {
+      "label": "中国社媒传闻 / 谣言",
+      "ladder": ["中国互联网联合辟谣平台 piyao.org.cn", "涉事机构官方通报", "央媒/地方媒体核实报道", "首发平台原文（需能索引到该生态）", "问答/视频平台讨论（仅线索）"],
+      "closed": true,
+      "languages": ["zh"]
+    },
+    "tech_release": {
+      "label": "软件 / 库 / 插件 版本与许可",
+      "ladder": ["官方仓库 README/CHANGELOG 与 release 页", "官方文档站", "包管理器元数据（npm/PyPI 等）", "第三方评测或 issue 讨论"],
+      "closed": false,
+      "languages": ["en", "zh"]
+    },
+    "academic": {
+      "label": "学术论断 / 论文结论",
+      "ladder": ["期刊原文或预印本", "Crossref API 元数据（含 has-update 撤稿/更正）", "Retraction Watch", "作者机构页面", "综述或权威媒体报道"],
+      "closed": false,
+      "languages": ["en"]
+    },
+    "medical": {
+      "label": "医疗 / 药品 / 保健品",
+      "ladder": ["药品监管机构批准信息", "临床试验注册库（ClinicalTrials.gov / 中国临床试验注册中心等）", "权威医学机构声明", "期刊论文", "电商宣传页（仅作为被核查对象）"],
+      "closed": false,
+      "languages": ["zh", "en"]
+    },
+    "finance": {
+      "label": "金融 / 上市公司 / 市场传闻",
+      "ladder": ["交易所公告", "公司投资者关系页/财报", "监管问询函", "财经媒体", "社交平台传闻（仅线索）"],
+      "closed": false,
+      "languages": ["zh", "en"]
+    },
+    "international": {
+      "label": "跨国 / 国际组织 / 境外事件",
+      "ladder": ["当事国监管机构或政府原文（当地语言）", "国际组织原始报告", "英文主流媒体", "中文媒体报道（含编译转述）", "当地社交平台（仅线索）"],
+      "closed": false,
+      "languages": ["en", "local", "zh"],
+      "note": "国内外两侧必须分开呈现，转述不计为独立来源"
+    },
+    "image_video": {
+      "label": "图片 / 视频真实性",
+      "ladder": ["原始上传者与首发平台", "平台标注与社区笔记", "媒体核实报道", "EXIF 元数据（拍摄时间/GPS/编辑痕迹）", "地理/时间线比对"],
+      "closed": true,
+      "languages": ["zh", "en"]
+    },
+    "company_claim": {
+      "label": "企业自述 / 融资 / 合作宣称",
+      "ladder": ["企业官方公告/新闻稿", "合作方官方确认或伙伴目录", "工商登记变更（公开企业信息源）", "第三方市占或行业报告", "媒体独立报道"],
+      "closed": false,
+      "languages": ["zh", "en"]
+    }
+  },
+  "_rules": [
+    "同一条事实的多个来源若同源（互为转载），只算一个独立来源",
+    "分级表只是起点：来源是否一手，可用决策模型的 primary_source 逐条问，仍以可点击 URL 为准",
+    "封闭生态（closed=true）拿不到正文时，如实写「未能直接获取原文」，并用多渠道路径交叉"
+  ]
+}

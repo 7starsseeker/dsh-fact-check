@@ -1,0 +1,203 @@
+{
+ "_about": "来源等级判定测试集（16 例）。判据固定为「该来源是否为这条事实的原始发布方」。真值按 fact-check skill 自己的来源分级表机械裁定：官方/一手/当事人/原始数据 = true；媒体、门户、聚合、社区、内容农场、缓存快照 = false。",
+ "_generated_by": "cases/neutralize.mjs（作者侧工具，本包不分发原始语料）",
+ "_replaced_tokens": 5,
+ "_rubric": {
+  "true": "该来源是这条事实的原始发布方：官方公告、政府或机构官网、当事人账号、原始数据或法律条文原文",
+  "false": "该来源是转载、编译、聚合、百科、问答社区、论坛帖子、内容农场，或对原始出处的复述"
+ },
+ "cases": [
+  {
+   "id": "S01",
+   "label": true,
+   "claim": "Jev 是 TypeSafe 的首个 System One 模型。",
+   "evidence": [
+    {
+     "name": "typesafe.ai 官网首页",
+     "type": "厂商官网",
+     "text": "Jev is TypeSafe's first public System One Model, optimized for automation."
+    }
+   ]
+  },
+  {
+   "id": "S02",
+   "label": true,
+   "claim": "官方端点是 POST https://api.typesafe.ai/v1/systemone。",
+   "evidence": [
+    {
+     "name": "docs.typesafe.ai/api（官方 API 参考）",
+     "type": "官方文档",
+     "text": "POST https://api.typesafe.ai/v1/systemone ；Authorization: Bearer <API_KEY>。"
+    }
+   ]
+  },
+  {
+   "id": "S03",
+   "label": true,
+   "claim": "OpenRouter 上该模型的上下文登记为 32k。",
+   "evidence": [
+    {
+     "name": "openrouter.ai/typesafe/jev-1.13（平台自身模型页）",
+     "type": "平台登记页",
+     "text": "CONTEXT 32K；Price $0.042 / $0 per 1M；Released Sep 18, 2026。"
+    }
+   ]
+  },
+  {
+   "id": "S04",
+   "label": false,
+   "claim": "Jev 在四个工作流上的平均准确率约为 67.8%。",
+   "evidence": [
+    {
+     "name": "DataCamp 博客",
+     "type": "第三方媒体博客",
+     "text": "On TypeSafe's 4-workflow benchmark, it hits ~68% accuracy, close to mid-tier LLMs."
+    }
+   ]
+  },
+  {
+   "id": "S05",
+   "label": false,
+   "claim": "可以用 Jev 做路由中间件。",
+   "evidence": [
+    {
+     "name": "LangChain 官方博客",
+     "type": "第三方机构博客",
+     "text": "A System One model evaluates a state and returns typed answers and probabilities."
+    }
+   ]
+  },
+  {
+   "id": "S06",
+   "label": false,
+   "claim": "Jev 不生成文本而输出决策。",
+   "evidence": [
+    {
+     "name": "网易转载的 36氪 文章",
+     "type": "聚合转载",
+     "text": "TypeSafe 官方称，Jev 使用了新的模型架构、并行 sampler，以及 RLCD 训练方法。"
+    }
+   ]
+  },
+  {
+   "id": "S07",
+   "label": false,
+   "claim": "36氪实测 Jev 50 题准确率约 64%–65.2%。",
+   "evidence": [
+    {
+     "name": "新浪财经转载 IT之家 稿件",
+     "type": "媒体转载",
+     "text": "TypeSafe AI 昨日发布公告，宣布推出 Jev，该模型定位为 System One Model。"
+    }
+   ]
+  },
+  {
+   "id": "S08",
+   "label": false,
+   "claim": "Jev 被称为「不会写字的智能 if」。",
+   "evidence": [
+    {
+     "name": "知乎专栏文章",
+     "type": "社区专栏",
+     "text": "Jev 是一个不写文章、不聊天、也不生成代码的模型。"
+    }
+   ]
+  },
+  {
+   "id": "S09",
+   "label": true,
+   "claim": "该开源项目作者自跑日语 36 题四选一，Jev 得 34/36。",
+   "evidence": [
+    {
+     "name": "github.com/uehaj/jev-semgrep README",
+     "type": "第三方项目作者自述",
+     "text": "in our tests Japanese meanings wobble a little more near the threshold."
+    }
+   ]
+  },
+  {
+   "id": "S10",
+   "label": false,
+   "claim": "Jev 支持 64k 上下文。",
+   "evidence": [
+    {
+     "name": "CSDN 转载译文",
+     "type": "内容农场/转载",
+     "text": "Jev 的上下文长度是 64k token……（本文转载自 XXX）"
+    }
+   ]
+  },
+  {
+   "id": "S11",
+   "label": true,
+   "claim": "现场 55 条中文路由样本上 Jev 与两位盲标注共识一致 30/48。",
+   "evidence": [
+    {
+     "name": "probe-v2-results-2026-09-21.json（现场原始测量数据）",
+     "type": "原始数据",
+     "text": "{\"A\":{\"rows\":[...]},\"summary\":{\"consensus\":48,\"hits\":30}}"
+    }
+   ]
+  },
+  {
+   "id": "S12",
+   "label": true,
+   "claim": "<该安全阀门> 第 23 项（双语与语言开关）验收通过。",
+   "evidence": [
+    {
+     "name": "<项目验证记录>",
+     "type": "项目自身验证记录",
+     "text": "| <宿主> | 23 | pass | 双语与语言开关：离线 selftest-i18n 26 例全过 |"
+    }
+   ]
+  },
+  {
+   "id": "S13",
+   "label": false,
+   "claim": "有人认为 Jev 的准确性被高估。",
+   "evidence": [
+    {
+     "name": "Reddit r/singularity 帖子",
+     "type": "社区论坛",
+     "text": "This is a borderliine scam. / its accuracy is more like a mid tier LLM"
+    }
+   ]
+  },
+  {
+   "id": "S14",
+   "label": false,
+   "claim": "Hacker News 讨论中有人报告类型正确但答案错误。",
+   "evidence": [
+    {
+     "name": "Hacker News 评论线程",
+     "type": "社区论坛",
+     "text": "type-valid but wrong answers（256 条评论）"
+    }
+   ]
+  },
+  {
+   "id": "S15",
+   "label": false,
+   "claim": "官方声明 English 是主要训练语言。",
+   "evidence": [
+    {
+     "name": "Google 搜索结果快照（缓存页）",
+     "type": "缓存快照",
+     "text": "English is the primary training language and where accuracy is currently best."
+    }
+   ]
+  },
+  {
+   "id": "S16",
+   "label": false,
+   "claim": "TypeSafe 官方说 Jev 是决策模型。",
+   "evidence": [
+    {
+     "name": "jevtypesafeai.com（疑似 SEO 站，未被官网或 OpenRouter 链接）",
+     "type": "内容农场",
+     "text": "Jev is a decision model from TypeSafe that returns typed answers."
+    }
+   ]
+  }
+ ]
+}
