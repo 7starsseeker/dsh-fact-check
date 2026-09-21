@@ -1,0 +1,101 @@
+name: publish
+
+# 只有版本 tag 能触发发布。刻意不加 workflow_dispatch：`npm publish` 发的是
+# package.json 里写的版本、根本不看 tag，手动触发就等于开了一条
+# "发布一个没人打过 tag 的版本" 的路。
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: read
+  id-token: write # OIDC 的必需项：用身份换一次性的发布授权
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '24'
+          registry-url: 'https://registry.npmjs.org'
+          package-manager-cache: false # 发布构建永不用缓存
+
+      # runner 自带的 npm 可能早于 trusted publishing 所需的 11.5.1
+      - name: Ensure npm supports trusted publishing
+        run: npm install --global npm@latest
+
+      # 闸一：tag 与 manifest 的版本必须一致。发布时取的版本号来自
+      # package.json，tag 只是触发器 —— 没有这道闸，忘了改版本号会变成
+      # "试图重发一个旧版本"，报出来的原因还不是真的。
+      - name: Tag must match package.json version
+        run: |
+          set -euo pipefail
+          tag="${GITHUB_REF_NAME#v}"
+          pkg="$(node -p "require('./package.json').version")"
+          echo "tag = ${GITHUB_REF_NAME}, package.json = ${pkg}"
+          if [ "${tag}" != "${pkg}" ]; then
+            echo "::error::tag ${GITHUB_REF_NAME} does not match package.json version ${pkg}"
+            exit 1
+          fi
+
+      # 闸二：跑 selftest 工作流在 main 上跑的那同一套门（六步逐条对齐），
+      # 所以只有已经过门的东西才能发出去。
+      - name: Plugin mounts and serves SKILL.md (single source of truth)
+        run: node tools/smoke-plugin.mjs
+
+      - name: Judgement layer regression assertions
+        run: node tools/jev-verdict.mjs selftest
+
+      - name: Routing tables
+        run: node tools/route.mjs selftest
+
+      - name: Routing corpus
+        run: node tools/route.mjs regress --file cases/route-cases-neutral.json
+
+      - name: Dispatch-arm proxy metric (against the two blind labellings)
+        run: node tools/route.mjs arms
+
+      - name: Generated INSTRUCTIONS.md matches SKILL.md
+        shell: bash
+        run: |
+          set -eo pipefail
+          node tools/make-instructions.mjs
+          git diff --exit-code INSTRUCTIONS.md
+
+      # 闸三：tarball 不得夹带本机状态。
+      # 这道闸对本包不是形式主义：`files` 里是整个 `tools/`，而 `tools/local.json`
+      # 按 ADAPTING.md 的说法正是本机配置（keyFile 路径、检索端点、代理地址）。
+      # 它在 .gitignore 里 —— 但**被 git 忽略 ≠ 不会进 npm 包**：npm 会把 `files`
+      # 所列目录下的东西一律包含，无论忽略文件怎么写（实测：.gitignore 与
+      # .npmignore 都挡不住，只有 files 里的 `!` 取反有效，见 package.json）。
+      # 所以这里检查的是打好的 tarball，而不是相信白名单。
+      # 注意 npm 11 的 --json 返回数组、npm 12 返回以包名为键的对象，两种都吃。
+      - name: Tarball carries no local state
+        run: |
+          node -e '
+            const { execSync } = require("node:child_process");
+            // 走 shell 的 execSync，不是 execFileSync：Windows 上 npm 是 npm.cmd，
+            // execFileSync 解析不到 —— 只在 runner 上能跑的闸等于没人能本地核验。
+            const raw = JSON.parse(execSync("npm pack --dry-run --json", { encoding: "utf8" }));
+            const packed = Array.isArray(raw) ? raw[0] : Object.values(raw)[0];
+            if (packed === undefined || !Array.isArray(packed.files)) {
+              console.error(`::error::unexpected npm pack --json shape: ${JSON.stringify(raw).slice(0, 200)}`);
+              process.exit(1);
+            }
+            const paths = packed.files.map(f => f.path);
+            const forbidden = /(^|\/)(local\.json|secrets\.json|config\.json)$|\.log$|^verification-results\//u;
+            const leaked = paths.filter(p => forbidden.test(p));
+            console.log(`${packed.name}@${packed.version}: ${paths.length} files in the tarball`);
+            if (leaked.length > 0) {
+              console.error(`::error::tarball carries local state: ${leaked.join(", ")}`);
+              process.exit(1);
+            }
+          '
+
+      # 不需要 --provenance、也不需要 --access public：public 仓库 + public 包
+      # 会自动附 provenance。
+      - name: Publish to npm
+        run: npm publish
