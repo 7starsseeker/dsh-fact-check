@@ -2,10 +2,12 @@
 
 [![version](https://img.shields.io/github/v/tag/7starsseeker/dsh-fact-check?label=version)](https://github.com/7starsseeker/dsh-fact-check/tags)
 [![npm](https://img.shields.io/npm/v/dsh-fact-check?label=npm&style=flat)](https://www.npmjs.com/package/dsh-fact-check)
+[![npm downloads](https://img.shields.io/npm/dm/dsh-fact-check?label=downloads&style=flat)](https://www.npmjs.com/package/dsh-fact-check)
 [![selftest](https://img.shields.io/github/actions/workflow/status/7starsseeker/dsh-fact-check/selftest.yml?label=selftest)](https://github.com/7starsseeker/dsh-fact-check/actions/workflows/selftest.yml)
 [![license: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
 [![node](https://img.shields.io/badge/node-%E2%89%A518-brightgreen.svg)](https://nodejs.org)
 [![DSH plugin](https://img.shields.io/badge/DeepSeek%20Harness-plugin-4B6BFB.svg)](https://github.com/deepseek-ai/deepseek-harness)
+[![Awesome DSH Plugin](https://awesome-dsh-plugin.com/badge.svg)](https://awesome-dsh-plugin.com)
 [![dependencies: 0](https://img.shields.io/badge/dependencies-0-brightgreen.svg)](./package.json)
 [![last commit](https://img.shields.io/github/last-commit/7starsseeker/dsh-fact-check)](https://github.com/7starsseeker/dsh-fact-check/commits/main)
 [![stars](https://img.shields.io/github/stars/7starsseeker/dsh-fact-check?style=flat)](https://github.com/7starsseeker/dsh-fact-check/stargazers)
