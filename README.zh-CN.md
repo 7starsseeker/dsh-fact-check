@@ -61,6 +61,15 @@
 技能正文不绑定任何产品、主机或工具链：它只写**能力名**，由 [`ADAPTING.md`](./ADAPTING.md) 把能力
 落到你的环境里。
 
+**已验证宿主：DSH 0.1.7-rc.2**（2026-09-25，Node 24.21.0，WSL/Linux）。宿主能发现本技能并读入正文；
+插件形态能挂到宿主自己的技能注册表上，`source: bundled`，描述取自 `SKILL.md`，`get()` 交出的正文
+与 `SKILL.md` 逐字一致；`npm run selftest` 全过（插件挂载 27/27、`jev-verdict` 25/25、`route` 37/37）；
+`route.mjs regress` 离线 26/26；判据语料复现 [`MEASUREMENTS.md`](./MEASUREMENTS.md) §6 的预期 ——
+`support` 37/40、`injection` 11/12、`provenance` 15/16、`usable_page` 12/12、`sufficient` 24/40
+（最后一条正是 §1 已写明「不要单用」的那条判据）。`package.json` 不声明宿主版本 —— `engines` 只留
+`node`，写精确版本会让插件市场判「确认不兼容」并拦住其他所有宿主 —— 所以未列入的宿主是没验过，
+而不是被禁止。
+
 ## 安装
 
 ### 作为 DSH 插件

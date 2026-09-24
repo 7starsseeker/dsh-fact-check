@@ -67,6 +67,17 @@ are kept in their own sections — *unverified* and *undecidable* never sit in t
 The skill body is not bound to any host, product or tool chain: it names *capabilities*, and
 [`ADAPTING.md`](./ADAPTING.md) maps them onto your environment.
 
+**Verified host: DSH 0.1.7-rc.2** (2026-09-25, Node 24.21.0, WSL/Linux). The host discovers the skill
+and loads its body; the plugin form mounts on the host's own skill registry with `source: bundled`, its
+description read from `SKILL.md` and `get()` returning that body verbatim; `npm run selftest` passes
+(plugin mount 27/27, `jev-verdict` 25/25, `route` 37/37); `route.mjs regress` is 26/26 offline; and the
+judgement corpora reproduce the expectations in [`MEASUREMENTS.md`](./MEASUREMENTS.md) §6 — `support`
+37/40, `injection` 11/12, `provenance` 15/16, `usable_page` 12/12, `sufficient` 24/40 (the last one is
+the criterion §1 already says not to use on its own). No host version is declared in `package.json` —
+`engines` carries only `node`, and an exact version there would make the plugin market report
+"confirmed incompatible" and block every other host — so a host not listed here is untested, not
+forbidden.
+
 ## Install
 
 ### As a DSH plugin
