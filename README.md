@@ -78,6 +78,8 @@ the criterion §1 already says not to use on its own). No host version is declar
 "confirmed incompatible" and block every other host — so a host not listed here is untested, not
 forbidden.
 
+**DSH 0.2.0-rc.2: smoke-tested only (2026-09-29).** The host was **not** upgraded, so nothing here is an end-to-end result: the skill was exercised against the host's own **published** `0.2.0-rc.2` packages instead. Both delivery forms were covered — the plugin form mounts on the real `@deepseek-ai/dsh-skill` 0.2.0-rc.2 registry with its candidate rank equal to the host's exported `BUNDLED_SKILL_RANK` and `get()` returning the `SKILL.md` body verbatim (15/15), and the directory form is discovered by the real `@deepseek-ai/dsh-skill-filesystem` 0.2.0-rc.2 provider and wins the same-name merge against the bundled copy at rank 400 against 600 (6/6). `npm run selftest` still passes (27/27, 25/25, 37/37) and `route.mjs regress` is 26/26 offline. The host file implementing the skill registry is byte-identical between 0.1.7-rc.2 and 0.2.0-rc.2, so no code change was needed and none was made. Not covered: a mounted run in a real 0.2.0-rc.2 session, and the §6 judgement corpora, which need a key and do not depend on the host.
+
 ## Install
 
 ### As a DSH plugin
