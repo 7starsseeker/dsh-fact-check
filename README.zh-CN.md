@@ -61,7 +61,7 @@
 技能正文不绑定任何产品、主机或工具链：它只写**能力名**，由 [`ADAPTING.md`](./ADAPTING.md) 把能力
 落到你的环境里。
 
-**已验证宿主：DSH 0.1.7-rc.2**（2026-09-25，Node 24.21.0，WSL/Linux）。宿主能发现本技能并读入正文；
+**已验证宿主：DSH 0.1.7-rc.2 与 0.2.0-rc.2。** 0.1.7-rc.2 于 2026-09-25 完整跑过一遍（Node 24.21.0，WSL/Linux）：宿主能发现本技能并读入正文；
 插件形态能挂到宿主自己的技能注册表上，`source: bundled`，描述取自 `SKILL.md`，`get()` 交出的正文
 与 `SKILL.md` 逐字一致；`npm run selftest` 全过（插件挂载 27/27、`jev-verdict` 25/25、`route` 37/37）；
 `route.mjs regress` 离线 26/26；判据语料复现 [`MEASUREMENTS.md`](./MEASUREMENTS.md) §6 的预期 ——
@@ -70,7 +70,7 @@
 `node`，写精确版本会让插件市场判「确认不兼容」并拦住其他所有宿主 —— 所以未列入的宿主是没验过，
 而不是被禁止。
 
-**DSH 0.2.0-rc.2：只做过冒烟测试（2026-09-29）。** 本次**没有升级宿主**，所以这里没有一条是端到端结论：做法是让技能对着宿主自己**已发布**的 `0.2.0-rc.2` 包跑。两种交付形态都覆盖了 —— 插件形态挂到真实的 `@deepseek-ai/dsh-skill` 0.2.0-rc.2 注册表上，候选 rank 等于宿主自己导出的 `BUNDLED_SKILL_RANK`，`get()` 交出的正文与 `SKILL.md` 逐字一致（15/15）；目录形态被真实的 `@deepseek-ai/dsh-skill-filesystem` 0.2.0-rc.2 provider 发现，并在同名合并中以 rank 400 压过 bundled 的 600（6/6）。`npm run selftest` 仍然全过（27/27、25/25、37/37），`route.mjs regress` 离线 26/26。实现技能注册表的那个宿主文件在 0.1.7-rc.2 与 0.2.0-rc.2 之间逐字节一致，所以无需改动、也确实一行未改。**未覆盖**：在真实 0.2.0-rc.2 会话里挂载运行，以及 §6 的判据语料（它需要密钥，且与宿主版本无关）。
+**DSH 0.2.0-rc.2 于 2026-09-30 完整跑过一遍** —— 这次宿主**真的升上来了**（`@deepseek-ai/dsh-desktop-runtime` 0.2.0-rc.2、Node 24.12.0、Windows）。目录形态在上面是活的：运行中会话自己的技能目录里列着 `fact-check`，是宿主真实的 `@deepseek-ai/dsh-skill-filesystem` provider 从技能目录里扫出来的。仓库自带的工具在该宿主上对着真实判定模型重跑：`npm run selftest` 27/27、25/25、37/37；`route.mjs regress` 26/26；判据语料（需要密钥）—— `support` 37/40（Brier 0.0451）、`injection` 11/12（0.0369）、`primary_source` 15/16（0.0487）、`usable_page` 12/12（0.0031）—— 全部复现 [`MEASUREMENTS.md`](./MEASUREMENTS.md) §6 的预期。实现技能注册表的那个宿主文件在 0.1.7-rc.2 与 0.2.0-rc.2 之间逐字节一致，所以无需改动、也确实一行未改。有一项仍停在 2026-09-29 那一轮的位置：**插件形态没有在这台宿主上挂载** —— 那台机器跑的是目录形态，插件包并未安装 —— 它的证据仍是针对宿主自己**已发布**的 `0.2.0-rc.2` 包做的注册检查：挂到真实的 `@deepseek-ai/dsh-skill` 0.2.0-rc.2 注册表上，候选 rank 等于宿主自己导出的 `BUNDLED_SKILL_RANK`，`get()` 交出的正文与 `SKILL.md` 逐字一致（15/15）；目录形态也在那里验证过同名合并以 rank 400 压过 bundled 的 600（6/6）。
 
 ## 安装
 

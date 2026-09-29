@@ -67,7 +67,7 @@ are kept in their own sections — *unverified* and *undecidable* never sit in t
 The skill body is not bound to any host, product or tool chain: it names *capabilities*, and
 [`ADAPTING.md`](./ADAPTING.md) maps them onto your environment.
 
-**Verified host: DSH 0.1.7-rc.2** (2026-09-25, Node 24.21.0, WSL/Linux). The host discovers the skill
+**Verified hosts: DSH 0.1.7-rc.2 and 0.2.0-rc.2.** DSH 0.1.7-rc.2 was checked end to end on 2026-09-25 (Node 24.21.0, WSL/Linux): the host discovers the skill
 and loads its body; the plugin form mounts on the host's own skill registry with `source: bundled`, its
 description read from `SKILL.md` and `get()` returning that body verbatim; `npm run selftest` passes
 (plugin mount 27/27, `jev-verdict` 25/25, `route` 37/37); `route.mjs regress` is 26/26 offline; and the
@@ -78,7 +78,7 @@ the criterion §1 already says not to use on its own). No host version is declar
 "confirmed incompatible" and block every other host — so a host not listed here is untested, not
 forbidden.
 
-**DSH 0.2.0-rc.2: smoke-tested only (2026-09-29).** The host was **not** upgraded, so nothing here is an end-to-end result: the skill was exercised against the host's own **published** `0.2.0-rc.2` packages instead. Both delivery forms were covered — the plugin form mounts on the real `@deepseek-ai/dsh-skill` 0.2.0-rc.2 registry with its candidate rank equal to the host's exported `BUNDLED_SKILL_RANK` and `get()` returning the `SKILL.md` body verbatim (15/15), and the directory form is discovered by the real `@deepseek-ai/dsh-skill-filesystem` 0.2.0-rc.2 provider and wins the same-name merge against the bundled copy at rank 400 against 600 (6/6). `npm run selftest` still passes (27/27, 25/25, 37/37) and `route.mjs regress` is 26/26 offline. The host file implementing the skill registry is byte-identical between 0.1.7-rc.2 and 0.2.0-rc.2, so no code change was needed and none was made. Not covered: a mounted run in a real 0.2.0-rc.2 session, and the §6 judgement corpora, which need a key and do not depend on the host.
+**DSH 0.2.0-rc.2 was checked end to end on 2026-09-30** — this time the host *was* upgraded (`@deepseek-ai/dsh-desktop-runtime` 0.2.0-rc.2, Node 24.12.0, Windows). The directory form is live on it: the running session's own skill catalog lists `fact-check`, discovered from the host's skill directory by the host's real `@deepseek-ai/dsh-skill-filesystem` provider. The tools were re-run on that host against the live judgement model: `npm run selftest` 27/27, 25/25, 37/37; `route.mjs regress` 26/26; and the judgement corpora, which need a key — `support` 37/40 (Brier 0.0451), `injection` 11/12 (0.0369), `primary_source` 15/16 (0.0487), `usable_page` 12/12 (0.0031) — all reproducing the [`MEASUREMENTS.md`](./MEASUREMENTS.md) §6 expectations. The host file implementing the skill registry is byte-identical between 0.1.7-rc.2 and 0.2.0-rc.2, so no code change was needed and none was made. One thing stays where the 2026-09-29 round left it: the **plugin** form was not mounted on this host — that machine runs the directory form, so the plugin package is not installed there — and its evidence remains the registration check against the host's own **published** `0.2.0-rc.2` packages, where it mounts on the real `@deepseek-ai/dsh-skill` 0.2.0-rc.2 registry with its candidate rank equal to the host's exported `BUNDLED_SKILL_RANK` and `get()` returning the `SKILL.md` body verbatim (15/15), and the directory form wins the same-name merge against the bundled copy at rank 400 against 600 (6/6).
 
 ## Install
 
