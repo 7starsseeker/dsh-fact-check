@@ -3,6 +3,17 @@
 面向使用者的**版本间净变化**（修复 / 改进 / 新增）。只写最终结果，不写过程。
 判据、阈值、触发词的任何改动都必须同时更新 `MEASUREMENTS.md` 的数字与 `cases/` 的回归结果。
 
+## 1.4.0 — 2026-10-17
+
+**新增**
+
+- **接入 DSH 0.2.1-rc.2 的两项技能注册表能力**：① 候选与定义带 `path`（`SKILL.md` 的绝对路径，catalog 摘要保留），宿主可据此按文件定位；② provider 监听 `SKILL.md`，保存后调用 `control.invalidate()`，会话中的技能目录**无需重启**即刷新（150 ms 去抖；watcher 在 `control.signal` abort 或 context dispose 时关闭；宿主不传 `control` 时退回「重启生效」）。
+- 这次是**增量接入而非适配**：`@deepseek-ai/dsh-skill` 的 `lib/index.js` 在 0.2.0-rc.2 与 0.2.1-rc.2 之间逐字节一致（差异仅换行与版本元数据），`registerProvider` 的签名没有变，新能力都在既有的 `control = { signal, invalidate() }` 里。同一份代码在 **0.2.0-rc.2（已发布包）** 与 **0.2.1-rc.2（宿主 asar 里抽出的注册表）** 上各 21/21 通过，因此向前兼容。
+
+**其它**
+
+- 发布 1.4.0：`package.json` 与 `SKILL.md` frontmatter 的版本号同步；README / README.zh-CN 的已验证宿主补上 **0.2.1-rc.2**，并记录本轮证据（两套注册表各 21/21、`snapshot.complete`、`get()` 正文逐字、`provider.list()` rank 600、两轮编辑→刷新；`selftest` 27/27 · 25/25 · 37/37，`regress` 26/26）。
+
 ## 1.3.0 — 2026-09-22
 
 **新增**
