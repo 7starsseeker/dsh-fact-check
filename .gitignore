@@ -10,3 +10,6 @@ node_modules/
 out/
 *.log
 *.log.jsonl
+
+# 本机代码索引（codegraph 生成：机器相关、可随时重建，不是源码）
+.codegraph/
