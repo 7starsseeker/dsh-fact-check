@@ -13,6 +13,7 @@
 [![stars](https://img.shields.io/github/stars/7starsseeker/dsh-fact-check?style=flat)](https://github.com/7starsseeker/dsh-fact-check/stargazers)
 [![issues](https://img.shields.io/github/issues/7starsseeker/dsh-fact-check)](https://github.com/7starsseeker/dsh-fact-check/issues)
 [![PRs welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](./CONTRIBUTING.md)
+[![](https://img.shields.io/badge/powered_by-dsh-4D6BFE?style=flat-square&logo=deepseek&logoColor=white)](https://github.com/deepseek-ai/deepseek-harness)
 
 > DeepSeek Harness 用的事实核查技能：不轻信模型自己的记忆，一律去公开互联网核实——多源交叉、
 > 国内外信息生态并行、对抗性反查，最后交出一份结论先行、每条论断都可溯源的核查报告。

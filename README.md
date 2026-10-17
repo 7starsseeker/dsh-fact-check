@@ -13,6 +13,7 @@
 [![stars](https://img.shields.io/github/stars/7starsseeker/dsh-fact-check?style=flat)](https://github.com/7starsseeker/dsh-fact-check/stargazers)
 [![issues](https://img.shields.io/github/issues/7starsseeker/dsh-fact-check)](https://github.com/7starsseeker/dsh-fact-check/issues)
 [![PRs welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](./CONTRIBUTING.md)
+[![](https://img.shields.io/badge/powered_by-dsh-4D6BFE?style=flat-square&logo=deepseek&logoColor=white)](https://github.com/deepseek-ai/deepseek-harness)
 
 > A fact-checking skill for DeepSeek Harness that verifies claims against the open web instead of model
 > memory — multi-source cross-checking, domestic and international search ecosystems in parallel,
