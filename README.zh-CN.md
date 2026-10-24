@@ -62,7 +62,7 @@
 技能正文不绑定任何产品、主机或工具链：它只写**能力名**，由 [`ADAPTING.md`](./ADAPTING.md) 把能力
 落到你的环境里。
 
-**已验证宿主：DSH 0.1.7-rc.2、0.2.0-rc.2 与 0.2.1-rc.2。** 0.1.7-rc.2 于 2026-09-25 完整跑过一遍（Node 24.21.0，WSL/Linux）：宿主能发现本技能并读入正文；
+**已验证宿主：DSH 0.1.7-rc.2、0.2.0-rc.2、0.2.1-rc.2 与 0.2.1-rc.3。** 0.1.7-rc.2 于 2026-09-25 完整跑过一遍（Node 24.21.0，WSL/Linux）：宿主能发现本技能并读入正文；
 插件形态能挂到宿主自己的技能注册表上，`source: bundled`，描述取自 `SKILL.md`，`get()` 交出的正文
 与 `SKILL.md` 逐字一致；`npm run selftest` 全过（插件挂载 27/27、`jev-verdict` 25/25、`route` 37/37）；
 `route.mjs regress` 离线 26/26；判据语料复现 [`MEASUREMENTS.md`](./MEASUREMENTS.md) §6 的预期 ——
@@ -74,6 +74,8 @@
 **DSH 0.2.0-rc.2 于 2026-09-30 完整跑过一遍** —— 这次宿主**真的升上来了**（`@deepseek-ai/dsh-desktop-runtime` 0.2.0-rc.2、Node 24.12.0、Windows）。目录形态在上面是活的：运行中会话自己的技能目录里列着 `fact-check`，是宿主真实的 `@deepseek-ai/dsh-skill-filesystem` provider 从技能目录里扫出来的。仓库自带的工具在该宿主上对着真实判定模型重跑：`npm run selftest` 27/27、25/25、37/37；`route.mjs regress` 26/26；判据语料（需要密钥）—— `support` 37/40（Brier 0.0451）、`injection` 11/12（0.0369）、`primary_source` 15/16（0.0487）、`usable_page` 12/12（0.0031）—— 全部复现 [`MEASUREMENTS.md`](./MEASUREMENTS.md) §6 的预期。实现技能注册表的那个宿主文件在 0.1.7-rc.2 与 0.2.0-rc.2 之间逐字节一致，所以无需改动、也确实一行未改。有一项仍停在 2026-09-29 那一轮的位置：**插件形态没有在这台宿主上挂载** —— 那台机器跑的是目录形态，插件包并未安装 —— 它的证据仍是针对宿主自己**已发布**的 `0.2.0-rc.2` 包做的注册检查：挂到真实的 `@deepseek-ai/dsh-skill` 0.2.0-rc.2 注册表上，候选 rank 等于宿主自己导出的 `BUNDLED_SKILL_RANK`，`get()` 交出的正文与 `SKILL.md` 逐字一致（15/15）；目录形态也在那里验证过同名合并以 rank 400 压过 bundled 的 600（6/6）。
 
 **DSH 0.2.1-rc.2 于 2026-10-17 完整跑过一遍**（Node 24.21.0，Windows）。注册表的实现（`@deepseek-ai/dsh-skill` 的 `lib/index.js`）在 0.2.0-rc.2 与 0.2.1-rc.2 之间**内容没有变化** —— diff 只有换行符与版本号（`package.json` 把 peer 依赖抬到 cordis `~4.0.5`、加了一个 `./locale/*.json` 导出）—— 所以不需要任何 API 适配。变的是 provider 能拿 `control` **做什么**，本包两样都用上了：候选带上 `path`（指向绝对的 `SKILL.md`，摘要会保留它）；provider 监听 `SKILL.md`，保存时调 `control.invalidate()`，改正文不必重启就会刷新会话里的技能目录（150 ms 去抖；`control.signal` abort 或上下文销毁时收尾，宿主不传 `control` 时退化为「改完重启生效」）。证据：插件分别挂到宿主自己那套 `0.2.1-rc.2` 注册表代码（从已发布的 asar 里取出，配宿主自带的 cordis 4.0.5）与**已发布**的 `0.2.0-rc.2` 包上，各 21/21 项检查通过：`snapshot.complete === true`、`get()` 交出的正文与 `SKILL.md` 逐字一致、`provider.list()` 的 rank 为 600，两轮「改文件 → 目录自动刷新」都观察到了；`npm run selftest` 27/27、25/25、37/37 与 `route.mjs regress` 26/26 均在 Node 24.21.0 上复跑。
+
+**DSH 0.2.1-rc.3 于 2026-10-24 完整跑过一遍**（Node 24.22.1，Windows）。注册表契约没有位移：`@deepseek-ai/dsh-skill` 0.2.1-rc.3 仍导出 `BUNDLED_SKILL_RANK`（600）、`SkillRegistry`、`isSkillName`、`isModelInvocable` 与 `isUserInvocable`，`registerProvider()` 交出的 `control`（`{ signal, invalidate }`）不变，`invalidateCache()` 仍推进缓存 revision 并广播 `skills/change`。插件挂在这套注册表上（取自随宿主发布的 `app.asar`，配宿主自己的 cordis 4.0.5）通过了 **28/28** 项检查：`inject: ['skills']`；候选带 `source: bundled`、`rank` 600 等于宿主导出的常量、绝对 `SKILL.md` 作为 `path`、包根目录作为 `resourceBase`、描述与 frontmatter 逐字一致；`get()` 交出正文（13,533 字符，frontmatter 已剥离，`path` 保留）；`control.invalidate()` 让注册表 revision 从 1 到 2 并恰好广播一次 `skills/change`；拆卸后 provider 消失且 `control.signal` 已 abort。两处看着像失败、其实不是的细节也一并记下：宿主的 `toSummary()` 有意不在目录摘要里带 `rank`（它是同名仲裁的输入，不是展示字段）；注册只在 `ctx.plugin()` 的 thenable 落定后可观测 —— 在 await 之前去看，即便挂载成功也看不到 `control`。同一次 rc3 会话里真正运行的是**目录形态**（宿主自己的技能目录），会话的技能目录用本仓 `SKILL.md` 的描述列出了 `fact-check`。
 
 ## 安装
 
