@@ -86,8 +86,8 @@ const DOMAIN_SIGNALS = [
   ['entertainment_celebrity', /(明星|艺人|演员|歌手|导演|主持人|网红|名人|公众人物|工作室|经纪公司|娱乐公司|粉丝|饭圈|塌房|绯闻|恋情|出道|退圈|封杀|演唱会|影视剧|综艺)/i],
   ['cn_policy', /(政策|法规|条例|法条|司法解释|统计年鉴|文号|国务院|征求意见)/i],
   ['finance', /(上市|股价|财报|融资|重组|证券|交易所|IPO|币|加密货币|跑路)/i],
-  ['cn_social_rumor', /(传闻|谣言|辟谣|网传|社媒|公众号|知乎|B\s?站|微博|小红书|抖音|舆情|热搜|大V|博主|网暴|舆论危机)/i],
-  ['international', /(国际|境外|外国|跨国|海外|联合国|世卫|欧盟|美国|美方|日本|日方|欧洲|白宫|国会|当地)/i],
+  ['cn_social_rumor', /(传闻|谣言|辟谣|网传|社媒|公众号|知乎|B\s?站|微博|小红书|抖音|舆情|热搜|大V|博主|网暴|舆论危机|推特|Twitter|X\s*平台|骂战|对线|论战|口水战|开撕|网络战)/i],
+  ['international', /(国际|境外|外国|跨国|海外|联合国|世卫|欧盟|美国|美方|日本|日方|欧洲|白宫|国会|当地|土耳其|希腊|俄罗斯|越南|印度|韩国|朝鲜|以色列|巴勒斯坦|乌克兰|阿根廷|巴西|墨西哥|沙特|埃及)/i],
   ['company_claim', /(公司|企业|厂商|宣布|合作|行业第一|市占|官网)/i],
   ['tech_release', /(版本|更新|发布|仓库|插件|npm|pip|库|许可|LICENSE|CVE|RFC|API|模型|部署)/i],
 ]
@@ -115,14 +115,20 @@ const DOMAIN_ROUTES = {
   education_exam: ['gov_notice', 'general_web', 'news_rss'],
   sports: ['sports_official', 'general_web', 'closed_intl_social'],
   entertainment_celebrity: ['entertainment_official', 'closed_cn_social', 'archive'],
+  general_fact: ['general_web', 'searxng_meta', 'news_rss', 'archive'],
 }
 
 export function planFor(task) {
   const matched = []
   for (const [domain, re] of DOMAIN_SIGNALS) if (re.test(task)) matched.push(domain)
-  // An unmatched task falls back to technology releases: the widest ladder, and the
-  // only one whose routes (general search + metasearch + vertical) fit any topic.
-  const chosen = matched.length ? matched : ['tech_release']
+  // An unmatched task falls back to the general fact-check domain: a ladder that
+  // applies to any topic (party's own release → wire service → metasearch → archive
+  // → local media), not the software-release ladder. Falling back to tech_release
+  // handed unrelated tasks a README/CHANGELOG ladder, and because that domain is
+  // not closed, a hint saying a single route was enough — which talked the agent
+  // out of dispatching.
+  const fallback = matched.length === 0
+  const chosen = fallback ? ['general_fact'] : matched
   const ladders = chosen.map((d) => ({ domain: d, label: matrix.domains[d].label, ladder: matrix.domains[d].ladder }))
   const routeIds = [...new Set(chosen.flatMap((d) => DOMAIN_ROUTES[d] || []))]
   const chosenRoutes = routeIds.map((id) => routes.routes.find((r) => r.id === id)).filter(Boolean)
@@ -131,15 +137,20 @@ export function planFor(task) {
   return {
     task,
     domains: chosen,
+    // True when no domain matched and the general ladder was used: read that ladder
+    // as a starting point, not as a domain verdict.
+    fallback,
     closedEcosystem: closed,
     factPointsInText: factPoints,
     ladders: substDeep(ladders),
     routes: chosenRoutes.map((r) => ({ id: r.id, when: subst(r.when), primary: substDeep(r.primary), notes: subst(r.notes) })),
     failureActions: substDeep(routes._failure_actions),
     localPlaceholdersUnset: unresolved(),
-    dispatchHint: closed || chosen.length >= 3 || factPoints >= 4
-      ? '需要多路取证（封闭生态 / 多类型事实点）→ 候选派子代理；最终仍以派发判据标注集为准'
-      : '单路可覆盖，串行处理即可',
+    dispatchHint: fallback
+      ? '未识别事实类型（兜底域）→ 按 SKILL.md 的信号表判断：涉及封闭生态 / 需抓大量长文 / 事实点 ≥4，任一命中即派子代理'
+      : closed || chosen.length >= 3 || factPoints >= 4
+        ? '需要多路取证（封闭生态 / 多类型事实点）→ 候选派子代理；最终仍以派发判据标注集为准'
+        : '单路可覆盖，串行处理即可',
   }
 }
 
@@ -248,7 +259,23 @@ function selftest() {
     const s = JSON.stringify(routes._failure_actions)
     return s.includes('403') && (s.includes('超时') || s.includes('000'))
   })
-  t('未匹配任务有兜底域', () => planFor('???').domains[0] === 'tech_release')
+  t('未匹配任务有兜底域', () => planFor('???').domains[0] === 'general_fact')
+  t('兜底域不是软件发布域（那套阶梯与多数任务无关）', () => planFor('???').domains[0] !== 'tech_release')
+  t('兜底域给出通用来源阶梯', () => {
+    const l = planFor('今天天气不错').ladders[0].ladder.join('|')
+    return l.includes('通讯社') && l.includes('当事方')
+  })
+  t('兜底任务提示按信号表判断派发（不误劝退）', () => {
+    const h = planFor('???').dispatchHint
+    return h.includes('未识别事实类型') && h.includes('派子代理')
+  })
+  t('兜底任务显式标记 fallback', () => planFor('???').fallback === true && planFor('网传某地发生地震').fallback === false)
+  t('社交平台战类任务识别出封闭生态', () =>
+    planFor('确认这几天 X 平台上两国网民骂战的来龙去脉和目前的状况').closedEcosystem === true)
+  t('社交平台战类任务识别为社媒域', () =>
+    planFor('这几天推特上双方网友对线的来龙去脉').domains.includes('cn_social_rumor'))
+  t('常见外方国名识别为国际域', () =>
+    planFor('核查土耳其与某国之间的网络冲突').domains.includes('international'))
   t('常见任务的路线数不超过 5 条', () => planFor('核查某公司宣称的合作是否属实，需要境外监管文件').routes.length <= 5)
   t('可移植：占位符可由 JEV_* 环境变量解析', () => {
     const old = process.env.JEV_SEARXNG_URL
@@ -335,6 +362,7 @@ function regress(file, out) {
     if (c.expectDomains) checks.push(['expectDomains', c.expectDomains.every((d) => p.domains.includes(d))])
     if (c.expectNotDomains) checks.push(['expectNotDomains', c.expectNotDomains.every((d) => !p.domains.includes(d))])
     if (typeof c.expectClosed === 'boolean') checks.push(['expectClosed', p.closedEcosystem === c.expectClosed])
+    if (typeof c.expectFallback === 'boolean') checks.push(['expectFallback', p.fallback === c.expectFallback])
     if (c.expectRoutes) checks.push(['expectRoutes', c.expectRoutes.every((r) => p.routes.some((x) => x.id === r))])
     if (typeof c.expectDispatch === 'boolean') {
       checks.push(['expectDispatch', c.expectDispatch === (p.dispatchHint.startsWith('需要多路取证'))])
@@ -346,6 +374,7 @@ function regress(file, out) {
       passed: ok,
       failed: failedOn,
       domains: p.domains,
+      fallback: p.fallback,
       closedEcosystem: p.closedEcosystem,
       routes: p.routes.map((r) => r.id),
     })

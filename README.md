@@ -131,7 +131,7 @@ Two optional offline tools sit alongside it:
 
 | Tool | What it does |
 |---|---|
-| `node tools/route.mjs plan --task "…"` | Deterministic planning: which source ladder and which channels this kind of claim needs, plus the failure-action table. A pure data table — no model, no tokens. |
+| `node tools/route.mjs plan --task "…"` | Deterministic planning: which source ladder and which channels this kind of claim needs, plus the failure-action table. A pure data table — no model, no tokens. A claim that matches no known fact type still gets the general fact-check ladder (flagged `fallback: true` in the output), never a software-release one. |
 | `node tools/jev-verdict.mjs` | The judgement client described below. |
 
 ## The optional Jev decision layer
@@ -174,7 +174,7 @@ node tools/doctor.mjs                                # what this machine can and
 
 `node tools/doctor.mjs --net` additionally self-tests the fetch chains and the judgement endpoint, and
 reports which capabilities are missing and how the skill degrades without them. Current status on this
-checkout: **27/27**, **25/25**, **37/37** and **26/26** assertions pass.
+checkout: **27/27**, **25/25**, **44/44** and **30/30** assertions pass.
 
 CI runs exactly these commands on Linux and Windows, on Node 18 and 22, plus one more check: that the
 generated `INSTRUCTIONS.md` still matches `SKILL.md`.

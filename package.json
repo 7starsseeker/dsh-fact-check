@@ -1,6 +1,6 @@
 {
   "name": "dsh-fact-check",
-  "version": "1.5.0",
+  "version": "1.5.1",
   "description": "Fact-checking skill for DeepSeek Harness: verifies claims against the open web instead of model memory, cross-checks independent sources across domestic and international search ecosystems, and can route three factual judgements (does the evidence support the claim / is this source primary / does this page carry usable text) to a TypeSafe Jev (System One) decision model when a key is configured, falling back to the skill's deterministic rules when it is not.",
   "keywords": [
     "deepseek-harness",

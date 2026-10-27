@@ -121,7 +121,7 @@ dsh plugin add ./dsh-fact-check
 
 | 工具 | 做什么 |
 |---|---|
-| `node tools/route.mjs plan --task "…"` | 确定性规划：这类核查该走哪条来源阶梯、哪些渠道，以及失败动作表。纯数据表，无模型、0 token。 |
+| `node tools/route.mjs plan --task "…"` | 确定性规划：这类核查该走哪条来源阶梯、哪些渠道，以及失败动作表。纯数据表，无模型、0 token。未命中任何已知事实类型的任务也照样给阶梯——给的是通用事实核查阶梯（输出里 `fallback: true`），不会是软件发布那套。 |
 | `node tools/jev-verdict.mjs` | 下面说的判据客户端。 |
 
 ## 可选的 Jev 判据层
@@ -159,7 +159,7 @@ node tools/doctor.mjs                                # 这台机器能做什么�
 ```
 
 `node tools/doctor.mjs --net` 会额外自测抓取链与判据端点，并报告缺哪些能力、缺了会降级成什么样。
-本检出上的当前状态：**27/27**、**25/25**、**37/37**、**26/26** 断言全过。
+本检出上的当前状态：**27/27**、**25/25**、**44/44**、**30/30** 断言全过。
 
 CI 在 Linux 与 Windows 上、Node 18 与 22 下跑的就是上面这几条，另外多一条检查：生成的
 `INSTRUCTIONS.md` 是否仍然与 `SKILL.md` 一致。

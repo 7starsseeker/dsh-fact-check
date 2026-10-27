@@ -114,8 +114,8 @@
 node tools/doctor.mjs                                                                   # 先看本机能力与降级路径
 node tools/doctor.mjs --net                                                             # 再真跑一遍抓取链与端点自测
 node tools/jev-verdict.mjs selftest                                                     # 25 项离线断言，不花钱
-node tools/route.mjs selftest                                                           # 37 项离线断言，不花钱
-node tools/route.mjs regress --file cases/route-cases-neutral.json                      # 路由语料 26 例，不花钱
+node tools/route.mjs selftest                                                           # 44 项离线断言，不花钱
+node tools/route.mjs regress --file cases/route-cases-neutral.json                      # 路由语料 30 例，不花钱
 node tools/route.mjs arms                                                               # 派发臂代理指标（§4.1），不花钱
 
 # 本包自带的是（第二遍）去痕版语料
@@ -140,4 +140,5 @@ node tools/jev-verdict.mjs regress --file cases/sufficient-cases-neutral.json   
 7. **`contradicted` ≠ 证伪**：`p < 0.5` 的档位里确实混着真值为"支持"的样本（§1.2），对外只能表述为"证据不足或被反驳，需人工复核"。
 8. **域路由的触发词是正则，必然有误命中**：`tech_release` 的词表里有「发布」，会把「政策发布会」这类任务拉进技术域（实测 dispatch 语料 D27 因此同时命中 5 个域）；`medical` 的单字「药」会把「农药残留」同时拉进医疗域。多命中**不影响结论正确性**（多一个域只是多给几条来源阶梯），但会推高 `dispatchHint` 的域数阈值。1.3.0 新增七个域时按「具体在前」排列以降低串味，既有域的**触发词**一个未动。1.3.0 另修了 `medical` 的**域路由**：原先指向 `official_json_api`（国务院政策文件库 / 法规库），与它阶梯首级的「药品监管机构批准信息」对不上，已改走 `gov_notice`（含国家药监局与市场监管总局）。
 9. **`factPointsInText` 不是真的拆事实点**：它只数任务文本里 `；;。\n` 的个数再 +1，却被 `dispatchHint` 当判据用（`>= 4` 就建议派发）。一段逗号连写的长任务会被低估，一段分号并列的短任务会被高估。它只够当粗筛，不要拿它当「事实点已拆好」的证据。
+10. **路由的兜底域（1.5.1 修）**：未命中任何触发词的任务原先兜底到 `tech_release`——那是「官方仓库 / 包管理器元数据」的阶梯，与多数任务无关；而且该域 `closed=false`，`dispatchHint` 会说「单路可覆盖，串行处理即可」，把「封闭生态 / 大量长文」这类真正该派的任务劝退。现改为专用 `general_fact` 兜底阶梯（当事方原始发布 → 通讯社 → 元搜索交叉 → 存档 → 当地媒体 → 社区线索），`plan` 输出新增 `fallback`，兜底时提示改为「按 SKILL.md 的信号表判断」。同一轮补了两条触发词（`cn_social_rumor`：推特 / Twitter / X 平台 / 骂战 / 对线 / 论战 / 口水战 / 开撕 / 网络战；`international`：土耳其 / 希腊 / 俄罗斯 / 越南 / 印度 / 韩国 / 朝鲜 / 以色列 / 巴勒斯坦 / 乌克兰 / 阿根廷 / 巴西 / 墨西哥 / 沙特 / 埃及）。按 §4.1 的代理指标重跑，**28/35 = 80.0% 与 7 条 mismatch（D08 / D10 / D12 / D15 / D27 / D30 / D37）逐条不变**——新增词条在 35 条共识样本上没改变任何一条判定；样本小，这只说明「未变差」，不等于扩词已在通用任务上验证。
 
