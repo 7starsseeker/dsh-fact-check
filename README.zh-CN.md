@@ -62,7 +62,7 @@
 技能正文不绑定任何产品、主机或工具链：它只写**能力名**，由 [`ADAPTING.md`](./ADAPTING.md) 把能力
 落到你的环境里。
 
-**已验证宿主：DSH 0.1.7-rc.2、0.2.0-rc.2、0.2.1-rc.2 与 0.2.1-rc.3。** 0.1.7-rc.2 于 2026-09-25 完整跑过一遍（Node 24.21.0，WSL/Linux）：宿主能发现本技能并读入正文；
+**已验证宿主：DSH 0.1.7-rc.2、0.2.0-rc.2、0.2.1-rc.2、0.2.1-rc.3 与 0.2.1-rc.5。** 0.1.7-rc.2 于 2026-09-25 完整跑过一遍（Node 24.21.0，WSL/Linux）：宿主能发现本技能并读入正文；
 插件形态能挂到宿主自己的技能注册表上，`source: bundled`，描述取自 `SKILL.md`，`get()` 交出的正文
 与 `SKILL.md` 逐字一致；`npm run selftest` 全过（插件挂载 27/27、`jev-verdict` 25/25、`route` 37/37）；
 `route.mjs regress` 离线 26/26；判据语料复现 [`MEASUREMENTS.md`](./MEASUREMENTS.md) §6 的预期 ——
@@ -76,6 +76,10 @@
 **DSH 0.2.1-rc.2 于 2026-10-17 完整跑过一遍**（Node 24.21.0，Windows）。注册表的实现（`@deepseek-ai/dsh-skill` 的 `lib/index.js`）在 0.2.0-rc.2 与 0.2.1-rc.2 之间**内容没有变化** —— diff 只有换行符与版本号（`package.json` 把 peer 依赖抬到 cordis `~4.0.5`、加了一个 `./locale/*.json` 导出）—— 所以不需要任何 API 适配。变的是 provider 能拿 `control` **做什么**，本包两样都用上了：候选带上 `path`（指向绝对的 `SKILL.md`，摘要会保留它）；provider 监听 `SKILL.md`，保存时调 `control.invalidate()`，改正文不必重启就会刷新会话里的技能目录（150 ms 去抖；`control.signal` abort 或上下文销毁时收尾，宿主不传 `control` 时退化为「改完重启生效」）。证据：插件分别挂到宿主自己那套 `0.2.1-rc.2` 注册表代码（从已发布的 asar 里取出，配宿主自带的 cordis 4.0.5）与**已发布**的 `0.2.0-rc.2` 包上，各 21/21 项检查通过：`snapshot.complete === true`、`get()` 交出的正文与 `SKILL.md` 逐字一致、`provider.list()` 的 rank 为 600，两轮「改文件 → 目录自动刷新」都观察到了；`npm run selftest` 27/27、25/25、37/37 与 `route.mjs regress` 26/26 均在 Node 24.21.0 上复跑。
 
 **DSH 0.2.1-rc.3 于 2026-10-24 完整跑过一遍**（Node 24.22.1，Windows）。注册表契约没有位移：`@deepseek-ai/dsh-skill` 0.2.1-rc.3 仍导出 `BUNDLED_SKILL_RANK`（600）、`SkillRegistry`、`isSkillName`、`isModelInvocable` 与 `isUserInvocable`，`registerProvider()` 交出的 `control`（`{ signal, invalidate }`）不变，`invalidateCache()` 仍推进缓存 revision 并广播 `skills/change`。插件挂在这套注册表上（取自随宿主发布的 `app.asar`，配宿主自己的 cordis 4.0.5）通过了 **28/28** 项检查：`inject: ['skills']`；候选带 `source: bundled`、`rank` 600 等于宿主导出的常量、绝对 `SKILL.md` 作为 `path`、包根目录作为 `resourceBase`、描述与 frontmatter 逐字一致；`get()` 交出正文（13,533 字符，frontmatter 已剥离，`path` 保留）；`control.invalidate()` 让注册表 revision 从 1 到 2 并恰好广播一次 `skills/change`；拆卸后 provider 消失且 `control.signal` 已 abort。两处看着像失败、其实不是的细节也一并记下：宿主的 `toSummary()` 有意不在目录摘要里带 `rank`（它是同名仲裁的输入，不是展示字段）；注册只在 `ctx.plugin()` 的 thenable 落定后可观测 —— 在 await 之前去看，即便挂载成功也看不到 `control`。同一次 rc3 会话里真正运行的是**目录形态**（宿主自己的技能目录），会话的技能目录用本仓 `SKILL.md` 的描述列出了 `fact-check`。
+
+**DSH 0.2.1-rc.5 于 2026-10-31 完整跑过一遍**（Node 26.13.0，Windows；宿主版本以随宿主发布的 `app.asar` 里 `@deepseek-ai/dsh-desktop` 声明的为准，`dsh --version` 报的也是同一个 `0.2.1-rc.5`）。注册表契约再次没有位移：`@deepseek-ai/dsh-skill` 0.2.1-rc.5 仍导出 `BUNDLED_SKILL_RANK`（600）与同一套 `SkillRegistry` / `isSkillName` / `isModelInvocable` / `isUserInvocable`，`registerProvider()` 交出的 `control`（`{ signal, invalidate }`）不变，`validateCandidate`、`toSummary`、`renderSkillContent` 的行为与 0.2.1-rc.3 一致 —— 均逐行对着从 `app.asar` 取出的那份文件、配宿主自己的 cordis 4.0.5 核过。插件挂在这套注册表上通过了 **24/24** 项检查：`inject: ['skills']`；`fact-check` 恰好一条候选，带 `source: bundled`、`rank` 600 等于宿主导出的常量、绝对 `SKILL.md` 作为 `path`、包根目录作为 `resourceBase`；`get()` 交出正文（14,462 字符，frontmatter 已剥离）；该正文经 `renderSkillContent` 可正常渲染且资源基准为包根；`control.invalidate()` 让改动过的描述在目录里可见（探针内改完即还原，事后 `git status --porcelain` 为空）；拆卸后 provider 再次消失。仓库自带套件在 Node 26.13.0 上复跑全绿：`smoke-plugin` 27/27、`jev-verdict selftest` 25/25、`route selftest` 44/44、`route.mjs regress` 离线 30/30、`doctor` exit 0。
+
+这一版新增的一条宿主行为决定**任何**插件能不能加载，所以记在这里。`@deepseek-ai/dsh-app-boot` 加了插件↔运行时兼容门禁：声明了 `engines.dsh` 的插件必须满足它；没有 `engines.dsh` 但**有** `peerDependencies` 的插件，其中凡是 `@deepseek-ai/dsh` / `@deepseek-ai/dsh-*` 的 peer 都必须满足；**两者都没有的插件无条件通过**。不兼容的 profile bundle 会被静默跳过、不打印任何东西，不兼容的 `cordis.patch.yml` 行会被置 `disabled`。本包只声明 `engines.node`、没有 `peerDependencies`，所以门禁在任何运行时上都无法拒载它 —— 这是除上面那条插件市场理由之外，又一条把 manifest 保持为「不声明宿主版本」的理由。
 
 ## 安装
 
