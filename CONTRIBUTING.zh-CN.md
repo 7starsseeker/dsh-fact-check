@@ -36,8 +36,9 @@ node tools/make-instructions.mjs                     # 只有改了 SKILL.md 才
 
 ## 主机相关的值永不入库
 
-端点、密钥、主机路径，以及「这台机器上哪个渠道真的能用」，一律放 `tools/local.json`（已 gitignore），
-模板是 `tools/local.example.json`。`tools/*.mjs` 里有断言：一旦硬编码主机路径就失败；
+端点、密钥、主机路径，以及「这台机器上哪个渠道真的能用」，一律放 **包外** 的 `local.json`
+（Windows 默认 `%LOCALAPPDATA%\dsh-fact-check\local.json`，其它平台 `~/.config/dsh-fact-check/local.json`，
+或用 `JEV_LOCAL_CONFIG` 指定），模板是 `tools/local.example.json`。`tools/*.mjs` 里有断言：一旦硬编码主机路径就失败；
 `SKILL.md` 里也不得出现主机名、内网地址、路径或密钥。
 
 ## 版本纪律

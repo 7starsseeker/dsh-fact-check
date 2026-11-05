@@ -23,12 +23,12 @@
 4. **平台专用工具**——视频 / 社交类平台的专用 CLI（字幕、弹幕、评论等）；
 5. **免登录直取接口**——平台公开的免登录端点；拿不到就如实标注"未能获取原文"，不要伪造。
 
-哪条链在本机可用、哪个站已经挂了，属于**运行时基线**：写进 `tools/local.json` 的 `runtimeNotes`（带日期），**不要写进本文**——正文没有时效标注机制，写在这里半年后就是过期信息，而且换台机器就得改正文。
+哪条链在本机可用、哪个站已经挂了，属于**运行时基线**：写进 `local.json`（包外用户配置目录，见 `ADAPTING.md`）的 `runtimeNotes`（带日期），**不要写进本文**——正文没有时效标注机制，写在这里半年后就是过期信息，而且换台机器就得改正文。
 
 **首选路径失败必须自动降级到次选**，而不是直接判定"无法核查"。只有**五条路径全部失败**才判"无法核查"，且必须在报告的「本次未能核实到的」里写明试过哪几条、各自报什么错。
 **搜索结果的 `content` / `snippet` 字段只是摘要，不能当正文计入证据。**
 
-**本技能不绑定任何具体产品、主机或工具链。** 正文只使用"能力名"；把能力落到你的环境里见 `ADAPTING.md`；所有"在某台机器上测出来"的数字都在 `MEASUREMENTS.md`，它们**是证据，不是配置**。本机的能力绑定与输出约定可写进 `tools/local.json`（可选字段，见 `tools/local.example.json`），正文只保留默认值。
+**本技能不绑定任何具体产品、主机或工具链。** 正文只使用"能力名"；把能力落到你的环境里见 `ADAPTING.md`；所有"在某台机器上测出来"的数字都在 `MEASUREMENTS.md`，它们**是证据，不是配置**。本机的能力绑定与输出约定可写进 `local.json`（包外，可选字段，见 `tools/local.example.json`），正文只保留默认值。
 
 自检：`node tools/doctor.mjs` 会探测当前环境有哪些能力、缺什么、会降级成什么样；加 `--net` 会额外自测判据端点与**两条可自测的抓取链**（宿主内置抓取与搜索服务的抽取字段它探不到，需自己各跑一次真实抓取确认）。
 
@@ -342,7 +342,7 @@
 - 目录结构：**`FOR-AI.md`（交给 AI 的操作说明：逐步配置与使用）** + `SKILL.md`（本文件，流程与规则）+ `ADAPTING.md`（换环境要改什么）+ `MEASUREMENTS.md`（实测数字与复跑）+ `CHANGELOG.md`（版本间净变化）+ `lib/index.js`（DSH 插件入口：把本文件挂到 `ctx.skills`）+ `cordis.patch.yml`（让本包能被 `dsh plugin add` 安装）+ `tools/`（两个可选工具、本机配置模板与数据表）+ `cases/`（回归语料）+ `README.md` / `README.zh-CN.md`（给人类的说明）+ `submission/`（投稿到插件市场的条目文件，不属于插件包本身）。
 - **两种分发形态同一份正文**：① `dsh plugin add github:7starsseeker/dsh-fact-check`（DSH 插件市场的形态，`lib/index.js` 现读本文件，所以改本文件不必改代码）；② 把整个目录交给任何 AI 工具（`FOR-AI.md` 那套）。**不要为其中一种抄一份正文出来**——两份必然漂移，`tools/smoke-plugin.mjs` 里有断言在守"候选描述 = 本文件 frontmatter 的 description"这条单一真相源。
 - **改判据 = 重新校准事件**：`tools/jev-verdict.mjs` 里的 `QUESTIONS` 是冻结字面量，任何 instruction/criteria/阈值改动都必须重跑 `cases/` 下的回归，并把新数字写回 `MEASUREMENTS.md`。**`tools/route.mjs` 的触发词表与域路由表同理**：改完要重跑 `node tools/route.mjs regress --file cases/route-cases-neutral.json` 与 `node tools/route.mjs selftest`。
-- **环境相关的值只放 `tools/local.json`**（模板 `tools/local.example.json`）：密钥、端点、state 目录、数据表里的 `${占位符}`，以及可选的能力绑定 `capabilities`、输出约定 `outputConvention`、运行时基线 `runtimeNotes`。代码与数据表**不写死任何主机路径**，`selftest` 里有断言在守这条。
+- **环境相关的值只放 `local.json`**（包外用户配置目录；模板 `tools/local.example.json`）：密钥、端点、state 目录、数据表里的 `${占位符}`，以及可选的能力绑定 `capabilities`、输出约定 `outputConvention`、运行时基线 `runtimeNotes`。代码与数据表**不写死任何主机路径**，`selftest` 里有断言在守这条。
 - **不要在本技能正文里写入任何主机、内网地址、路径或密钥**。本机事实要么进 `local.json`，要么作为"在某环境测得"的证据进 `MEASUREMENTS.md`。
 - **版本纪律**：凡是改动面向使用者的行为（流程、报告模板、判据、触发词），就升 frontmatter 的 `version` 并在 `CHANGELOG.md` 记一条净变化；只改措辞或文档不算。
 - **「利益相关与污染面」是标注制，不是降权制**：不要把任何"利益相关 / 疑似投毒 ⇒ 降档"的规则接进定档。至少会同时坏三件事（非单调、奖励信息垄断、全局降档），三条理由是那一节的正文，改之前先重读。

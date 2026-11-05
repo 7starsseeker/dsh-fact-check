@@ -38,8 +38,9 @@ All of these run offline and need no API key.
 
 ## Machine-specific values never enter the repository
 
-Endpoints, keys, host paths and "which channel actually works here" belong in `tools/local.json`, which is
-git-ignored; `tools/local.example.json` is the template. `tools/*.mjs` carry assertions that fail if a host
+Endpoints, keys, host paths and "which channel actually works here" belong in `local.json` **outside the package**
+(default `%LOCALAPPDATA%\dsh-fact-check\local.json` on Windows, `~/.config/dsh-fact-check/local.json` elsewhere,
+or whatever `JEV_LOCAL_CONFIG` points at); `tools/local.example.json` is the template. `tools/*.mjs` carry assertions that fail if a host
 path is hard-coded, and `SKILL.md` may not name a host, an internal address, a path or a key.
 
 ## Versioning

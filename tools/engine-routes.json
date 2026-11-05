@@ -1,5 +1,5 @@
 {
-  "_about": "渠道路由表：确定性映射，模型不参与。**这是模板，不是配置**：表里所有 ${...} 都是变量，取值由 tools/local.json 的 overrides（或 JEV_* 环境变量）提供；未填也能跑，计划会原样显示占位符并把它列进 localPlaceholdersUnset。",
+  "_about": "渠道路由表：确定性映射，模型不参与。**这是模板，不是配置**：表里所有 ${...} 都是变量，取值由 `local.json`（包外用户配置目录）的 overrides（或 JEV_* 环境变量）提供；未填也能跑，计划会原样显示占位符并把它列进 localPlaceholdersUnset。",
   "_template_note": "本表只描述公开可用的渠道与接口，不包含任何主机地址。下面的 capabilities 段是「这类渠道能干什么」，具体地址由你填。",
   "capabilities": {
     "searxng": "${SEARXNG_URL} —— 自托管元搜索：GET /search?q=…&format=json；引擎数量看你自己实例的 GET /config；若走 HTTP 代理，本地地址必须绕过代理；冷启首查可能超时，建议放宽到 20~30s",
