@@ -46,10 +46,10 @@ node tools/doctor.mjs --net      # 联网版：额外自测抓取链与判据端
 2. 或者生成配置草稿再补空值：
 
 ```bash
-node tools/doctor.mjs --write    # 生成 tools/local.json（已存在则不会覆盖）
+node tools/doctor.mjs --write    # 生成配置文件（默认写到包外用户目录；已存在则不会覆盖）
 ```
 
-3. 若环境里有自托管搜索 / 代理 / 工具，把它们填进 `tools/local.json` 的 `overrides`：
+3. 若环境里有自托管搜索 / 代理 / 工具，把它们填进配置文件的 `overrides`：
 
 ```json
 { "overrides": { "SEARXNG_URL": "…", "HTTP_PROXY_URL": "…", "VIDEO_FETCH_CMD": "…", "EXIFTOOL_CMD": "…" } }

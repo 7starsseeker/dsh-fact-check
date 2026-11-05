@@ -3,6 +3,19 @@
 面向使用者的**版本间净变化**（修复 / 改进 / 新增）。只写最终结果，不写过程。
 判据、阈值、触发词的任何改动都必须同时更新 `MEASUREMENTS.md` 的数字与 `cases/` 的回归结果。
 
+## 1.5.2 — 2026-11-05
+
+**修复**
+
+- **包更新会把本机配置一起冲掉**：`local.json` / `secrets.json` 原先只从包内 `tools/` 读，而 `dsh plugin update`（以及任何 `npm i`）是**整包替换**，装在包里的本机设置必然消失；又因为 package.json 的 `files` 不含 `local.json`，用户只能在装完后手工往 `node_modules/…/tools/` 里放，每次更新重来一遍。现改为**包外配置目录**：Windows `%LOCALAPPDATA%\dsh-fact-check\`，其它平台 `$XDG_CONFIG_HOME/dsh-fact-check/` 或 `~/.config/dsh-fact-check/`；`JEV_LOCAL_CONFIG` 可显式指定文件。解析顺序 `JEV_LOCAL_CONFIG` → 用户配置目录 → 包内旧位置（兜底，不破坏已有安装）。
+- `tools/doctor.mjs --write` 改为写入包外用户目录（已存在则不覆盖），并在输出里加一行「本机配置：…」显示**实际生效**的文件路径；`route.mjs` / `jev-verdict.mjs` / `doctor.mjs` 的读取全部走同一套解析（新增 `tools/config.mjs`，仍零依赖）。密钥文件同目录解析（`secrets.json`）。
+
+**其它**
+
+- 文档同步：`ADAPTING.md`（新增「配置文件位置」说明）、`FOR-AI.md`、`README.md`、`README.zh-CN.md`、`tools/local.example.json` 的路径性描述改为包外位置；判据、阈值与流程正文未动。
+- 验收：`route selftest 44/44`、`jev-verdict selftest 25/25`、`smoke-plugin 27/27` 全部通过；解析优先级实测三条：`JEV_LOCAL_CONFIG` 指定路径生效、用户目录生效、两者皆无时 `overrides` 为空且不报错。
+- 升级提示：老安装升级到 1.5.2 后，把原来的 `tools/local.json` 复制到上面那个包外路径即可（包内旧位置仍会被读到，但下次整包替换后就没了）。
+
 ## 1.5.1 — 2026-10-28
 
 **修复**

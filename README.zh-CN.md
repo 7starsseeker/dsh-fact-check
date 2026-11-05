@@ -142,7 +142,7 @@ dsh plugin add ./dsh-fact-check
 两件事是刻意的：
 
 - **它是可选的。** 没配密钥时，这三件事由 `SKILL.md` 里写死的确定性规则执行，其余流程完全不变。
-  密钥可以来自 `tools/local.json`、环境变量 `TYPESAFE_API_KEY`，或 `tools/jev-verdict.mjs --key-file`。
+  密钥可以来自本机配置 `local.json`、环境变量 `TYPESAFE_API_KEY`，或 `tools/jev-verdict.mjs --key-file`。
 - **模型的判断只能降档，不能升档。** 结论档位由确定性规则「独立来源数 → 档位」裁定；模型说「支持」
   不会让任何东西升级。只有「证据不足」或「与证据矛盾」才触发动作。
 
@@ -187,8 +187,10 @@ CI 在 Linux 与 Windows 上、Node 18 与 22 下跑的就是上面这几条，�
 
 ## 配置
 
-主机相关的值——端点、密钥、你那台机器上哪些渠道真的能用——一律放 `tools/local.json`，它被 gitignore，
-只分发 [`tools/local.example.json`](./tools/local.example.json)。代码与数据表里**不写死**任何主机路径、
+主机相关的值——端点、密钥、你那台机器上哪些渠道真的能用——一律放 `local.json`，它在**包外**
+（默认 `%LOCALAPPDATA%\dsh-fact-check\local.json`，其它平台 `~/.config/dsh-fact-check/local.json`，
+可用 `JEV_LOCAL_CONFIG` 覆盖），这样包更新不会把它清掉。模板只分发
+[`tools/local.example.json`](./tools/local.example.json)。代码与数据表里**不写死**任何主机路径、
 端点或密钥，`tools/*.mjs` 里有断言专门守这条。
 
 ## 参与贡献

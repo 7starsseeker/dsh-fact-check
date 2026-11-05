@@ -1,5 +1,5 @@
 {
-  "_about": "复制成 local.json 并填入你自己的值（或先跑 `node tools/doctor.mjs --write` 生成草稿）。local.json 属于本机配置：不要提交、不要随包分享、不要写进 SKILL.md。",
+  "_about": "复制成 local.json 并填入你自己的值（或先跑 `node tools/doctor.mjs --write` 生成草稿）。推荐放在包外的用户配置目录：Windows `%LOCALAPPDATA%\\dsh-fact-check\\local.json`，其它平台 `~/.config/dsh-fact-check/local.json`；也可用 JEV_LOCAL_CONFIG 指定路径。local.json 属于本机配置：不要提交、不要随包分享、不要写进 SKILL.md。",
   "_note": "全部字段都可以省略：省了就按内置默认值跑，占位符未填时 route.mjs 会把它们列进 localPlaceholdersUnset，jev-verdict.mjs 会在找不到密钥时明确报错并回退到人工规则。环境变量优先级高于本文件（JEV_ 前缀或原名，例如 JEV_SEARXNG_URL / SEARXNG_URL）。",
   "keyFile": "/path/to/your/secrets.json",
   "keyFiles": [],

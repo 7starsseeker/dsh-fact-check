@@ -8,7 +8,7 @@
  *
  *   node tools/doctor.mjs            # offline checks only
  *   node tools/doctor.mjs --net      # also probe the endpoint, the local search service, and the fetch chain
- *   node tools/doctor.mjs --write    # write tools/local.json from detected values (won't overwrite)
+ *   node tools/doctor.mjs --write    # write the local config from detected values (won't overwrite)
  *   node tools/doctor.mjs --json     # machine-readable
  *
  * It never prints a secret — only where a key was found.
@@ -18,6 +18,7 @@ import { existsSync, readFileSync, writeFileSync, mkdirSync, rmSync } from 'node
 import { dirname, join, isAbsolute, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { homedir, tmpdir } from 'node:os'
+import { activeConfigPath, readLocalConfig, userConfigPath, writeLocalConfig } from './config.mjs'
 import { spawnSync } from 'node:child_process'
 
 const HERE = dirname(fileURLToPath(import.meta.url))
@@ -36,7 +37,7 @@ function readJson(file) {
 }
 
 function localConfig() {
-  return readJson(join(HERE, 'local.json')) || {}
+  return readLocalConfig(HERE)
 }
 
 /* ---------------- runtime ---------------- */
@@ -44,6 +45,7 @@ function localConfig() {
 const major = Number(process.versions.node.split('.')[0])
 report.info.node = process.versions.node
 report.info.platform = `${process.platform} ${process.arch}`
+report.info.configFile = activeConfigPath(HERE) || `${userConfigPath('local.json')}（尚未生成）`
 if (major >= 18) report.ok.push(`Node ${process.versions.node}（≥18，内置 fetch / AbortSignal.timeout 可用）`)
 else report.fail.push(`Node ${process.versions.node} 过旧：需要 ≥18（内置 fetch）。判据层不可用，流程仍可按 SKILL.md 人工执行`)
 
@@ -255,9 +257,9 @@ if (has('--net')) {
 /* ---------------- --write ---------------- */
 
 if (has('--write')) {
-  const target = join(HERE, 'local.json')
-  if (existsSync(target)) {
-    report.warn.push(`local.json 已存在，未覆盖：${target}`)
+  const existing = activeConfigPath(HERE)
+  if (existing) {
+    report.warn.push(`local.json 已存在，未覆盖：${existing}`)
   } else {
     const generated = {
       _about: '由 doctor.mjs 生成；可按需修改。请勿提交或分享。',
@@ -272,8 +274,8 @@ if (has('--write')) {
         EXIFTOOL_CMD: process.env.JEV_EXIFTOOL_CMD || ov.EXIFTOOL_CMD || report.info.optionalTools.exiftool || null,
       },
     }
-    writeFileSync(target, JSON.stringify(generated, null, 2) + '\n', 'utf8')
-    report.ok.push(`已生成 ${target} —— 请把 null 的项按你的环境补上`)
+    const { path } = writeLocalConfig(HERE, generated)
+    report.ok.push(`已生成 ${path} —— 请把 null 的项按你的环境补上`)
   }
 }
 
@@ -287,6 +289,7 @@ if (has('--json')) {
   line('# fact-check skill · 环境自检')
   line('')
   line(`运行环境：Node ${report.info.node} · ${report.info.platform}`)
+  line(`本机配置：${report.info.configFile}`)
   line(`判据端点：${report.info.endpoint} · 模型：${report.info.model}`)
   line(`日志目录：${report.info.stateDir}${writable ? '（可写）' : '（不可写，会静默跳过）'}`)
   line('')
@@ -311,7 +314,7 @@ if (has('--json')) {
         '正文抽取字段探不到，请各自用一次真实抓取确认——这三条是"任一可用即可"的能力族。',
     )
   }
-  line('下一步：cp tools/local.example.json tools/local.json 并按上面提示填写；或 node tools/doctor.mjs --write 生成草稿。')
+  line(`下一步：node tools/doctor.mjs --write 生成配置草稿（写到 ${userConfigPath('local.json')}，包更新不会清掉）；或手动创建同名文件。`)
   line('')
 }
 

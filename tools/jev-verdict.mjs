@@ -31,6 +31,7 @@ import { readFileSync, writeFileSync, appendFileSync, existsSync, mkdirSync, rea
 import { dirname, join, isAbsolute, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { homedir } from 'node:os'
+import { readLocalConfig, userConfigPath } from './config.mjs'
 
 const HERE = dirname(fileURLToPath(import.meta.url))
 const ENDPOINT = 'https://api.typesafe.ai/v1/systemone'
@@ -48,8 +49,7 @@ const PRICE_PER_MTOK = 0.042
  */
 export function localConfig() {
   try {
-    const f = join(HERE, 'local.json')
-    if (existsSync(f)) return JSON.parse(readFileSync(f, 'utf8'))
+    return readLocalConfig(HERE)
   } catch {
     /* a broken local.json must never break a verdict */
   }
@@ -273,6 +273,7 @@ export function resolveKey({ explicit } = {}) {
       ? process.env.JEV_KEY_FILES.split(process.platform === 'win32' ? ';' : ':')
       : []),
     join(HERE, 'secrets.json'),
+    userConfigPath('secrets.json'),
   ].filter(Boolean)
   for (const f of candidates) {
     try {

@@ -152,8 +152,8 @@ Three judgements are inherently about facts rather than about prose, and the ski
 Two things about it are deliberate:
 
 - **It is optional.** With no key configured, the same three judgements are made by the deterministic
-  rules written in `SKILL.md`; nothing else changes. A key can come from `tools/local.json`, from the
-  `TYPESAFE_API_KEY` environment variable, or from `tools/jev-verdict.mjs --key-file`.
+  rules written in `SKILL.md`; nothing else changes. A key can come from the local config
+  (`local.json`), from the `TYPESAFE_API_KEY` environment variable, or from `tools/jev-verdict.mjs --key-file`.
 - **A model verdict can only lower a grade, never raise it.** The conclusion tier is decided by the
   deterministic rule *number of independent sources → tier*; a model saying "the evidence supports this"
   promotes nothing. Only "insufficient evidence" or "contradicts the evidence" triggers an action.
@@ -203,7 +203,9 @@ generated `INSTRUCTIONS.md` still matches `SKILL.md`.
 ## Configuration
 
 Machine-specific values — endpoints, keys, which channels actually work on your machine — live in
-`tools/local.json`, which is git-ignored and shipped only as [`tools/local.example.json`](./tools/local.example.json).
+`local.json` **outside the package** (default `%LOCALAPPDATA%\dsh-fact-check\local.json` on Windows,
+`~/.config/dsh-fact-check/local.json` elsewhere; override with `JEV_LOCAL_CONFIG`), so a package update
+cannot wipe them. The template ships as [`tools/local.example.json`](./tools/local.example.json).
 No host path, endpoint or key is hard-coded in the code or the data tables, and `tools/*.mjs` carry
 assertions that fail if one ever appears.
 

@@ -1,8 +1,13 @@
 # 换环境适配清单（ADAPTING）
 
-本技能**不绑定任何主机、产品、路径或密钥**：正文只讲能力与规则，两个工具是零依赖的 Node 脚本，所有环境相关的值都在 `tools/local.json`。本文说明落到你的环境需要做哪几件事。
+本技能**不绑定任何主机、产品、路径或密钥**：正文只讲能力与规则，两个工具是零依赖的 Node 脚本，所有环境相关的值都在 `local.json`（放在**包外**的用户配置目录，见下）。本文说明落到你的环境需要做哪几件事。
 
 > 逐步执行请用 **`FOR-AI.md`**（它是操作手册）；本文是配套的背景与决策依据（为什么这样改、没有决策模型怎么办、判据校准纪律）。
+
+> **配置文件位置**：默认 `%LOCALAPPDATA%\dsh-fact-check\local.json`（Windows）或
+> `~/.config/dsh-fact-check/local.json`；`JEV_LOCAL_CONFIG` 可指定任意路径；旧的包内
+> `tools/local.json` 仍会被读，但只作为兜底。放在包外是为了 `dsh plugin update` / `npm i`
+> 换掉整个包目录时，不会把本机设置一起清掉。`secrets.json` 用同一套目录。
 
 ---
 
@@ -17,8 +22,8 @@ node tools/doctor.mjs --net                     # 建议也跑一次：会真跑
 export TYPESAFE_API_KEY=…                       # 或 doctor --write 生成 local.json 后填 keyFile
 
 # 3) 本机值（可选）：自托管搜索、代理、可选工具路径；还有能力绑定 / 输出约定 / 运行时基线
-node tools/doctor.mjs --write                   # 生成 local.json 草稿，再把 null 的项补上
-#    或： cp tools/local.example.json tools/local.json
+node tools/doctor.mjs --write                   # 生成配置草稿（写到包外用户目录），再把 null 的项补上
+#    或： 把 tools/local.example.json 复制成配置文件（路径看 doctor 输出里的「本机配置」一行）
 
 # 4) 验收（离线，不花钱）
 node tools/jev-verdict.mjs selftest                              # 期望 25/25

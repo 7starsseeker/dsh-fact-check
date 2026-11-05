@@ -16,6 +16,7 @@
 import { readFileSync, writeFileSync, existsSync } from 'node:fs'
 import { dirname, join, isAbsolute, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
+import { activeConfigPath, readLocalConfig } from './config.mjs'
 
 const HERE = dirname(fileURLToPath(import.meta.url))
 const matrix = JSON.parse(readFileSync(join(HERE, 'source-matrix.json'), 'utf8'))
@@ -28,15 +29,23 @@ const CASES_DIR = resolve(HERE, '..', 'cases')
  * never in the tables or the code. Anything environment-specific in the tables
  * is written as ${PLACEHOLDER} and resolved here from:
  * env JEV_<NAME> → env <NAME> → local.json `overrides.<NAME>` → left as-is.
+ *
+ * The file itself lives OUTSIDE the package (see `config.mjs`), so a package
+ * update cannot delete the machine's settings; `tools/local.json` is still read
+ * as a fallback for older installs.
  */
 export function localOverrides() {
   try {
-    const f = join(HERE, 'local.json')
-    if (existsSync(f)) return JSON.parse(readFileSync(f, 'utf8')).overrides || {}
+    return readLocalConfig(HERE).overrides || {}
   } catch {
     /* a broken local.json must not break planning */
   }
   return {}
+}
+
+/** Which local.json is actually in effect — surfaced by the doctor/plan output. */
+export function localConfigPath() {
+  return activeConfigPath(HERE)
 }
 
 export function subst(text) {
