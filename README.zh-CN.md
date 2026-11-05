@@ -62,7 +62,7 @@
 技能正文不绑定任何产品、主机或工具链：它只写**能力名**，由 [`ADAPTING.md`](./ADAPTING.md) 把能力
 落到你的环境里。
 
-**已验证宿主：DSH 0.1.7-rc.2、0.2.0-rc.2、0.2.1-rc.2、0.2.1-rc.3 与 0.2.1-rc.5。** 0.1.7-rc.2 于 2026-09-25 完整跑过一遍（Node 24.21.0，WSL/Linux）：宿主能发现本技能并读入正文；
+**已验证宿主：DSH 0.1.7-rc.2、0.2.0-rc.2、0.2.1-rc.2、0.2.1-rc.3、0.2.1-rc.5 与 0.2.2-rc.1。** 0.1.7-rc.2 于 2026-09-25 完整跑过一遍（Node 24.21.0，WSL/Linux）：宿主能发现本技能并读入正文；
 插件形态能挂到宿主自己的技能注册表上，`source: bundled`，描述取自 `SKILL.md`，`get()` 交出的正文
 与 `SKILL.md` 逐字一致；`npm run selftest` 全过（插件挂载 27/27、`jev-verdict` 25/25、`route` 37/37）；
 `route.mjs regress` 离线 26/26；判据语料复现 [`MEASUREMENTS.md`](./MEASUREMENTS.md) §6 的预期 ——
@@ -80,6 +80,8 @@
 **DSH 0.2.1-rc.5 于 2026-10-31 完整跑过一遍**（Node 26.13.0，Windows；宿主版本以随宿主发布的 `app.asar` 里 `@deepseek-ai/dsh-desktop` 声明的为准，`dsh --version` 报的也是同一个 `0.2.1-rc.5`）。注册表契约再次没有位移：`@deepseek-ai/dsh-skill` 0.2.1-rc.5 仍导出 `BUNDLED_SKILL_RANK`（600）与同一套 `SkillRegistry` / `isSkillName` / `isModelInvocable` / `isUserInvocable`，`registerProvider()` 交出的 `control`（`{ signal, invalidate }`）不变，`validateCandidate`、`toSummary`、`renderSkillContent` 的行为与 0.2.1-rc.3 一致 —— 均逐行对着从 `app.asar` 取出的那份文件、配宿主自己的 cordis 4.0.5 核过。插件挂在这套注册表上通过了 **24/24** 项检查：`inject: ['skills']`；`fact-check` 恰好一条候选，带 `source: bundled`、`rank` 600 等于宿主导出的常量、绝对 `SKILL.md` 作为 `path`、包根目录作为 `resourceBase`；`get()` 交出正文（14,462 字符，frontmatter 已剥离）；该正文经 `renderSkillContent` 可正常渲染且资源基准为包根；`control.invalidate()` 让改动过的描述在目录里可见（探针内改完即还原，事后 `git status --porcelain` 为空）；拆卸后 provider 再次消失。仓库自带套件在 Node 26.13.0 上复跑全绿：`smoke-plugin` 27/27、`jev-verdict selftest` 25/25、`route selftest` 44/44、`route.mjs regress` 离线 30/30、`doctor` exit 0。
 
 这一版新增的一条宿主行为决定**任何**插件能不能加载，所以记在这里。`@deepseek-ai/dsh-app-boot` 加了插件↔运行时兼容门禁：声明了 `engines.dsh` 的插件必须满足它；没有 `engines.dsh` 但**有** `peerDependencies` 的插件，其中凡是 `@deepseek-ai/dsh` / `@deepseek-ai/dsh-*` 的 peer 都必须满足；**两者都没有的插件无条件通过**。不兼容的 profile bundle 会被静默跳过、不打印任何东西，不兼容的 `cordis.patch.yml` 行会被置 `disabled`。本包只声明 `engines.node`、没有 `peerDependencies`，所以门禁在任何运行时上都无法拒载它 —— 这是除上面那条插件市场理由之外，又一条把 manifest 保持为「不声明宿主版本」的理由。
+
+**DSH 0.2.2-rc.1 于 2026-11-06 完整跑过一遍**（Node 26.13.0，Windows；宿主版本以随宿主发布的 `app.asar` 里 `@deepseek-ai/dsh-desktop` / `@deepseek-ai/dsh-desktop-runtime` 声明的为准，`dsh --version` 报的也是同一个 `0.2.2-rc.1`）。这一轮以**运行时证据为主，而非逐行 diff**：宿主是原地升级，磁盘上已没有 0.2.1-rc.5 的对应文件可作对照。仍直接核对了随宿主发布的构建里留下的契约：`@deepseek-ai/dsh-skill` 的 `lib/index.js` 第 23 行仍是 `const BUNDLED_SKILL_RANK = 600;`；`registerProvider()` 交出的 `control` 仍是 `{ signal, invalidate }`，`invalidate()` 仍先确认 `active.layer.providers.get(active.name)?.provider === provider` 再刷新目录；第 566 行的导出清单不变。运行中的宿主上，插件以 `link:T:/fact-check-skill` 挂载；插件市场把它的激活状态报成 `live`（「已热加载(bundle patch)」），`diagnostics.findings` 为空；会话自己的技能目录列出了 `fact-check`、描述与本仓 `SKILL.md` 一致 —— 而且 `$DSH_HOME/skills` 与 profile 的 `skills/` 下都没有 fact-check 副本，所以它只能来自插件。仓库自带套件在该宿主上复跑全绿：`smoke-plugin` 27/27、`jev-verdict selftest` 25/25、`route selftest` 44/44。这一轮**没有**覆盖：改 `SKILL.md` → `control.invalidate()` 的热刷新（需要在真实仓库里改文件才能验），以及 `validateCandidate` / `toSummary` 的内部行为（没有旧构建可逐行对照）。
 
 ## 安装
 
