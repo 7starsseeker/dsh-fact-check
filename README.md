@@ -26,6 +26,7 @@
 ## Table of contents
 
 - [What it is](#what-it-is)
+- [Related plugin](#related-plugin)
 - [Requirements](#requirements)
 - [Install](#install)
 - [How it works](#how-it-works)
@@ -56,6 +57,21 @@ five rules it is not allowed to skip:
 The output is a **conclusion-first** report with a numbered source appendix. Partially verified findings
 are kept in their own sections — *unverified* and *undecidable* never sit in the same paragraph as
 *confirmed* — so a guess cannot be quoted as if it were settled.
+
+## Related plugin
+
+The report is plain Markdown, so it can also be turned into images by
+[dsh-card-export](https://github.com/7starsseeker/dsh-card-export) — a separate, optional plugin that
+renders any Markdown report or DSH conversation excerpt into shareable PNGs. Its `report-card` skill
+recognises this report's conclusion structure (the fixed `## 一句话结论` / `## 哪些是真的` / `## 来源`
+headings) and takes the tier, both rails and each assertion's grading straight from the report; a report
+carrying only two of the three sections still renders, with the missing one listed at the end of the long
+image.
+
+The dependency is one-way and structural: fact-check works standalone and never calls the export side,
+which only probes whether it is installed. What actually couples the two is the format above — rename
+those headings or drop them to `###` and the export silently falls back to a plain report: no cover card,
+no tier or rail extraction.
 
 ## Requirements
 
