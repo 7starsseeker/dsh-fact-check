@@ -187,6 +187,26 @@
       "id": "R30",
       "task": "核查土耳其与某国之间的网络冲突",
       "expectDomains": ["international"]
+    },
+    {
+      "id": "R31",
+      "task": "什么是量子纠缠",
+      "expectDomains": ["definition", "science_general"],
+      "expectFallback": false,
+      "_why": "定义域排第一：问「是什么」先拿规范定义阶梯，领域阶梯随后并入"
+    },
+    {
+      "id": "R32",
+      "task": "自奏圣乐是什么",
+      "expectDomains": ["definition"],
+      "expectFallback": false,
+      "_why": "未识别任何事实类别，但「是什么」触发定义域，不应落到 general_fact 兜底"
+    },
+    {
+      "id": "R33",
+      "task": "美国大选是什么结果",
+      "expectNotDomains": ["definition"],
+      "_why": "「是什么」带宾语的取值问句不是定义问句，定义域不得吞掉它"
     }
   ]
 }

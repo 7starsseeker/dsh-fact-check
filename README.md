@@ -39,14 +39,25 @@
 
 ## What it is
 
-A fact-checking skill. Hand it a claim, a rumour, a figure, a news item or a "is this true?" and it
-returns a verification report. What separates it from asking a model directly is that it is built around
-five rules it is not allowed to skip:
+A skill that **types the request before it searches**. Hand it a claim, a rumour, a figure, a "is this
+true?", a "what actually happened?" or an "how do these two compare?" and it first decides which kind of
+report the question calls for, then returns that structure.
+
+**Six report kinds**: verdict (true/false) · explainer (what is X) · causal mechanism (why / what happened /
+what it will do) · comparison (A vs B) · survey map (the landscape) · metric card (a figure's current
+state). Forcing every research question into a true-false verdict, and writing every verification question
+as a survey, are the same class of error — this is the largest change in 2.0.
+
+What separates it from asking a model directly is that it is built around five rules it is not allowed to
+skip:
 
 1. **No model memory.** Even if the model "knows" the answer, it must verify by searching the internet
    first. If search is unavailable it reports *"cannot verify"* — it never substitutes recollection.
 2. **Multi-source cross-checking.** Every fact point needs 2–3 mutually *independent* sources. Multiple
-   outlets reprinting one original report count as **one** source, not three.
+   outlets reprinting one original report count as **one** source, not three. **The scope scales with the
+   report kind**: an explainer needs one authoritative primary text, a comparison needs both sides measured
+   the same way per dimension, a metric card needs official and estimated figures side by side. Single-source
+   material is not a defect outside the verdict kind — but it must be attributed.
 3. **Domestic and international in parallel.** The same claim is searched from both ecosystems and both
    sides are reported separately, because much information exists on only one side.
 4. **Adversarial re-search.** Once a conclusion forms, it searches reverse/debunking keywords on purpose.
@@ -54,9 +65,10 @@ five rules it is not allowed to skip:
 5. **Everything traceable.** Every assertion, number, date and quotation carries a full URL, the source
    name, and the exact citation position.
 
-The output is a **conclusion-first** report with a numbered source appendix. Partially verified findings
-are kept in their own sections — *unverified* and *undecidable* never sit in the same paragraph as
-*confirmed* — so a guess cannot be quoted as if it were settled.
+Outputs **scope first, then tier**: a verdict never puts *unverified* or *undecidable* in the same paragraph
+as *confirmed*; causal and impact reports keep "what a source said" physically apart from "my inference" and
+give each a likelihood and a confidence; a survey map labels its certainty tiers. A guess cannot be quoted
+as settled in any of them.
 
 ## Related plugin
 
@@ -71,7 +83,13 @@ image.
 An English report is recognised the same way, through the equivalent anchors fixed in `SKILL.md` Step 4b:
 `## One-line verdict` / `## What is true, what is false` / `## Sources`. Its tier words are `Confirmed` /
 `Likely true` / `Unconfirmed` / `False` / `Unverifiable` — mapped back onto the same colours and icons, so
-the language changes the labels, never the verdict.
+the language changes the labels, never the verdict. The within-section fixed wording (both rails, table
+headers, grading subheadings, the no-quote warning, and `Likelihood:` / `Confidence:` for causal reports)
+lives in [`reference/i18n.md`](./reference/i18n.md), which is read **only when writing an English report**.
+
+**Only the verdict kind carries export anchors.** Explainer, causal, comparison, survey and metric card have
+no aligned anchors, so exporting them degrades to a plain document — that is intended, not a defect. Do not
+invent anchors for them: the parser would misread them as a verdict.
 
 The dependency is one-way and structural: fact-check works standalone and never calls the export side,
 which only probes whether it is installed. What actually couples the two is the format above — rename
@@ -149,9 +167,12 @@ environment offline, adapts itself, and needs no human configuration. Frameworks
 ## How it works
 
 ```
-decompose the claim  →  parallel search (domestic + international + vertical + debunking)
+premise scan + decompose into units (premise / definition / analysis)
+      →  type the request: verdict · explainer · causal mechanism · comparison · survey map · metric card
+      →  [confirm the direction + feasibility check: how obtainable is each unit, is it worth starting]
+      →  parallel search (domestic + international + vertical + debunking)
       →  fetch primary pages  →  cross-compare and grade sources  →  adversarial re-search
-      →  conclusion-first report: confirmed / unverified / undecidable + numbered sources
+      →  the skeleton that matches, not a one-size verdict
 ```
 
 Two optional offline tools sit alongside it:
@@ -201,7 +222,7 @@ node tools/doctor.mjs                                # what this machine can and
 
 `node tools/doctor.mjs --net` additionally self-tests the fetch chains and the judgement endpoint, and
 reports which capabilities are missing and how the skill degrades without them. Current status on this
-checkout: **27/27**, **25/25**, **44/44** and **30/30** assertions pass.
+checkout: **27/27**, **25/25**, **48/48** and **33/33** assertions pass.
 
 CI runs exactly these commands on Linux and Windows, on Node 18 and 22, plus one more check: that the
 generated `INSTRUCTIONS.md` still matches `SKILL.md`.
@@ -212,6 +233,7 @@ generated `INSTRUCTIONS.md` still matches `SKILL.md`.
 |---|---|
 | [`SKILL.md`](./SKILL.md) | the skill itself — flow and rules (the single source of truth) |
 | [`INSTRUCTIONS.md`](./INSTRUCTIONS.md) | generated from `SKILL.md` for hosts that take plain instructions |
+| [`reference/i18n.md`](./reference/i18n.md) | within-section fixed wording for Chinese/English reports — read on demand, only when writing an English report |
 | [`FOR-AI.md`](./FOR-AI.md) | the task brief for an AI that is handed this package |
 | [`ADAPTING.md`](./ADAPTING.md) | what to change when moving to another environment |
 | [`MEASUREMENTS.md`](./MEASUREMENTS.md) | measured numbers and how to reproduce them |

@@ -59,7 +59,7 @@ node tools/doctor.mjs --write    # 生成配置文件（默认写到包外用户
 
 4. **（可选，但推荐）** 另外三个字段也是给本机用的，填了就不用改正文：
    - `capabilities`：把 `SKILL.md` 能力表左列的能力名绑到本机真实工具名（对应第 4 步"只改右列"那件事）；
-   - `outputConvention`：本机对报告段序 / 纪律的额外要求（`SKILL.md` 的 Step 4 是默认值）；
+   - `outputConvention`：本机对报告段序 / 纪律的额外要求（`SKILL.md` 的 Step 4 各骨架模板是默认值）；
    - `runtimeNotes`：运行时基线，自由文本。最值得记的是"这台机器上哪些渠道真的能用"——例如元搜索实例里哪个引擎被 CAPTCHA 拦、哪些站点必须走代理。这类信息直接决定核查质量，但不适合写进正文。
 
 **硬性禁止**（违反即失职）：
@@ -73,8 +73,9 @@ node tools/doctor.mjs --write    # 生成配置文件（默认写到包外用户
 
 ```bash
 node tools/jev-verdict.mjs selftest      # 期望 25/25
-node tools/route.mjs selftest            # 期望 44/44
-node tools/route.mjs regress --file cases/route-cases-neutral.json   # 期望 30/30，0 成本
+node tools/route.mjs selftest            # 期望 48/48
+node tools/lint-skill.mjs                # 期望 120/120（正文结构断言：骨架、裁决锚点、双语序列、生成物同步）
+node tools/route.mjs regress --file cases/route-cases-neutral.json   # 期望 33/33，0 成本
 node tools/route.mjs arms                # 派发臂代理指标，期望 28/35 = 80.0%，0 成本
 
 # 有密钥时再跑一次真机，确认端到端可用（约 $0.0003）
@@ -102,13 +103,13 @@ node tools/jev-verdict.mjs regress --file cases/injection-cases-neutral.json --c
 
 **同时必须做的一件事**：把 `SKILL.md` 开头那张「能力 → 常见实现」表里的**右列换成你环境里真实可调用的工具名**。左列（能力名）是规范，右列是本地绑定——**只改右列**，正文一个字都不要动。
 
-装载完用一句话自检："面对'核实 X 是否属实'，我会按 SKILL.md 的 Step 0–5 走。"
+装载完用一句话自检："面对'核实 X 是否属实'，我会按 SKILL.md 的 Step 0–5 走；面对'X 是怎么回事'，我会先定型再走。"
 
 ---
 
 ## 第 5 步 · 使用规范（每次核查都遵守）
 
-**流程**：拆事实点（Step 0）→ 并行搜索、中英+质疑词（Step 1）→ 抓一手原文（Step 2）→ 交叉比对与来源分级（Step 3）→ 出报告（Step 4；英文报告另按 Step 4b 的固定标题与术语）→ 交付前回检措辞与断言（Step 5）。细节在 `SKILL.md`，别跳过。
+**流程**：前提扫描 + 拆作业单元（Step 0）→ **定型 / 确认 / 可行性（Step 0.5）** → 并行搜索、中英+质疑词（Step 1）→ 抓一手原文（Step 2）→ 交叉比对与来源分级（Step 3）→ 按型出产物（Step 4，六个骨架；多产物按 Step 4c 拆合；英文报告另按 Step 4b 的标题序列 + `reference/i18n.md`）→ 交付前回检（Step 5）。细节在 `SKILL.md`，别跳过。
 
 **两个工具怎么用**：
 

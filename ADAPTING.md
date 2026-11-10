@@ -27,8 +27,9 @@ node tools/doctor.mjs --write                   # 生成配置草稿（写到包
 
 # 4) 验收（离线，不花钱）
 node tools/jev-verdict.mjs selftest                              # 期望 25/25
-node tools/route.mjs selftest                                    # 期望 44/44
-node tools/route.mjs regress --file cases/route-cases-neutral.json   # 期望 30/30
+node tools/route.mjs selftest                                    # 期望 48/48
+node tools/lint-skill.mjs                                        # 期望 120/120（正文结构断言）
+node tools/route.mjs regress --file cases/route-cases-neutral.json   # 期望 33/33
 ```
 
 要求：**Node 18+**（内置 `fetch` 与 `AbortSignal.timeout`）。零 npm 依赖。

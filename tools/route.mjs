@@ -83,6 +83,10 @@ export function unresolved() {
  * and `cn_social_rumor`, and both ladders are then handed over.
  */
 const DOMAIN_SIGNALS = [
+  // 定义类排最前：问「X 是什么」时先拿规范定义阶梯，领域阶梯随后并入（两侧都要）。
+  // 之前没有这一档，「什么是量子纠缠」会落到 science_general（辟谣平台那套阶梯），
+  // 「自奏圣乐是什么」会兜底到 general_fact——两条都是核查阶梯，与「不要拿新闻稿当定义来源」冲突。
+  ['definition', /(什么是|是什么[？?。]?\s*$|是什么意思|什么意思|的含义|指什么|的定义)/i],
   ['image_video', /(图片|照片|视频|监控|截图|EXIF|合成|伪造的?图|deepfake)/i],
   ['legal_case', /(判决|判刑|量刑|起诉|批捕|逮捕|刑拘|刑事拘留|立案|开庭|庭审|宣判|法院|检察院|警情通报|警方通报|纪委监委|取保候审|缓刑|无期徒刑|死刑|案件|嫌疑人|被告人)/i],
   ['disaster_emergency', /(地震|震级|余震|台风|飓风|洪水|汛情|暴雨|山洪|泥石流|滑坡|干旱|雪灾|冰雹|森林火灾|爆炸|坍塌|垮塌|溃坝|堰塞湖|泄洪|矿难|坠机|失事|沉船|踩踏|车祸|事故|伤亡|遇难|失联|被困|救援|灾害|灾情)/i],
@@ -109,6 +113,7 @@ const DOMAIN_SIGNALS = [
  */
 const DOMAIN_ROUTES = {
   cn_policy: ['official_json_api', 'general_web', 'news_rss'],
+  definition: ['science_authority', 'official_json_api', 'general_web', 'vertical_domain'],
   cn_social_rumor: ['searxng_meta', 'closed_cn_social', 'general_web', 'factcheck_registry'],
   tech_release: ['general_web', 'searxng_meta', 'vertical_domain'],
   academic: ['academic_api', 'general_web', 'vertical_domain'],
@@ -268,6 +273,10 @@ function selftest() {
     const s = JSON.stringify(routes._failure_actions)
     return s.includes('403') && (s.includes('超时') || s.includes('000'))
   })
+  t('定义类任务识别为定义域', () => planFor('什么是量子纠缠').domains.includes('definition'))
+  t('定义域排在领域域之前（先拿规范定义阶梯）', () => planFor('什么是量子纠缠').domains[0] === 'definition')
+  t('定义类拿到术语审定阶梯', () => planFor('自奏圣乐是什么').ladders[0].ladder[0].includes('术语在线'))
+  t('定义类不吞掉取值类问句', () => !planFor('美国大选是什么结果').domains.includes('definition'))
   t('未匹配任务有兜底域', () => planFor('???').domains[0] === 'general_fact')
   t('兜底域不是软件发布域（那套阶梯与多数任务无关）', () => planFor('???').domains[0] !== 'tech_release')
   t('兜底域给出通用来源阶梯', () => {

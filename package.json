@@ -1,7 +1,7 @@
 {
   "name": "dsh-fact-check",
-  "version": "1.5.4",
-  "description": "Fact-checking skill for DeepSeek Harness: verifies claims against the open web instead of model memory, cross-checks independent sources across domestic and international search ecosystems, and can route three factual judgements (does the evidence support the claim / is this source primary / does this page carry usable text) to a TypeSafe Jev (System One) decision model when a key is configured, falling back to the skill's deterministic rules when it is not.",
+  "version": "2.0.0",
+  "description": "Fact-checking and evidence-based research skill for DeepSeek Harness: it types the request first (verify / explain / causal / compare / survey / metric), confirms the direction and runs a feasibility check, then emits a report skeleton that matches the request instead of forcing every question into a true-false verdict, in Chinese or English. Verification still never trusts model memory, cross-checks independent sources across domestic and international search ecosystems, and can route three factual judgements to a TypeSafe Jev (System One) decision model when a key is configured, falling back to the skill's deterministic rules when it is not.",
   "keywords": [
     "deepseek-harness",
     "dsh",
@@ -24,7 +24,9 @@
     "./package.json": "./package.json"
   },
   "scripts": {
-    "selftest": "node tools/smoke-plugin.mjs && node tools/jev-verdict.mjs selftest && node tools/route.mjs selftest",
+    "selftest": "node tools/smoke-plugin.mjs && node tools/jev-verdict.mjs selftest && node tools/route.mjs selftest && node tools/lint-skill.mjs",
+    "lint": "node tools/lint-skill.mjs",
+    "lint-report": "node tools/lint-report.mjs",
     "doctor": "node tools/doctor.mjs",
     "regress": "node tools/route.mjs regress --file cases/route-cases-neutral.json",
     "arms": "node tools/route.mjs arms",
@@ -40,6 +42,7 @@
   },
   "files": [
     "lib",
+    "reference",
     "tools",
     "!tools/local.json",
     "cases",
