@@ -68,6 +68,11 @@ headings) and takes the tier, both rails and each assertion's grading straight f
 carrying only two of the three sections still renders, with the missing one listed at the end of the long
 image.
 
+An English report is recognised the same way, through the equivalent anchors fixed in `SKILL.md` Step 4b:
+`## One-line verdict` / `## What is true, what is false` / `## Sources`. Its tier words are `Confirmed` /
+`Likely true` / `Unconfirmed` / `False` / `Unverifiable` — mapped back onto the same colours and icons, so
+the language changes the labels, never the verdict.
+
 The dependency is one-way and structural: fact-check works standalone and never calls the export side,
 which only probes whether it is installed. What actually couples the two is the format above — rename
 those headings or drop them to `###` and the export silently falls back to a plain report: no cover card,

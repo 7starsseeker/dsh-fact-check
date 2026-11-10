@@ -108,7 +108,7 @@ node tools/jev-verdict.mjs regress --file cases/injection-cases-neutral.json --c
 
 ## 第 5 步 · 使用规范（每次核查都遵守）
 
-**流程**：拆事实点（Step 0）→ 并行搜索、中英+质疑词（Step 1）→ 抓一手原文（Step 2）→ 交叉比对与来源分级（Step 3）→ 出报告（Step 4）→ 交付前回检措辞与断言（Step 5）。细节在 `SKILL.md`，别跳过。
+**流程**：拆事实点（Step 0）→ 并行搜索、中英+质疑词（Step 1）→ 抓一手原文（Step 2）→ 交叉比对与来源分级（Step 3）→ 出报告（Step 4；英文报告另按 Step 4b 的固定标题与术语）→ 交付前回检措辞与断言（Step 5）。细节在 `SKILL.md`，别跳过。
 
 **两个工具怎么用**：
 

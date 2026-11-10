@@ -173,6 +173,50 @@
 
 ---
 
+### Step 4b 英文报告：标题与术语（固定，别自创）
+
+报告用英文写时，**结构、顺序、纪律与上面完全一致**，只是标题与术语换成下表。这不是文风偏好：出图侧（`dsh-card-export` 的 `report-card`）按这些固定锚点识别结论结构，`One-line verdict` / `What is true, what is false` / `Sources` 命中**任意两段**才走结论卡——自创一个近义词（`Verdict`、`Summary of findings`、`References`），图照样能出，但会退化成普通文档：没有档位徽标、没有双轨、没有逐条断言分档。
+
+| 中文模板标题 | 英文报告必须用 |
+|---|---|
+| `## 一句话结论` | `## One-line verdict` |
+| `## 始末 / 事实概要` | `## What happened` |
+| `## 哪些是真的、哪些是假的` | `## What is true, what is false` |
+| `## 国内外视角` | `## Domestic vs international coverage` |
+| `## 利益相关与污染面（标注，不参与定档）` | `## Stakeholders and contamination surface (annotation only, no downgrade)` |
+| `## 为什么会这样` | `## Why this happened` |
+| `## 一句话总结` | `## One-sentence takeaway` |
+| `## 本次未能核实到的` | `## What we could not verify` |
+| `## 来源（编号附录）` | `## Sources (numbered appendix)` |
+| `## 工具与能力使用情况` | `## Tools and capabilities used` |
+
+段内的固定写法（左列的中文不要直译成别的近义词）：
+
+| 中文写法 | 英文写法 |
+|---|---|
+| `**已证实**` / `**很可能属实**` / `**未证实**` / `**证伪**` / `**无法核实**` | `**Confirmed**` / `**Likely true**` / `**Unconfirmed**` / `**False**` / `**Unverifiable**` |
+| `· 置信度 高 / 中高 / 中 / 低` | `· Confidence: high / medium-high / medium / low` |
+| `定档：**A / 高**（范围）；**B / 中**（范围）` | `Tiering: **Confirmed / high** (scope); **Unconfirmed / medium** (scope)` |
+| `**甲轨（默认口径，正式结论）**：` | `**Rail A (default basis, formal verdict)**:` |
+| `**乙轨（保守口径，…）**：` | `**Rail B (conservative reading, recomputed after removing annotated sources)**:` |
+| `**✅ 已证实 — 事实级**` | `**✅ Confirmed — fact level**` |
+| `**✅ 已证实 — 解读级**（…）` | `**✅ Confirmed — interpretation level (not the fact itself)**` |
+| `**⚠️ 未证实**（单一来源或无法溯源）` | `**⚠️ Unconfirmed** (single source or untraceable)` |
+| `**❓ 无法裁定**（各来源矛盾且无法判定）` | `**❓ Unresolved** (sources conflict, no way to adjudicate)` |
+| `> 不得在任何转述中被当作事实引用` | `> Must not be cited as fact in any retelling` |
+| `- 国内渠道：` / `- 国外渠道：` / `- 差异说明：` | `- Domestic channels:` / `- International channels:` / `- Difference:` |
+| `**核查时间**：` | `**Checked on**:` |
+
+利益相关那张表的四列表头同样固定：`来源 / 层级 / 可观察依据 / 乙轨动作` → `Source / Level / Observable basis / Rail B action`。
+
+三条纪律：
+
+- **档位词只有上表那五个**。写 `Partly true`、`Busted`、`Mixed` 之类，解析器认不出，徽标会落到 `Unverifiable`——那是判定错误，不是排版问题。
+- **同一份报告只用一种语言写**。语言按二级标题多数判定（标题英文就套英文标签）；标题英文、正文中文的稿子两边都对不上，图上会出现半中半英。
+- **英文标签只是显示层**：`Confirmed` 与「已证实」在出图侧映射到同一个内部判定，颜色、图标、档位语义完全相同，所以**不要为了配图去改判定用词**。
+
+---
+
 ### Step 5 交付前回检（措辞与断言）
 
 **写完报告不等于可以交。** 这一步查的不是"证据够不够"（那是 Step 3），而是**写出来的每个字是否还等于证据**。报告最容易在措辞层被放大——一旦被断章引用，错的不是结论，是读者以为的事实。
@@ -189,6 +233,8 @@
 8. **修辞不得改变事实**：为了让判断更锋利而改动词汇，即使每个字都能查证，也已经是错的。
 
 > **判据**：任一条过不了，就改数字或加限定词——不许把不确定写成确定。
+>
+> **英文报告再加一条**：标题与档位词是否照 Step 4b 的表写的。不一致时图能出，但没有徽标、没有双轨、没有逐条分档——那是交付物降级，不是排版差异。
 
 ---
 

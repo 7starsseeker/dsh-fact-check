@@ -3,6 +3,24 @@
 面向使用者的**版本间净变化**（修复 / 改进 / 新增）。只写最终结果，不写过程。
 判据、阈值、触发词的任何改动都必须同时更新 `MEASUREMENTS.md` 的数字与 `cases/` 的回归结果。
 
+## 1.5.4 — 2026-11-10
+
+**新增**
+
+- **Step 4b「英文报告：标题与术语（固定，别自创）」**：报告现在可以整篇用英文写，但标题与术语必须走固定表——`## One-line verdict` / `## What happened` / `## What is true, what is false` / `## Domestic vs international coverage` / `## Stakeholders and contamination surface (annotation only, no downgrade)` / `## Why this happened` / `## One-sentence takeaway` / `## What we could not verify` / `## Sources (numbered appendix)` / `## Tools and capabilities used`；档位词 `Confirmed` / `Likely true` / `Unconfirmed` / `False` / `Unverifiable`；置信度 `high / medium-high / medium / low`；双轨 `Rail A (default basis, formal verdict)` / `Rail B (conservative reading, recomputed after removing annotated sources)`；分档小标题、禁引用警示、国内外视角键名、利益相关表头、`**Checked on**` 一并固定。理由是可核对的耦合：出图侧（`dsh-card-export` 的 `report-card`）按这些锚点识别结论结构，`One-line verdict` / `What is true, what is false` / `Sources` 命中任意两段才走结论卡；自创近义词（`Verdict`、`References`）会让图静默退化成普通文档——没有徽标、没有双轨、没有逐条分档。
+- **Step 5 加一条英文专项**：交付前核对标题与档位词有没有照 Step 4b 写；不一致算交付物降级，不是排版差异。
+
+**其它**
+
+- `README.md` / `README.zh-CN.md` 的「相关插件」段落补上英文锚点与档位词，与 `dsh-card-export` README 的描述保持同源；`FOR-AI.md` 的流程链注明「英文报告另按 Step 4b」。
+- `SKILL.md` frontmatter 与 `package.json` 版本号同步到 **1.5.4**；`INSTRUCTIONS.md` 由 `tools/make-instructions.mjs` 重新生成（422 行）。
+- **判据层未动**：`tools/jev-verdict.mjs`、`engine-routes.json`、`tools/route.mjs` 的触发词与域路由表、`lib/`、`cases/` 本轮无改动，因此 `MEASUREMENTS.md` 的数字与回归结果不适用。
+
+**验收**
+
+- `smoke-plugin 27/27`、`jev-verdict selftest 25/25`、`route selftest 44/44`、`route regress 30/30` 全部通过。
+- 跨仓实测（`dsh-card-export` 侧）：按 Step 4b 写的英文报告走结论卡，徽标 `✓ Confirmed · Confidence high`，长图小节标题全英文、禁引用警示英文；同一轮改动后中文产物逐字节不变（`sample-report` 两张 PNG 的 MD5 与改前一致）。
+
 ## 1.5.3 — 2026-11-09
 
 **新增**
