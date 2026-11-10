@@ -4,6 +4,8 @@
 
 > 逐步执行请用 **`FOR-AI.md`**（它是操作手册）；本文是配套的背景与决策依据（为什么这样改、没有决策模型怎么办、判据校准纪律）。
 
+**English → [ADAPTING.en.md](./ADAPTING.en.md)**
+
 > **配置文件位置**：默认 `%LOCALAPPDATA%\dsh-fact-check\local.json`（Windows）或
 > `~/.config/dsh-fact-check/local.json`；`JEV_LOCAL_CONFIG` 可指定任意路径；旧的包内
 > `tools/local.json` 仍会被读，但只作为兜底。放在包外是为了 `dsh plugin update` / `npm i`

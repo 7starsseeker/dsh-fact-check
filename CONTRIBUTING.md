@@ -52,6 +52,18 @@ between versions, not the development log.
 
 Also regenerate `INSTRUCTIONS.md` whenever `SKILL.md` changes, so the two never diverge.
 
+## Documentation language
+
+Two audiences, two rules:
+
+- **Read by an AI tool** — one language, Chinese: `SKILL.md`, `INSTRUCTIONS.md` (generated), `FOR-AI.md`.
+  `SKILL.md` is the prompt itself; an English copy would immediately become a second source of truth and
+  drift. English *output* is already covered by Step 4b, so an English body is not needed for that.
+- **Read by a human** — both languages: `README`, `CONTRIBUTING`, `SECURITY`, `CHANGELOG`, `RELEASING`,
+  `ADAPTING`, `MEASUREMENTS`. Update both sides in the same change, not in a follow-up.
+
+`CHANGELOG.en.md` starts at 2.0.0; earlier entries stay in the language they were written in.
+
 ## Regression corpora
 
 `cases/*.json` are de-identified: host paths, private tool names and instance identifiers are replaced

@@ -15,8 +15,9 @@
 [![PRs welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](./CONTRIBUTING.md)
 [![](https://img.shields.io/badge/powered_by-dsh-4D6BFE?style=flat-square&logo=deepseek&logoColor=white)](https://github.com/deepseek-ai/deepseek-harness)
 
-> DeepSeek Harness 用的事实核查技能：不轻信模型自己的记忆，一律去公开互联网核实——多源交叉、
-> 国内外信息生态并行、对抗性反查，最后交出一份结论先行、每条论断都可溯源的核查报告。
+> DeepSeek Harness 用的核查与调研技能：**先定型，再取证**——先判断该出哪种产物（核查／释义／因果机制／
+> 对照／地图／指标卡），再按同一套铁律取证：不轻信模型记忆、一律去公开互联网核实、多源交叉、
+> 国内外生态并行、对抗性反查，每条论断都可溯源到 URL 与引用位置。报告支持中英双语。
 
 **English → [README.md](./README.md)**
 

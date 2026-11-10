@@ -49,6 +49,15 @@ node tools/make-instructions.mjs                     # 只有改了 SKILL.md 才
 
 改了 `SKILL.md` 就要同时重生成 `INSTRUCTIONS.md`，别让两份分叉。
 
+## 文档语言
+
+两种读者，两条规矩：
+
+- **给 AI 工具看**——单语中文：`SKILL.md`、`INSTRUCTIONS.md`（生成物）、`FOR-AI.md`。`SKILL.md` 是提示词本体，英文版会立刻变成第二真相源并漂移；英文**产物**已由 Step 4b 覆盖，不需要英文正文。
+- **给人看**——中英双语：`README`、`CONTRIBUTING`、`SECURITY`、`CHANGELOG`、`RELEASING`、`ADAPTING`、`MEASUREMENTS`。两份要在同一次改动里一起更新，不要留成后续任务。
+
+`CHANGELOG.en.md` 从 2.0.0 起；更早的条目保持原文语言。
+
 ## 回归语料
 
 `cases/*.json` 是去痕版：主机路径、私有工具名与实例标识都换成了 `<占位符>`，而公开的技术栈名与观测

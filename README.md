@@ -15,9 +15,11 @@
 [![PRs welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](./CONTRIBUTING.md)
 [![](https://img.shields.io/badge/powered_by-dsh-4D6BFE?style=flat-square&logo=deepseek&logoColor=white)](https://github.com/deepseek-ai/deepseek-harness)
 
-> A fact-checking skill for DeepSeek Harness that verifies claims against the open web instead of model
-> memory — multi-source cross-checking, domestic and international search ecosystems in parallel,
-> adversarial re-search, and a conclusion-first report where every statement is traceable.
+> A DeepSeek Harness skill that **types the question before it searches**. It first decides which report
+> the question calls for — verdict, explainer, causal mechanism, comparison, survey map or metric card —
+> then gathers evidence the same way for every kind: never from model memory, always from the open web,
+> multi-source, domestic and international ecosystems in parallel, adversarial re-search, every statement
+> traceable to a URL and a citation position. Reports are written in Chinese or English.
 
 **简体中文 → [README.zh-CN.md](./README.zh-CN.md)**
 

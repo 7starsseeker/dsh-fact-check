@@ -1,5 +1,7 @@
 # 实测数字与复跑方法（MEASUREMENTS）
 
+**English → [MEASUREMENTS.en.md](./MEASUREMENTS.en.md)**
+
 > **这些是证据，不是配置。** 「原始语料」列来自**作者侧那次**验证：**2026-09-21**、**一台机器**、**中文输入**、决策模型 **`jev-1.13`**。
 > 标 **「本机复跑」** 的列是 2026-09-21 在**本包实际分发的语料**（`cases/*-neutral.json`，第二遍去痕版）上复测的，每个数字跑**两轮**取样（实际返回 `jev-1.13.0`）。
 > **版本归属**：本节判据数字（`support` / `injection` / `provenance` / `usable_page` / `sufficient`）是在 **1.0.0 语料**上复跑的；1.1.0 与 1.2.0 **都没有改动**这五套语料（只改了文档结构、渠道表项与主机事实的存放位置），数字继续有效；`route` 语料是 **1.1.0 新增**的。版本号见 `SKILL.md` frontmatter，版本间改动见 `CHANGELOG.md`。
@@ -114,8 +116,10 @@
 node tools/doctor.mjs                                                                   # 先看本机能力与降级路径
 node tools/doctor.mjs --net                                                             # 再真跑一遍抓取链与端点自测
 node tools/jev-verdict.mjs selftest                                                     # 25 项离线断言，不花钱
-node tools/route.mjs selftest                                                           # 44 项离线断言，不花钱
-node tools/route.mjs regress --file cases/route-cases-neutral.json                      # 路由语料 30 例，不花钱
+node tools/route.mjs selftest                                                           # 48 项离线断言，不花钱
+node tools/route.mjs regress --file cases/route-cases-neutral.json                      # 路由语料 33 例，不花钱
+node tools/lint-skill.mjs                                                               # 221 条正文结构断言，不花钱
+node tools/lint-report.mjs <报告文件>                                                    # 报告机械回检（有产物时跑）
 node tools/route.mjs arms                                                               # 派发臂代理指标（§4.1），不花钱
 
 # 本包自带的是（第二遍）去痕版语料
@@ -182,7 +186,7 @@ node tools/jev-verdict.mjs regress --file cases/sufficient-cases-neutral.json   
 
 ### 10.2 结构断言
 
-`node tools/lint-skill.mjs` → **193 条**，全部离线、0 成本。覆盖：六个骨架完整、判据树 12 步与归宿、**裁决 10 个锚点逐字存在**、8 条英文序列与中文段数对齐、`reference/i18n.md` 的存在与引用、Step 编号顺序、`INSTRUCTIONS.md` 与 `SKILL.md` 逐字同步、`package.json` 的 `files` 含 `reference`。
+`node tools/lint-skill.mjs` → **221 条**，全部离线、0 成本。覆盖：六个骨架完整、判据树 12 步与归宿、**裁决 10 个锚点逐字存在**、8 条英文序列与中文段数对齐、`reference/i18n.md` 的存在与引用、Step 编号顺序、`INSTRUCTIONS.md` 与 `SKILL.md` 逐字同步、`package.json` 的 `files` 含 `reference`、`definition` 域与触发词锚。
 
 **变异验证**（证明断言不是空的，每次变异后按 hash 校验还原）：
 
@@ -212,7 +216,7 @@ node tools/jev-verdict.mjs regress --file cases/sufficient-cases-neutral.json   
 | 指标 | 改动前 | 改动后 | 说明 |
 |---|---|---|---|
 | `route selftest` | 44/44 | **48/48** | 新增 4 条定义域断言 |
-| `route regress`（30 条语料） | 30/30 | **30/30** | **原有 30 条判定逐条未变** |
+| `route regress` | 30/30 | **33/33** | 新增 R31–R33 三条用例；**原有 30 条判定逐条未变** |
 | 新增用例 | — | **R31–R33** | 定义域命中、定义域排首位、取句式不被吞 |
 | `route.mjs arms` 代理指标 | 28/35 = 80.0% | **28/35 = 80.0%** | 35 条共识样本上无变化 |
 

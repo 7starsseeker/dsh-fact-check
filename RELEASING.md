@@ -1,5 +1,7 @@
 # npm 自动发布流程（RELEASING）
 
+**English → [RELEASING.en.md](./RELEASING.en.md)**
+
 **目标终态**：推一个版本 tag，CI 自己把包发到 npm，**全程没有任何长期 token**。
 
 本文是**可移植的操作手册** —— 把这套流程套到任何 npm 包上都能照着走，不限于本包。文中所有 npm 行为都是实测过的，实测结论旁边会写明是怎么测的。
