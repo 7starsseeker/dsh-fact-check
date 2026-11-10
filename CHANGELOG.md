@@ -5,6 +5,19 @@
 
 **English (from 2.0.0) → [CHANGELOG.en.md](./CHANGELOG.en.md)**
 
+## 2.0.1 — 2026-11-11
+
+**补一份机器可读的骨架锚点表（不改变行为）**
+
+- 新增 `reference/skeleton-anchors.json`：把六个骨架**既有的** `##` 标题登记成表——短标题、命中阈值（`minHits`）、结论段（`lead`）、跨骨架共享标题规则（`sharedHeadings`），给下游出图侧读声明而不是靠手抄标题表。**正文流程不读它**，一个标题都没动，所以它是索引不是锚点。
+- `tools/lint-skill.mjs` 增 §19（15 条断言，221 → 236）：表可解析、六个 id 齐全、`match` 命中对应骨架模板块、`matchEn` 在该骨架 §4b 英文序列内、非锚点英文标题均为共享标题、同一短标题不跨骨架、`exportCard` 只有裁决为 `true`、`noSkeletonMayUse` / `verdictOnly` 未被误用。**标题改名 === 断言变红**，不再静默失效。
+- `SKILL.md` §4b 加一句指针；维护须知补目录结构与「锚点表是索引，不是锚点」一条。`README` / `MEASUREMENTS` / `ADAPTING` 同步，`INSTRUCTIONS.md` 重新生成。
+- 依赖仍是单向的：出图侧读不到这张表时按内置表降级，fact-check 从不调用出图侧。
+
+**验收**
+
+- `lint-skill 236/236`、`smoke-plugin 27/27`、`jev-verdict 25/25`、`route selftest 48/48`、`route regress 33/33`。（`lint-report` 需报告文件作参数，本轮未跑，也未改。）
+
 ## 2.0.0 — 2026-11-10
 
 **破坏性变更（对用法）**

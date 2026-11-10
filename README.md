@@ -99,6 +99,12 @@ lives in [`reference/i18n.md`](./reference/i18n.md), which is read **only when w
 no aligned anchors, so exporting them degrades to a plain document — that is intended, not a defect. Do not
 invent anchors for them: the parser would misread them as a verdict.
 
+A machine-readable index of the six skeletons' existing headings — short titles, hit thresholds, lead and
+secondary sections, and the rules for headings shared across skeletons — ships as
+[`reference/skeleton-anchors.json`](./reference/skeleton-anchors.json), so the export side reads a declaration
+instead of guessing titles. It is only an index, not a new set of anchors, and nothing in this skill reads it
+at runtime: whether the export plugin is installed changes nothing here.
+
 The dependency is one-way and structural: fact-check works standalone and never calls the export side,
 which only probes whether it is installed. What actually couples the two is the format above — rename
 those headings or drop them to `###` and the export silently falls back to a plain report: no cover card,

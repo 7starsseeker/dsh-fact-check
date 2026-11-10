@@ -115,7 +115,7 @@ node tools/doctor.mjs --net                                                     
 node tools/jev-verdict.mjs selftest                                                     # 25 offline assertions, free
 node tools/route.mjs selftest                                                           # 48 offline assertions, free
 node tools/route.mjs regress --file cases/route-cases-neutral.json                      # 33 route cases, free
-node tools/lint-skill.mjs                                                               # 221 structural assertions on the body, free
+node tools/lint-skill.mjs                                                               # 236 structural assertions on the body, free
 node tools/lint-report.mjs <report file>                                                # mechanical report check (when there is an artefact)
 node tools/route.mjs arms                                                               # dispatch-arm proxy metric (§4.1), free
 
@@ -183,7 +183,7 @@ Plus one line making the implicit convention explicit: "when a supplementary rul
 
 ### 10.2 Structural assertions
 
-`node tools/lint-skill.mjs` → **221 assertions**, all offline, free. Coverage: six skeletons complete, decision tree 12 steps and their destinations, **the verdict's 10 anchors present verbatim**, 8 English sequences aligned with the Chinese section counts, `reference/i18n.md` present and referenced, Step numbering order, `INSTRUCTIONS.md` byte-identical to `SKILL.md`'s generated form, `package.json`'s `files` containing `reference`, and the `definition` domain plus its anchored trigger.
+`node tools/lint-skill.mjs` → **236 assertions**, all offline, free. Coverage: six skeletons complete, decision tree 12 steps and their destinations, **the verdict's 10 anchors present verbatim**, 8 English sequences aligned with the Chinese section counts, **the skeleton anchor table (§19: `reference/skeleton-anchors.json`'s `match` hitting in-block headings, `matchEn` inside the English sequences, non-anchor English titles all shared, no cross-skeleton collision)**, `reference/i18n.md` present and referenced, Step numbering order, `INSTRUCTIONS.md` byte-identical to `SKILL.md`'s generated form, `package.json`'s `files` containing `reference`, and the `definition` domain plus its anchored trigger.
 
 **Mutation verification** (proving the assertions are not vacuous; each mutation was reverted and verified by hash):
 
@@ -191,6 +191,7 @@ Plus one line making the implicit convention explicit: "when a supplementary rul
 |---|---|
 | Change `## 一句话结论` to `## 结论` | 3 assertions red, exit code 1 |
 | Delete one segment from the 4-S English sequence | 2 assertions red (segment alignment + generated-file sync), exit code 1 |
+| Change `一句话定义` to `一句话定义X` in the anchor table (definition) | 1 assertion red (that skeleton's anchor consistency only, other 235 unchanged), exit code 1; reverted and verified byte-identical to the draft |
 
 ### 10.3 Mechanical report check
 

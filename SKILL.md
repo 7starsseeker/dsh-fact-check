@@ -1,6 +1,6 @@
 ---
 name: fact-check
-version: 2.0.0
+version: 2.0.1
 description: 事实核查与取证式调研。先定型再取证：把提问拆成前提/定义/分析三类作业单元，判定要出哪种产物（核查/释义/成因/对照/地图/指标卡），与用户确认方向并做可行性分析，再按型输出不同的报告骨架，中英双语。当用户要求核实真伪、解释概念、复盘事件、追问成因、对比对象、评估影响、查指标现状时使用——即使只说"查一下""确认一下""这是什么""怎么回事""对比一下""为什么""有什么影响"也应触发。核心行为：不依赖自身知识库，关键事实一律走互联网取证，多源交叉、国内外并行、逐条可溯源；轻量任务直连，渠道多或长文多时自动分派并行子代理。
 ---
 
@@ -512,7 +512,7 @@ description: 事实核查与取证式调研。先定型再取证：把提问拆�
 2. **同一份报告只用一种语言**——按二级标题多数判定。标题英文、正文中文的稿子两边都对不上，图上会出现半中半英。
 3. **标题词是锚点，不许自创近义词**。写 `Verdict` / `References` 这类词，出图侧认不出，会静默退化成普通文档。
 
-> **只有 4-V 有出图锚点。** 其余五个骨架没有对齐锚点，出图会退化成普通文档——这是预期行为，不是缺陷。**不要给其它骨架自创锚点**：解析器会把它误判成裁决，把一份释义报告渲染成带档位徽标的判决书。
+> **只有 4-V 有出图锚点。** 其余五个骨架没有对齐锚点，出图会退化成普通文档——这是预期行为，不是缺陷。**不要给其它骨架自创锚点**：解析器会把它误判成裁决，把一份释义报告渲染成带档位徽标的判决书。机器可读版本见 `reference/skeleton-anchors.json`（只给出图侧消费，写报告时不读）。
 
 **各骨架的英文标题序列**（按顺序对齐各骨架模板的段序；中文侧见上面各骨架）：
 
@@ -831,12 +831,13 @@ node tools/lint-report.mjs <报告文件>
 
 ## 维护须知
 
-- 目录结构：**`FOR-AI.md`（交给 AI 的操作说明：逐步配置与使用）** + `SKILL.md`（本文件，流程与规则）+ `reference/i18n.md`（**按需读取**：中英双语的段内固定写法）+ `ADAPTING.md`（换环境要改什么）+ `MEASUREMENTS.md`（实测数字与复跑）+ `CHANGELOG.md`（版本间净变化）+ `lib/index.js`（DSH 插件入口：把本文件挂到 `ctx.skills`）+ `cordis.patch.yml`（让本包能被 `dsh plugin add` 安装）+ `tools/`（两个可选工具、本机配置模板与数据表）+ `cases/`（回归语料）+ `README.md` / `README.zh-CN.md`（给人类的说明）+ `submission/`（投稿到插件市场的条目文件，不属于插件包本身）。
+- 目录结构：**`FOR-AI.md`（交给 AI 的操作说明：逐步配置与使用）** + `SKILL.md`（本文件，流程与规则）+ `reference/i18n.md`（**按需读取**：中英双语的段内固定写法）+ `reference/skeleton-anchors.json`（**机器可读的骨架锚点表**：六个骨架的既有标题索引，只给出图侧消费，写报告时不读）+ `ADAPTING.md`（换环境要改什么）+ `MEASUREMENTS.md`（实测数字与复跑）+ `CHANGELOG.md`（版本间净变化）+ `lib/index.js`（DSH 插件入口：把本文件挂到 `ctx.skills`）+ `cordis.patch.yml`（让本包能被 `dsh plugin add` 安装）+ `tools/`（两个可选工具、本机配置模板与数据表）+ `cases/`（回归语料）+ `README.md` / `README.zh-CN.md`（给人类的说明）+ `submission/`（投稿到插件市场的条目文件，不属于插件包本身）。
 - **两种分发形态同一份正文**：① `dsh plugin add github:7starsseeker/dsh-fact-check`（DSH 插件市场的形态，`lib/index.js` 现读本文件，所以改本文件不必改代码）；② 把整个目录交给任何 AI 工具（`FOR-AI.md` 那套）。**不要为其中一种抄一份正文出来**——两份必然漂移，`tools/smoke-plugin.mjs` 里有断言在守"候选描述 = 本文件 frontmatter 的 description"这条单一真相源。
 - **改判据 = 重新校准事件**：`tools/jev-verdict.mjs` 里的 `QUESTIONS` 是冻结字面量，任何 instruction/criteria/阈值改动都必须重跑 `cases/` 下的回归，并把新数字写回 `MEASUREMENTS.md`。**`tools/route.mjs` 的触发词表与域路由表同理**：改完要重跑 `node tools/route.mjs regress --file cases/route-cases-neutral.json` 与 `node tools/route.mjs selftest`。
 - **环境相关的值只放 `local.json`**（包外用户配置目录；模板 `tools/local.example.json`）：密钥、端点、state 目录、数据表里的 `${占位符}`，以及可选的能力绑定 `capabilities`、输出约定 `outputConvention`、运行时基线 `runtimeNotes`。代码与数据表**不写死任何主机路径**，`selftest` 里有断言在守这条。
 - **不要在本技能正文里写入任何主机、内网地址、路径或密钥**。本机事实要么进 `local.json`，要么作为"在某环境测得"的证据进 `MEASUREMENTS.md`。
 - **版本纪律**：凡是改动面向使用者的行为（流程、报告模板、判据、触发词），就升 frontmatter 的 `version` 并在 `CHANGELOG.md` 记一条净变化；只改措辞或文档不算。
+- **骨架锚点表是索引，不是锚点**：`reference/skeleton-anchors.json` 只是把各骨架既有的 `##` 标题登记下来给出图侧消费，**正文流程不读它**，所以补它、改它都不属于「面向使用者的行为」，不升版本。反过来，**被登记的标题改名会让 `tools/lint-skill.mjs` §19 立刻变红**（按骨架逐条比 `match` / `matchEn`）——改标题时同步这张表，别让下游静默失效。这份表与 `cordis.patch.yml`、`tools/` 一样不得写死主机路径。
 - **「利益相关与污染面」是标注制，不是降权制**：不要把任何"利益相关 / 疑似投毒 ⇒ 降档"的规则接进定档。至少会同时坏三件事（非单调、奖励信息垄断、全局降档），三条理由是那一节的正文，改之前先重读。
 - 改文件前先备份；改完跑：`node tools/smoke-plugin.mjs`（插件挂载与单一真相源）、`node tools/doctor.mjs`（需要时加 `--net`）、`node tools/jev-verdict.mjs selftest`、`node tools/route.mjs selftest`、以及受影响的 `regress`。改了本文件还要重跑 `node tools/make-instructions.mjs` 同步 `INSTRUCTIONS.md`（它是生成物）。
 

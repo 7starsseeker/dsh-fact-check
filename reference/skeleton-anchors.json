@@ -1,0 +1,90 @@
+{
+  "$comment": "给 dsh-card-export 消费的骨架锚点表。位置 fact-check 仓 reference/skeleton-anchors.json。标题一律是「去掉末尾括号说明后的短标题」，消费方按全等匹配；同一标题不许出现在两个骨架里。version 跟 fact-check 的版本走，lint 会与 SKILL.md frontmatter 比对。",
+  "version": "2.0.1",
+  "matchRule": "stripTrailingParenThenExact",
+  "minHitsDefault": 2,
+  "skeletons": [
+    {
+      "id": "verdict",
+      "name": { "zh": "裁决", "en": "Verdict" },
+      "exportCard": true,
+      "match": ["一句话结论", "哪些是真的、哪些是假的", "来源"],
+      "matchEn": ["One-line verdict", "What is true, what is false", "Sources"],
+      "minHits": 2,
+      "lead": ["一句话结论"],
+      "leadEn": ["One-line verdict"],
+      "secondary": [],
+      "secondaryEn": []
+    },
+    {
+      "id": "definition",
+      "name": { "zh": "释义", "en": "Definition" },
+      "exportCard": false,
+      "match": ["一句话定义", "义项", "规范定义", "边界", "构成 / 运作方式", "常见误解", "出处", "设定框架", "角色", "剧情", "常见设定误解"],
+      "matchEn": ["One-line definition", "Senses", "Normative definition", "Boundaries", "Composition and mechanism", "Common misconceptions"],
+      "minHits": 2,
+      "lead": ["一句话定义"],
+      "leadEn": ["One-line definition"],
+      "secondary": ["规范定义"],
+      "secondaryEn": ["Normative definition"]
+    },
+    {
+      "id": "causal",
+      "name": { "zh": "因果机制", "en": "Causal mechanism" },
+      "exportCard": false,
+      "match": ["时间线", "各方角色与诉求", "因果链", "排除的成因", "排除的成因 / 未发生的环节", "边界与反例", "未知", "差异与成因", "主因", "前提核对", "拆条款", "落地概率", "机制链", "反向 / 对冲"],
+      "matchEn": ["Timeline", "Actors and their stakes", "Causal chain", "Ruled out", "Limits and counterexamples", "Open questions", "Differences and their causes", "Primary cause", "Premise check", "Clauses", "Probability of enactment", "Transmission chain", "Countervailing effects"],
+      "minHits": 2,
+      "lead": ["主因", "落地概率", "因果链", "差异与成因"],
+      "leadEn": ["Primary cause", "Probability of enactment", "Causal chain", "Differences and their causes"],
+      "secondary": ["排除的成因", "排除的成因 / 未发生的环节"],
+      "secondaryEn": ["Ruled out"]
+    },
+    {
+      "id": "compare",
+      "name": { "zh": "对照", "en": "Comparison" },
+      "exportCard": false,
+      "match": ["对比维度", "逐维对照", "不可比", "分场景结论"],
+      "matchEn": ["Comparison dimensions", "Dimension by dimension", "Not comparable", "Scenario conclusions"],
+      "minHits": 2,
+      "lead": ["分场景结论"],
+      "leadEn": ["Scenario conclusions"],
+      "secondary": ["不可比"],
+      "secondaryEn": ["Not comparable"]
+    },
+    {
+      "id": "map",
+      "name": { "zh": "地图", "en": "Map" },
+      "exportCard": false,
+      "match": ["核心发现", "确定性分层", "分歧在哪", "机制解释", "建议"],
+      "matchEn": ["Key findings", "Certainty tiers", "Where sources disagree", "Mechanism", "Recommendations"],
+      "minHits": 2,
+      "lead": ["核心发现"],
+      "leadEn": ["Key findings"],
+      "secondary": ["确定性分层"],
+      "secondaryEn": ["Certainty tiers"]
+    },
+    {
+      "id": "metric",
+      "name": { "zh": "指标卡", "en": "Metric card" },
+      "exportCard": false,
+      "match": ["数值", "走势", "口径差异", "可信度"],
+      "matchEn": ["Figures", "Trend", "Basis differences", "Confidence"],
+      "minHits": 2,
+      "lead": ["数值"],
+      "leadEn": ["Figures"],
+      "secondary": ["口径差异"],
+      "secondaryEn": ["Basis differences"]
+    }
+  ],
+  "sharedHeadings": {
+    "$comment": "跨骨架重复出现的标题。noSkeletonMayUse 里的，任何骨架都不得用来识别；verdictOnly 里的只保留给 verdict（现行出图契约），其余骨架不得用。",
+    "noSkeletonMayUse": { "zh": ["定界", "缺口", "可比性检验"], "en": ["Scope", "Gaps", "Comparability check"] },
+    "verdictOnly": { "zh": ["来源"], "en": ["Sources"] }
+  },
+  "attachments": {
+    "$comment": "三个附段，挂在主骨架上、不单独成报告；消费方当前忽略，列出仅为完整性。",
+    "zh": ["主张", "双方理由与强度", "共识区", "判定条件", "这是谁的经验", "优点 / 缺点", "适用场景 / 不适用场景", "框架", "逐项证据", "边界条件", "立场分布"],
+    "en": []
+  }
+}

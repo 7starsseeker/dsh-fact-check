@@ -30,7 +30,7 @@ node tools/doctor.mjs --write                   # 生成配置草稿（写到包
 # 4) 验收（离线，不花钱）
 node tools/jev-verdict.mjs selftest                              # 期望 25/25
 node tools/route.mjs selftest                                    # 期望 48/48
-node tools/lint-skill.mjs                                        # 期望 120/120（正文结构断言）
+node tools/lint-skill.mjs                                        # 期望 236/236（正文结构断言）
 node tools/route.mjs regress --file cases/route-cases-neutral.json   # 期望 33/33
 ```
 

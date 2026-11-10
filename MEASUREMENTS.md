@@ -118,7 +118,7 @@ node tools/doctor.mjs --net                                                     
 node tools/jev-verdict.mjs selftest                                                     # 25 项离线断言，不花钱
 node tools/route.mjs selftest                                                           # 48 项离线断言，不花钱
 node tools/route.mjs regress --file cases/route-cases-neutral.json                      # 路由语料 33 例，不花钱
-node tools/lint-skill.mjs                                                               # 221 条正文结构断言，不花钱
+node tools/lint-skill.mjs                                                               # 236 条正文结构断言，不花钱
 node tools/lint-report.mjs <报告文件>                                                    # 报告机械回检（有产物时跑）
 node tools/route.mjs arms                                                               # 派发臂代理指标（§4.1），不花钱
 
@@ -186,7 +186,7 @@ node tools/jev-verdict.mjs regress --file cases/sufficient-cases-neutral.json   
 
 ### 10.2 结构断言
 
-`node tools/lint-skill.mjs` → **221 条**，全部离线、0 成本。覆盖：六个骨架完整、判据树 12 步与归宿、**裁决 10 个锚点逐字存在**、8 条英文序列与中文段数对齐、`reference/i18n.md` 的存在与引用、Step 编号顺序、`INSTRUCTIONS.md` 与 `SKILL.md` 逐字同步、`package.json` 的 `files` 含 `reference`、`definition` 域与触发词锚。
+`node tools/lint-skill.mjs` → **236 条**，全部离线、0 成本。覆盖：六个骨架完整、判据树 12 步与归宿、**裁决 10 个锚点逐字存在**、8 条英文序列与中文段数对齐、**骨架锚点表 §19（`reference/skeleton-anchors.json` 的 `match` 命中块内标题、`matchEn` 在英文序列内、非锚点均为共享标题、跨骨架不撞车）**、`reference/i18n.md` 的存在与引用、Step 编号顺序、`INSTRUCTIONS.md` 与 `SKILL.md` 逐字同步、`package.json` 的 `files` 含 `reference`、`definition` 域与触发词锚。
 
 **变异验证**（证明断言不是空的，每次变异后按 hash 校验还原）：
 
@@ -194,6 +194,7 @@ node tools/jev-verdict.mjs regress --file cases/sufficient-cases-neutral.json   
 |---|---|
 | 把 `## 一句话结论` 改成 `## 结论` | 3 条红，退出码 1 |
 | 从 4-S 英文序列删掉一段 | 2 条红（段数对齐 + 生成物同步），退出码 1 |
+| 把锚点表里 definition 的 `一句话定义` 改成 `一句话定义X` | 1 条红（仅该骨架的锚点一致性，其余 235 条不变），退出码 1；改回后与草稿逐字一致 |
 
 ### 10.3 报告机械回检
 

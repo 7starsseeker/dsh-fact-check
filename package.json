@@ -1,6 +1,6 @@
 {
   "name": "dsh-fact-check",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Fact-checking and evidence-based research skill for DeepSeek Harness: it types the request first (verify / explain / causal / compare / survey / metric), confirms the direction and runs a feasibility check, then emits a report skeleton that matches the request instead of forcing every question into a true-false verdict, in Chinese or English. Verification still never trusts model memory, cross-checks independent sources across domestic and international search ecosystems, and can route three factual judgements to a TypeSafe Jev (System One) decision model when a key is configured, falling back to the skill's deterministic rules when it is not.",
   "keywords": [
     "deepseek-harness",

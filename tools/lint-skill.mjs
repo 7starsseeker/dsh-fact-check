@@ -314,6 +314,104 @@ check('reference/i18n.md 有专名与译名分歧表一节', /## 5\. 专名对�
 check('i18n 标明中英两侧表头方向相反', /English \/ Origin \/ Where it circulates \/ Adopted/.test(i18n), '')
 check('i18n 中文侧列固定为四个', /中文译法 \/ 来源性质 \/ 流通范围 \/ 采信/.test(i18n), '')
 
+// ── 19. 骨架锚点表（reference/skeleton-anchors.json，给下游出图侧消费）──────────
+// 这份表是**既有标题的索引**，不是新锚点，也不改变行为：正文流程不读它。
+// 所以本组断言守的是一条不变量——标题改名 === 本组变红，两边同时知道，不再静默失效。
+const ANCHOR_PATH = 'reference/skeleton-anchors.json'
+const ANCHOR_IDS = ['verdict', 'definition', 'causal', 'compare', 'map', 'metric']
+const ANCHOR_SECTION = { verdict: '4-V', definition: '4-E', causal: '4-C', compare: '4-M', map: '4-S', metric: '4-L' }
+// 匹配规则与消费方逐字一致：先去掉末尾括号说明（可叠加），再全等比较。
+// 不做前缀、不做子串——否则 `边界`（4-E）会误吞 `边界与反例`（4-C）。
+const shortHeading = (h) => {
+  let out = String(h).trim()
+  for (let prev = ''; prev !== out; ) {
+    prev = out
+    out = out.replace(/\s*[（(][^（）()]*[）)]\s*$/, '').trim()
+  }
+  return out
+}
+// 一节内的全部 `## ` 标题：必须跨该节所有 ```markdown 块——
+// 4-E 有「标准件 + 二次元设定变体」两块，4-C 有三个入口，只取第一块会漏掉变体专有标题。
+function headingsInSkeleton(id) {
+  const head = new RegExp(`^#### ${id} `, 'm').exec(skill)
+  if (!head) return []
+  const after = skill.slice(head.index + head[0].length)
+  const next = after.search(/^#{3,4} /m)
+  const section = next >= 0 ? after.slice(0, next) : after
+  return [...section.matchAll(/```markdown\n([\s\S]*?)\n```/g)].flatMap((b) =>
+    b[1].split('\n').filter((l) => l.startsWith('## ')).map((l) => shortHeading(l.slice(3))),
+  )
+}
+// §4b 的英文序列按条目拆成标题数组；4-C 取三入口并集（C1/C2 共享尾段，拆开必撞车）。
+const enTitles = {}
+for (const line of seqLines) {
+  const sid = line.split(/\s+/)[0]
+  const titles = line.replace(/^\s*\S+\s+/, '').split('·').map(shortHeading).filter(Boolean)
+  enTitles[sid] = [...new Set([...(enTitles[sid] || []), ...titles])]
+}
+const enUnion = (sid) =>
+  sid === '4-C' ? [...new Set(['4-C1', '4-C2', '4-C3'].flatMap((k) => enTitles[k] || []))] : enTitles[sid] || []
+
+check('reference/skeleton-anchors.json 存在', existsSync(join(ROOT, ANCHOR_PATH)))
+let anchors = null
+try { anchors = JSON.parse(read(ANCHOR_PATH)) } catch { anchors = null }
+check('骨架锚点表可解析为 JSON', !!anchors)
+const anchorList = Array.isArray(anchors?.skeletons) ? anchors.skeletons : []
+check('骨架锚点表六个 id 齐全且不重不缺',
+  anchorList.length === ANCHOR_IDS.length &&
+    ANCHOR_IDS.every((id) => anchorList.filter((x) => x.id === id).length === 1),
+  anchorList.map((x) => x.id).join(',') || '(无)')
+check('骨架锚点表 version = SKILL.md frontmatter 版本（不升版本）',
+  anchors?.version === fm.version, `${anchors?.version} vs ${fm.version}`)
+check('骨架锚点表声明匹配规则为「去末尾括号后全等」',
+  anchors?.matchRule === 'stripTrailingParenThenExact', String(anchors?.matchRule))
+const sharedEn = new Set(
+  [...(anchors?.sharedHeadings?.noSkeletonMayUse?.en || []), ...(anchors?.sharedHeadings?.verdictOnly?.en || [])]
+    .map(shortHeading),
+)
+for (const id of ANCHOR_IDS) {
+  const entry = anchorList.find((x) => x.id === id) || {}
+  const zh = (entry.match || []).map(shortHeading)
+  const en = (entry.matchEn || []).map(shortHeading)
+  const heads = new Set(headingsInSkeleton(ANCHOR_SECTION[id]))
+  const seq = new Set(enUnion(ANCHOR_SECTION[id]))
+  const missingZh = zh.filter((h) => !heads.has(h))
+  const missingEn = en.filter((h) => !seq.has(h))
+  // 英文序列里不当作锚点的那几段，必须是共享标题；裁决例外——它只挑三个锚点，
+  // 其余段落（始末、国内外视角、档位…）本就不许当锚点，不是"漏登记"。
+  const extraEn = id === 'verdict' ? [] : [...seq].filter((h) => !en.includes(h) && !sharedEn.has(h))
+  check(`骨架锚点 ${id} 与 SKILL.md 一致（match 命中块内标题 / matchEn 在英文序列内 / 非锚点均为共享标题）`,
+    zh.length >= 2 && (entry.minHits || 0) >= 2 && entry.minHits <= zh.length &&
+      missingZh.length === 0 && missingEn.length === 0 && extraEn.length === 0,
+    [
+      missingZh.length ? `match 未命中: [${missingZh.join(', ')}]` : '',
+      missingEn.length ? `matchEn 不在英文序列: [${missingEn.join(', ')}]` : '',
+      extraEn.length ? `英文序列多出非共享标题: [${extraEn.join(', ')}]` : '',
+      (entry.minHits || 0) < 2 || entry.minHits > zh.length ? `minHits=${entry.minHits} 对 ${zh.length} 条 match` : '',
+    ].filter(Boolean).join('；'))
+}
+const zhMatches = anchorList.flatMap((x) => (x.match || []).map((h) => [shortHeading(h), x.id]))
+const zhOwner = new Map()
+for (const [h, id] of zhMatches) {
+  if (!zhOwner.has(h)) zhOwner.set(h, new Set())
+  zhOwner.get(h).add(id)
+}
+const zhDup = [...zhOwner.entries()].filter(([, ids]) => ids.size > 1).map(([h, ids]) => `${h}→${[...ids].join('/')}`)
+check('同一短标题不出现在两个骨架的 match 里（否则互相认领）', zhDup.length === 0, zhDup.join('; '))
+check('exportCard 只有裁决为 true（其余骨架不得造档位/双轨）',
+  anchorList.length === ANCHOR_IDS.length &&
+    anchorList.every((x) => (x.id === 'verdict' ? x.exportCard === true : x.exportCard === false)),
+  anchorList.filter((x) => (x.id === 'verdict' ? x.exportCard !== true : x.exportCard !== false)).map((x) => x.id).join(',') || '')
+const noUse = new Set((anchors?.sharedHeadings?.noSkeletonMayUse?.zh || []).map(shortHeading))
+const noUseHit = zhMatches.filter(([h]) => noUse.has(h)).map(([h, id]) => `${h}←${id}`)
+check('noSkeletonMayUse 的标题一个都没进任何 match', noUse.size > 0 && noUseHit.length === 0, noUseHit.join('; '))
+const verdictOnly = new Set((anchors?.sharedHeadings?.verdictOnly?.zh || []).map(shortHeading))
+const voHit = zhMatches.filter(([h, id]) => verdictOnly.has(h) && id !== 'verdict').map(([h, id]) => `${h}←${id}`)
+check('verdictOnly 的标题只出现在裁决的 match 里（其它骨架用它就会与裁决互相认领）',
+  verdictOnly.size > 0 && voHit.length === 0 &&
+    zhMatches.some(([h, id]) => verdictOnly.has(h) && id === 'verdict'),
+  voHit.join('; '))
+
 // ── 汇总 ─────────────────────────────────────────────────────────────────────
 const total = pass + fail
 console.log(`\n${pass}/${total} 通过`)

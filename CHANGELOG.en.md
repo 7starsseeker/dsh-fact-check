@@ -5,6 +5,19 @@
 > Net changes between releases (fixes / improvements / additions). Results only, no process notes.
 > Any change to judgements, thresholds or trigger words must also update the numbers in [`MEASUREMENTS.md`](./MEASUREMENTS.md) and the regressions under `cases/`.
 
+## 2.0.1 — 2026-11-11
+
+**Machine-readable skeleton anchor table (no behaviour change)**
+
+- New [`reference/skeleton-anchors.json`](./reference/skeleton-anchors.json) indexes the six skeletons' **existing** `##` headings — short titles, hit thresholds (`minHits`), lead sections (`lead`), and the rules for headings shared across skeletons (`sharedHeadings`) — so the export side reads a declaration instead of transcribing the heading table. The skill's own flow never reads it and no heading changed: it is an index, not a new set of anchors.
+- [`tools/lint-skill.mjs`](./tools/lint-skill.mjs) gains §19 (15 assertions, 221 → 236): the table parses, the six ids are present, `match` hits in-block headings, `matchEn` sits inside that skeleton's Step 4b English sequence, non-anchor English titles are all shared ones, no short title appears under two skeletons, `exportCard` is true for the verdict only, and `noSkeletonMayUse` / `verdictOnly` are respected. **A renamed heading now fails the lint** instead of degrading silently.
+- One pointer added in `SKILL.md` §4b; the maintenance notes gained the directory entry plus the "the table is an index, not anchors" invariant. `README` / `MEASUREMENTS` / `ADAPTING` updated; `INSTRUCTIONS.md` regenerated.
+- The dependency stays one-way: where the export side cannot read the table it falls back to its built-in table, and fact-check never calls the export side.
+
+**Verification**
+
+- `lint-skill 236/236`, `smoke-plugin 27/27`, `jev-verdict 25/25`, `route selftest 48/48`, `route regress 33/33`. (`lint-report` takes a report file and was not run this round; it was not modified either.)
+
 ## 2.0.0 — 2026-11-10
 
 **Breaking (usage, not contract)**

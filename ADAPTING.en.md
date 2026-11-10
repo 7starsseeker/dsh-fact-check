@@ -30,7 +30,7 @@ node tools/doctor.mjs --write                   # writes a draft to the per-user
 # 4) Acceptance (offline, free)
 node tools/jev-verdict.mjs selftest                              # expect 25/25
 node tools/route.mjs selftest                                    # expect 48/48
-node tools/lint-skill.mjs                                        # expect 221/221 (structural assertions on the body)
+node tools/lint-skill.mjs                                        # expect 236/236 (structural assertions on the body)
 node tools/route.mjs regress --file cases/route-cases-neutral.json   # expect 33/33
 ```
 
