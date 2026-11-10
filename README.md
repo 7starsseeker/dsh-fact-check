@@ -21,6 +21,12 @@
 > multi-source, domestic and international ecosystems in parallel, adversarial re-search, every statement
 > traceable to a URL and a citation position. Reports are written in Chinese or English.
 
+> **2.0.0 has just landed and is still in its proving phase.** The decision tree has had two blind tests
+> (19 questions in total); how readable the six output kinds are in real use, and how much the new
+> `definition` domain can actually fetch, have not been exercised enough. **Skeletons, judgements and even
+> output structure may change as real usage comes in** — these docs are not a frozen contract. If something
+> does not fit, feels awkward, or is plainly misclassified, please open an issue.
+
 **简体中文 → [README.zh-CN.md](./README.zh-CN.md)**
 
 ---
