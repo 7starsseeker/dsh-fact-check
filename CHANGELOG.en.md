@@ -5,6 +5,20 @@
 > Net changes between releases (fixes / improvements / additions). Results only, no process notes.
 > Any change to judgements, thresholds or trigger words must also update the numbers in [`MEASUREMENTS.md`](./MEASUREMENTS.md) and the regressions under `cases/`.
 
+## 2.0.2 — 2026-11-12
+
+**A general contract for multi-question input; the report and both images now show the original question**
+
+- **0.5a — split questions first**: separate "how many answers the user wants" from work units, then run the decision tree once per question. Adds a nine-shape answer table (verdict / explainer / three causal entries / comparison / survey map / metric card / attachment) and three hard rules: every question gets an answer, each answer keeps its own shape, and more than three questions or independent topics with non-overlapping evidence must stop or split.
+- **0.5b gate**: up to three questions with the same skeleton or overlapping evidence proceed without a confirmation stop; different skeletons also proceed when the second answer fits an existing section of the primary skeleton; split only when an independent H2 is required and the primary skeleton is 4-V. The verdict skeleton's ten H2 headings stay unchanged.
+- **Multi-answer layout**: an answer overview at the top; for 4-V the two or three judgment lines live inside `## 一句话结论` (with "Put together" as the third line for two questions, one line per question for three); other skeletons use `> **Answer overview**` and never add a `## 答题总览` heading. The 4-V multi-question variant and Step 4c's merge/split criteria are rewritten accordingly.
+- **Original question**: the 4-V template and the multi-question report now require `> **Original question**: <verbatim>` before the first `##` (Chinese: `> **原始提问**：`). The export side uses it to restore the question at the top of both the summary and the long image, instead of showing only the answer.
+- `reference/i18n.md` gains the bilingual mapping; `INSTRUCTIONS.md` is regenerated.
+
+**Verification**
+
+- `npm run selftest` exit 0: `smoke-plugin 27/27`, `jev-verdict 25/25`, `route 48/48`, `lint-skill 236/236`; the 4-V template still has ten H2 headings; `lint-report` 0/0.
+
 ## 2.0.1 — 2026-11-11
 
 **Machine-readable skeleton anchor table (no behaviour change)**

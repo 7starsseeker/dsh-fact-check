@@ -121,6 +121,8 @@ Markdown 报告或 DSH 对话片段渲染成能直接发的 PNG。它的 `report
 
 **DSH 0.2.2-rc.1 于 2026-11-06 完整跑过一遍**（Node 26.13.0，Windows；宿主版本以随宿主发布的 `app.asar` 里 `@deepseek-ai/dsh-desktop` / `@deepseek-ai/dsh-desktop-runtime` 声明的为准，`dsh --version` 报的也是同一个 `0.2.2-rc.1`）。这一轮以**运行时证据为主，而非逐行 diff**：宿主是原地升级，磁盘上已没有 0.2.1-rc.5 的对应文件可作对照。仍直接核对了随宿主发布的构建里留下的契约：`@deepseek-ai/dsh-skill` 的 `lib/index.js` 第 23 行仍是 `const BUNDLED_SKILL_RANK = 600;`；`registerProvider()` 交出的 `control` 仍是 `{ signal, invalidate }`，`invalidate()` 仍先确认 `active.layer.providers.get(active.name)?.provider === provider` 再刷新目录；第 566 行的导出清单不变。运行中的宿主上，插件以 `link:T:/fact-check-skill` 挂载；插件市场把它的激活状态报成 `live`（「已热加载(bundle patch)」），`diagnostics.findings` 为空；会话自己的技能目录列出了 `fact-check`、描述与本仓 `SKILL.md` 一致 —— 而且 `$DSH_HOME/skills` 与 profile 的 `skills/` 下都没有 fact-check 副本，所以它只能来自插件。仓库自带套件在该宿主上复跑全绿：`smoke-plugin` 27/27、`jev-verdict selftest` 25/25、`route selftest` 44/44。这一轮**没有**覆盖：改 `SKILL.md` → `control.invalidate()` 的热刷新（需要在真实仓库里改文件才能验），以及 `validateCandidate` / `toSummary` 的内部行为（没有旧构建可逐行对照）。
 
+**DSH 0.2.2-rc.2 于 2026-11-12 完整跑过一遍**（Node 26.13.0，Windows；`dsh --version` 报 `0.2.2-rc.2`）。这一轮仍是**运行时证据，不是依赖闭包 diff**：宿主是原地升级，磁盘上没有 0.2.2-rc.1 的副本可作对照。插件以 `link:T:/fact-check-skill` 挂载；运行中会话的技能目录列出了 `fact-check`、描述与本仓一致，而且这个技能被端到端用来生成了「两问」事实核查报告，报告的两张卡片由 `dsh-card-export` 0.1.4 渲出。仓库自带套件在该宿主上复跑全绿：`smoke-plugin` 27/27、`jev-verdict` 25/25、`route` 48/48、`lint-skill` 236/236；`lint-report` 对这份报告返回 0/0。新增的多问规则与 `> **原始提问**` 契约由这份报告和出图侧回归（77/77）实际走到。**没有**覆盖：0.2.2-rc.2 技能注册表的逐行 diff（没有上一版可对照），以及 DSH 启动日志（运行中的实例不在桌面日志目录留启动记录）。
+
 ## 安装
 
 ### 作为 DSH 插件

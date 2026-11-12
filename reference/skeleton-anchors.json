@@ -1,6 +1,6 @@
 {
   "$comment": "给 dsh-card-export 消费的骨架锚点表。位置 fact-check 仓 reference/skeleton-anchors.json。标题一律是「去掉末尾括号说明后的短标题」，消费方按全等匹配；同一标题不许出现在两个骨架里。version 跟 fact-check 的版本走，lint 会与 SKILL.md frontmatter 比对。",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "matchRule": "stripTrailingParenThenExact",
   "minHitsDefault": 2,
   "skeletons": [
